@@ -1,0 +1,1811 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#02040d" />
+    <meta name="description" content="Lumora presents Cadet Skyranger — a cursor-led 3D character interaction and interactive 3D solar system." />
+    <title>Lumora — Cadet Skyranger &amp; Solar System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,900&family=Space+Grotesk:wght@500;700&family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Cadet Skyranger Stage -->
+    <main class="stage" id="stage" aria-label="Lumora Cadet Skyranger interactive hero">
+      <div class="frame" id="scene">
+        <div class="plate" aria-hidden="true"></div>
+        <div class="plate-shade" aria-hidden="true"></div>
+
+        <div class="head-clip" aria-hidden="true">
+          <video id="headClip" muted playsinline preload="auto" crossorigin="anonymous"></video>
+        </div>
+
+        <div class="helmet-shell" id="helmetShell" aria-hidden="true">
+          <img
+            id="helmet"
+            src="./helmet-cutout.png"
+            alt=""
+          />
+        </div>
+
+        <header class="topbar">
+          <a class="brand" href="/" aria-label="Lumora home">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-name">Lumora</span>
+          </a>
+          <button class="menu-button" type="button" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+        </header>
+
+        <section class="copy-block" aria-labelledby="hero-title">
+          <p class="eyebrow">CADET</p>
+          <h1 id="hero-title">SKYRANGER</h1>
+          <p class="subtitle">Past the Stars and Further</p>
+        </section>
+
+        <div class="captions" aria-hidden="true">
+          <span>3D Interaction</span>
+          <span>@studio.design</span>
+        </div>
+
+        <button
+          id="pushButton"
+          class="push-button"
+          type="button"
+          aria-pressed="false"
+          aria-label="Launch rocket and explore 3D solar system"
+          title="Push to launch into 3D Solar System"
+        >
+          <span>PUSH</span>
+          <span>ME</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Rocket Launch Transition Overlay -->
+    <div id="rocketTransition" class="rocket-transition" aria-hidden="true">
+      <div class="rocket-warp-bg"></div>
+      <div class="warp-speed-lines"></div>
+
+      <div class="launch-hud">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+
+        <div class="hud-status-badge">
+          <span class="hud-pulse-dot"></span>
+          <span>IGNITION SEQUENCE ACTIVE</span>
+        </div>
+        <h2 class="hud-destination">TRAJECTORY: SOLAR SYSTEM</h2>
+        <div class="hud-countdown" id="launchCountdown">WARP DRIVE ENGAGED</div>
+        <div class="hud-sub">PAST THE STARS AND FURTHER</div>
+      </div>
+
+      <!-- Animated High-Tech Rocket -->
+      <div class="rocket-craft" id="rocketCraft">
+        <svg class="rocket-svg" viewBox="0 0 160 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Rocket Exhaust Flame & Plasma Plume -->
+          <defs>
+            <linearGradient id="rocketBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="45%" stop-color="#e0e8f5" />
+              <stop offset="100%" stop-color="#8ba3c7" />
+            </linearGradient>
+            <linearGradient id="rocketFinGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ff3b30" />
+              <stop offset="100%" stop-color="#b0160e" />
+            </linearGradient>
+            <linearGradient id="plumeGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="20%" stop-color="#ffe600" />
+              <stop offset="60%" stop-color="#ff4500" />
+              <stop offset="100%" stop-color="rgba(255, 30, 0, 0)" />
+            </linearGradient>
+            <filter id="thrusterGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Thruster Plume -->
+          <g class="thruster-fire" filter="url(#thrusterGlow)">
+            <polygon points="62,260 98,260 80,375" fill="url(#plumeGrad)" />
+            <polygon points="68,260 92,260 80,340" fill="#ffffff" opacity="0.9" />
+          </g>
+
+          <!-- Left & Right Booster Wings -->
+          <path d="M 50 170 L 15 250 L 50 240 Z" fill="url(#rocketFinGrad)" />
+          <path d="M 110 170 L 145 250 L 110 240 Z" fill="url(#rocketFinGrad)" />
+
+          <!-- Fuselage Core -->
+          <path d="M 80 20 Q 52 80 50 245 L 110 245 Q 108 80 80 20 Z" fill="url(#rocketBodyGrad)" stroke="#1a2538" stroke-width="2" />
+
+          <!-- Center Fin / Dorsal Spine -->
+          <polygon points="76,60 84,60 82,240 78,240" fill="#32496d" />
+
+          <!-- Cockpit Bubble Window -->
+          <circle cx="80" cy="90" r="14" fill="#0b1b36" stroke="#4da3ff" stroke-width="2.5" />
+          <circle cx="76" cy="86" r="4.5" fill="#ffffff" opacity="0.8" />
+
+          <!-- Cadet Skyranger Decal / Stripe -->
+          <rect x="58" y="140" width="44" height="6" fill="#ff3b30" />
+          <rect x="62" y="152" width="36" height="3" fill="#ffcc00" />
+
+          <!-- Engine Nozzle -->
+          <polygon points="60,245 100,245 92,265 68,265" fill="#1b2432" stroke="#485973" stroke-width="2" />
+        </svg>
+
+        <!-- Dynamic Particle Sparks -->
+        <div class="thruster-sparks">
+          <span class="spark s1"></span>
+          <span class="spark s2"></span>
+          <span class="spark s3"></span>
+          <span class="spark s4"></span>
+          <span class="spark s5"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Interactive Solar System Section -->
+    <section id="solarSystemSection" class="solar-system-section" aria-label="3D Solar System Exploration">
+      <!-- Solar Topbar Navigation & Controls -->
+      <header class="solar-topbar">
+        <div class="solar-nav-left">
+          <button id="btnBackCockpit" class="solar-action-btn back-btn" type="button" aria-label="Return to Cadet Cockpit">
+            <span class="btn-icon">←</span>
+            <span class="btn-label">Cadet Cockpit</span>
+          </button>
+          <div class="solar-title-group">
+            <span class="solar-system-badge">SOLAR EXPLORER</span>
+            <h2 class="solar-system-title">3D Solar System</h2>
+          </div>
+        </div>
+
+        <div class="solar-nav-controls">
+          <button id="btnResetSolarView" class="solar-action-btn" type="button" title="Align to reference blueprint view">
+            <span class="btn-icon">⊙</span>
+            <span class="btn-label">Blueprint View</span>
+          </button>
+
+          <button id="btnToggleOrbit" class="solar-action-btn" type="button" aria-pressed="false" title="Pause / Resume orbital revolution">
+            <span class="btn-icon">⏯</span>
+            <span class="btn-label">Pause Orbits</span>
+          </button>
+
+          <button id="btnSolarSpeed" class="solar-action-btn" type="button" title="Toggle simulation orbit speed">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-label">1.0x Speed</span>
+          </button>
+
+          <button id="btnSolarAudio" class="solar-action-btn" type="button" aria-pressed="false" title="Toggle cosmic ambient audio">
+            <span class="btn-icon">🔊</span>
+            <span class="btn-label">Sound: ON</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Mars Cinematic Video Background Layer -->
+      <div id="solarMarsBgLayer" class="solar-mars-bg-layer" aria-hidden="true">
+        <video
+          id="solarMarsBgVideo"
+          class="solar-mars-bg-video"
+          src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/cloudinarry%20to%20cloudflare/202606021731-e_hqa6sn.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="solar-mars-bg-overlay"></div>
+      </div>
+
+      <!-- 3D Canvas WebGL Host -->
+      <div id="solarCanvasContainer" class="solar-canvas-container"></div>
+
+      <!-- Floating 3D Billboard Planet Labels Layer -->
+      <div id="solarLabelsLayer" class="solar-labels-layer" aria-hidden="true"></div>
+
+      <!-- Quick-Jump Bottom Planet Ribbon / Dock -->
+      <nav id="solarPlanetDock" class="solar-planet-dock" aria-label="Planetary quick navigation">
+        <div class="dock-inner">
+          <button class="planet-dock-item" data-planet="sun" type="button">
+            <span class="dock-dot sun"></span>
+            <span class="dock-text">Sun</span>
+          </button>
+          <span class="dock-divider"></span>
+          <button class="planet-dock-item" data-planet="mercury" type="button">
+            <span class="dock-dot mercury"></span>
+            <span class="dock-text">Mercury</span>
+          </button>
+          <button class="planet-dock-item" data-planet="venus" type="button">
+            <span class="dock-dot venus"></span>
+            <span class="dock-text">Venus</span>
+          </button>
+          <button class="planet-dock-item" data-planet="earth" type="button">
+            <span class="dock-dot earth"></span>
+            <span class="dock-text">Earth</span>
+          </button>
+          <button class="planet-dock-item" data-planet="mars" type="button">
+            <span class="dock-dot mars"></span>
+            <span class="dock-text">Mars</span>
+          </button>
+          <button class="planet-dock-item" data-planet="jupiter" data-size="lg" type="button">
+            <span class="dock-dot jupiter"></span>
+            <span class="dock-text">Jupiter</span>
+          </button>
+          <button class="planet-dock-item" data-planet="saturn" data-size="lg" type="button">
+            <span class="dock-dot saturn"></span>
+            <span class="dock-text">Saturn</span>
+          </button>
+          <button class="planet-dock-item" data-planet="uranus" type="button">
+            <span class="dock-dot uranus"></span>
+            <span class="dock-text">Uranus</span>
+          </button>
+          <button class="planet-dock-item" data-planet="neptune" type="button">
+            <span class="dock-dot neptune"></span>
+            <span class="dock-text">Neptune</span>
+          </button>
+        </div>
+      </nav>
+    </section>
+
+    <!-- Mercury Hanging ID Card Pop-out Modal with 3D Video Background -->
+    <div id="mercuryIdModal" class="mercury-id-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mercury Explorer ID Card">
+      <!-- 3D Video Background -->
+      <div class="mercury-video-wrapper">
+        <video
+          id="mercuryBgVideo"
+          class="mercury-bg-video"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260815_030633_1712fc71-4979-4e14-98f9-9f95702ab3da.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="mercury-video-overlay"></div>
+      </div>
+
+      <!-- Top action bar -->
+      <header class="mercury-modal-topbar">
+        <div class="mercury-tag-group">
+          <span class="mercury-badge-dot"></span>
+          <span class="mercury-badge-text">MERCURY // EXPLORER IDENTITY</span>
+        </div>
+        <button id="btnCloseMercuryId" class="mercury-close-btn" type="button" aria-label="Close Mercury ID card" title="Close ID Card">
+          <span>✕</span>
+        </button>
+      </header>
+
+      <!-- Hanging ID Card Rig (Lanyard, Clasp & 3D Interactive Card) -->
+      <div class="hanging-rig-container" id="hangingRigContainer">
+        <!-- Lanyard Ribbon Straps from ceiling -->
+        <div class="lanyard-ribbon">
+          <div class="lanyard-strap left"></div>
+          <div class="lanyard-strap right"></div>
+          <div class="lanyard-stitch"></div>
+        </div>
+
+        <!-- Metallic Lobster Clasp & Eyelet -->
+        <div class="lanyard-clasp">
+          <div class="clasp-ring"></div>
+          <div class="clasp-body"></div>
+          <div class="clasp-hook"></div>
+        </div>
+
+        <!-- The Physical Hanging Badge Holder with 3D Parallax & Specular Sheen -->
+        <div class="id-card-holder" id="idCardHolder">
+          <!-- Clear Badge Holder Plastic Slot & Tab -->
+          <div class="badge-tab">
+            <div class="badge-slot-hole"></div>
+          </div>
+
+          <!-- Card Body with Realistic Badge Shadow & Specular Gloss -->
+          <div class="id-card-frame">
+            <img
+              src="./tanishka-id-card.jpg"
+              alt="Tanishka Sahu - Student ID Card - Vellore Institute of Technology"
+              class="id-card-img"
+              draggable="false"
+            />
+            <!-- Dynamic Specular Holo Glare Overlay -->
+            <div class="id-card-glare" id="idCardGlare"></div>
+            <!-- Protective Clear Sleeve Border -->
+            <div class="id-card-sleeve"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Quick Action Footer Bar -->
+        <div class="mercury-card-actions">
+          <a href="mailto:tanishkasahuwork191@gmail.com" class="card-action-btn email-btn" title="Send email">
+            <span class="btn-icon">✉</span>
+            <span>tanishkasahuwork191@gmail.com</span>
+          </a>
+          <button id="btnViewMercuryPlanetData" class="card-action-btn data-btn" type="button" title="View Mercury Scientific Data">
+            <span class="btn-icon">☿</span>
+            <span>Planetary Data</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Venus "About Me" Pop-out Modal with 3D Video Background (Inspired by reference picture) -->
+    <div id="venusAboutModal" class="venus-about-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Venus About Me Portfolio">
+      <!-- 3D Video Background -->
+      <div class="venus-video-wrapper">
+        <video
+          id="venusBgVideo"
+          class="venus-bg-video"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_115655_b4d9cd77-feed-43cd-a198-af78ebdf1f7a.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="venus-video-overlay"></div>
+      </div>
+
+      <!-- Top action bar -->
+      <header class="venus-modal-topbar">
+        <div class="venus-tag-group">
+          <span class="venus-badge-dot"></span>
+          <span class="venus-badge-text">VENUS // ABOUT ME DOSSIER</span>
+        </div>
+        <button id="btnCloseVenusAbout" class="venus-close-btn" type="button" aria-label="Close About Me" title="Close About Me">
+          <span>✕</span>
+        </button>
+      </header>
+
+      <!-- Scrollable Editorial Portfolio Showcase Sheet -->
+      <div class="venus-about-card-wrapper">
+        <article class="venus-about-sheet" id="venusAboutSheet">
+          <!-- Sheet Header Bar -->
+          <div class="sheet-topbar">
+            <button id="btnSheetBackArrow" class="sheet-back-btn" type="button" aria-label="Back">
+              <span>‹</span>
+            </button>
+            <span class="sheet-year">.2026</span>
+            <span class="sheet-role">Visual / Creative Developer 📱</span>
+          </div>
+
+          <!-- Hero Profile Section -->
+          <div class="sheet-hero">
+            <!-- Left: About User & Skills -->
+            <div class="hero-left-col">
+              <div class="about-user-header">
+                <span class="about-bell-icon">🔔</span>
+                <h3 class="about-user-title">About<br>User</h3>
+              </div>
+              <p class="about-user-bio">
+                A graphic designer &amp; creative developer hailing from Indonesia with extensive experience in the field. My talents encompass crafting editorial designs, interactive web 3D journeys, creative visuals for live streaming and social media, expertly editing visual content, and analyzing social media insights.
+              </p>
+              <!-- Bento Style Skill Pills -->
+              <div class="about-skill-badges">
+                <span class="skill-pill coral">
+                  <span class="pill-icon">🧠</span>
+                  <span>Critical Thinking</span>
+                </span>
+                <span class="skill-pill silver">
+                  <span class="pill-icon">🔍</span>
+                  <span>Attention to Detail</span>
+                </span>
+                <span class="skill-pill slate">
+                  <span class="pill-icon">👁</span>
+                  <span>Visual Aesthetic</span>
+                </span>
+                <span class="skill-pill violet">
+                  <span class="pill-icon">💡</span>
+                  <span>Creativity</span>
+                </span>
+                <span class="skill-pill gray">
+                  <span class="pill-icon">📂</span>
+                  <span>Organized</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Center: Portrait with Circular Arc Graphic -->
+            <div class="hero-center-col">
+              <div class="portrait-container">
+                <div class="portrait-c-ring" aria-hidden="true"></div>
+                <img
+                  src="./zidnal-portrait.png"
+                  alt="Muhammad Zidnal Falah - Creative Designer"
+                  class="portrait-img"
+                  draggable="false"
+                />
+                <!-- Pagination Dots -->
+                <div class="portrait-dots" aria-hidden="true">
+                  <span class="p-dot active"></span>
+                  <span class="p-dot"></span>
+                  <span class="p-dot"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Identity & Age Radial Stat -->
+            <div class="hero-right-col">
+              <div class="user-id-header">
+                <span class="user-icon">👤</span>
+                <h2 class="user-fullname">Muhammad<br>Zidnal Falah</h2>
+                <span class="user-location">Pasuruan, Indonesia</span>
+              </div>
+
+              <!-- Radial Progress Squircle Card -->
+              <div class="radial-stat-card">
+                <span class="stat-caption">/ years old</span>
+                <div class="circular-progress-wrap">
+                  <svg class="radial-svg" viewBox="0 0 80 80">
+                    <circle cx="40" cy="40" r="32" class="radial-bg" />
+                    <circle cx="40" cy="40" r="32" class="radial-bar" />
+                  </svg>
+                  <span class="radial-number">17</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mid Section: Education & Organization -->
+          <div class="sheet-dual-cols">
+            <!-- Education -->
+            <div class="timeline-block">
+              <div class="wireframe-badge">
+                <span class="wire-handle tl"></span>
+                <span class="wire-handle tr"></span>
+                <span class="wire-handle bl"></span>
+                <span class="wire-handle br"></span>
+                <span class="wire-title">Education</span>
+              </div>
+
+              <div class="timeline-entries">
+                <div class="timeline-entry">
+                  <span class="entry-years">2018–2021</span>
+                  <div class="entry-info">
+                    <h4 class="entry-title">SMP Progresif Bumi Shalawat</h4>
+                    <span class="entry-sub">Lebo, Sidoarjo</span>
+                  </div>
+                </div>
+                <div class="timeline-entry">
+                  <span class="entry-years">2021–2024</span>
+                  <div class="entry-info">
+                    <h4 class="entry-title">SMA Progresif Bumi Shalawat</h4>
+                    <span class="entry-sub">Lebo, Sidoarjo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Organization -->
+            <div class="timeline-block">
+              <div class="wireframe-badge">
+                <span class="wire-handle tl"></span>
+                <span class="wire-handle tr"></span>
+                <span class="wire-handle bl"></span>
+                <span class="wire-handle br"></span>
+                <span class="wire-title">Organization</span>
+              </div>
+
+              <div class="timeline-entries">
+                <div class="timeline-entry">
+                  <span class="entry-years">2021–2022</span>
+                  <div class="entry-info">
+                    <h4 class="entry-title">Research and Development</h4>
+                    <span class="entry-sub">Student Company — SMA Progresif Bumi Shalawat</span>
+                  </div>
+                </div>
+                <div class="timeline-entry">
+                  <span class="entry-years">2023–Now</span>
+                  <div class="entry-info">
+                    <h4 class="entry-title">Layout Department</h4>
+                    <span class="entry-sub">Progresif TV — PR. Progresif Bumi Shalawat</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Software Skills Section -->
+          <div class="software-skills-section">
+            <div class="wireframe-badge">
+              <span class="wire-handle tl"></span>
+              <span class="wire-handle tr"></span>
+              <span class="wire-handle bl"></span>
+              <span class="wire-handle br"></span>
+              <span class="wire-title">Software Skills</span>
+            </div>
+
+            <div class="software-icon-row">
+              <div class="software-badge-item" title="Adobe Photoshop">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">Ps</span>
+              </div>
+              <div class="software-badge-item" title="Adobe Illustrator">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">Ai</span>
+              </div>
+              <div class="software-badge-item" title="Adobe XD">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">Xd</span>
+              </div>
+              <div class="software-badge-item" title="Adobe InDesign">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">Id</span>
+              </div>
+              <div class="software-badge-item" title="Figma">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">❖</span>
+              </div>
+              <div class="software-badge-item" title="CapCut Video Editor">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">⧗</span>
+              </div>
+              <div class="software-badge-item" title="Microsoft PowerPoint">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">📊</span>
+              </div>
+              <div class="software-badge-item" title="Microsoft Excel">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">📈</span>
+              </div>
+              <div class="software-badge-item" title="Microsoft Word">
+                <span class="badge-corner-cut"></span>
+                <span class="badge-code">📝</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact & Social Bento Grid -->
+          <div class="contact-bento-section">
+            <div class="wireframe-badge">
+              <span class="wire-handle tl"></span>
+              <span class="wire-handle tr"></span>
+              <span class="wire-handle bl"></span>
+              <span class="wire-handle br"></span>
+              <span class="wire-title">Contact</span>
+            </div>
+
+            <div class="bento-grid">
+              <!-- Orange Pinterest Card -->
+              <div class="bento-card pinterest-card">
+                <span class="pinterest-logo">P</span>
+                <h4 class="card-headline">Check My<br>Other Project<br>on Pinterest</h4>
+                <a href="https://pinterest.com" target="_blank" rel="noopener" class="bento-pill-btn white">
+                  <span>s.id/jidsportfolio</span>
+                </a>
+              </div>
+
+              <!-- Main Middle Stack -->
+              <div class="bento-center-stack">
+                <!-- Email Pill -->
+                <a href="mailto:zidnalfalah@progresiftv.id" class="bento-card email-pill-card" title="Send email">
+                  <span class="email-icon">✉</span>
+                  <span class="email-address">zidnalfalah@progresiftv.id</span>
+                </a>
+
+                <!-- Instagram Card -->
+                <div class="bento-card instagram-card">
+                  <div class="insta-left">
+                    <span class="insta-icon">📷</span>
+                    <span class="insta-handle">@zidnalfalah_</span>
+                    <a href="https://instagram.com" target="_blank" rel="noopener" class="insta-follow-btn">
+                      <span>Follow</span>
+                      <span class="follow-count">1.2K</span>
+                    </a>
+                  </div>
+                  <div class="insta-preview-grid">
+                    <div class="insta-thumb t1"></div>
+                    <div class="insta-thumb t2"></div>
+                    <div class="insta-thumb t3"></div>
+                    <div class="insta-thumb t4"></div>
+                  </div>
+                </div>
+
+                <!-- Scenic Photography Snippet -->
+                <div class="bento-card photo-card">
+                  <div class="photo-snippet-img"></div>
+                  <span class="photo-caption">Love to Captured Moment.</span>
+                </div>
+              </div>
+
+              <!-- Right Social Column -->
+              <div class="bento-right-stack">
+                <!-- LinkedIn Card -->
+                <a href="https://linkedin.com" target="_blank" rel="noopener" class="bento-card linkedin-card">
+                  <span class="linkedin-logo">in</span>
+                  <span class="linkedin-name">Muhammad Zidnal Falah</span>
+                  <span class="linkedin-sub">linkedin.com/in/zidnalfalah</span>
+                </a>
+
+                <!-- Twitter / X Card -->
+                <a href="https://twitter.com" target="_blank" rel="noopener" class="bento-card twitter-card">
+                  <span class="x-logo">𝕏</span>
+                  <span class="twitter-handle">@zidnalfalah_</span>
+                </a>
+
+                <!-- Behance Card -->
+                <a href="https://behance.net" target="_blank" rel="noopener" class="bento-card behance-card">
+                  <span class="behance-logo">Bē</span>
+                  <div class="behance-info">
+                    <span class="behance-name">Zidnal Falah</span>
+                    <span class="behance-sub">www.behance.net/zidnalfalah</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Controls -->
+          <div class="sheet-bottom-actions">
+            <button id="btnViewVenusPlanetData" class="sheet-action-pill" type="button" title="View Venus Scientific Planetary Data">
+              <span>♀ Planetary Science Data</span>
+            </button>
+            <button id="btnSheetCloseBottom" class="sheet-action-pill close" type="button">
+              <span>✕ Return to Orbit</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Earth 3D Flippable Project Book Modal with 3D Video Background -->
+    <div id="earthBookModal" class="earth-book-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Earth Project Chronicles 3D Book">
+      <!-- 3D Video Background -->
+      <div class="earth-video-wrapper">
+        <video
+          id="earthBgVideo"
+          class="earth-bg-video"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260624_210218_173f8eba-17ff-4e27-972b-d128af25bf49.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="earth-video-overlay"></div>
+      </div>
+
+      <!-- Top Action Bar -->
+      <header class="earth-modal-topbar">
+        <div class="earth-tag-group">
+          <span class="earth-badge-dot"></span>
+          <span class="earth-badge-text">EARTH // TERRA ARCHIVES • 3D PROJECT CHRONICLES</span>
+        </div>
+        
+        <div class="earth-topbar-controls">
+          <button id="btnEarthAutoFlip" class="book-ctrl-pill" type="button" title="Auto-play Page Turning">
+            <span class="ctrl-icon">▶</span>
+            <span class="btn-text">Auto-Flip</span>
+          </button>
+          <button id="btnViewEarthPlanetData" class="book-ctrl-pill" type="button" title="View Earth Scientific Planetary Data">
+            <span class="ctrl-icon">♁</span>
+            <span class="btn-text">Planetary Data</span>
+          </button>
+          <button id="btnCloseEarthBook" class="earth-close-btn" type="button" aria-label="Close Project Book" title="Close Project Book">
+            <span>✕</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 3D Book Presentation Stage -->
+      <div class="book-stage" id="bookStage">
+        <div class="book-ambient-glow"></div>
+
+        <!-- The 3D Flipping Book -->
+        <div class="book-3d" id="book3D">
+          <!-- Book Spine Hinge & Ribbon Marker -->
+          <div class="book-spine-hinge"></div>
+          <div class="book-ribbon-marker" aria-hidden="true"></div>
+
+          <!-- Left Fixed Base (Underneath flipped pages) -->
+          <div class="book-base-leaf base-left">
+            <div class="base-page-content inside-back-cover">
+              <div class="archival-stamp">TERRA ARCHIVES • DEEP SPACE LOG</div>
+              <h3 class="base-heading">Civilization Repository</h3>
+              <p class="base-desc">Architectural blueprints, spatial computing engines, and deployed software artifacts forged on planet Earth (Sol-III).</p>
+              <div class="base-seal">♁ SOL-III VERIFIED</div>
+            </div>
+          </div>
+
+          <!-- Right Fixed Base (Underneath unflipped pages) -->
+          <div class="book-base-leaf base-right">
+            <div class="base-page-content colophon-page">
+              <div class="colophon-crest">♁</div>
+              <h3 class="base-heading">End of Volume I</h3>
+              <p class="base-desc">Autonomous continuous integration running via orbital runners. All codebases verified and active in production.</p>
+              <button class="book-jump-btn gold" id="btnRestartBook" type="button">Return to Cover ↺</button>
+            </div>
+          </div>
+
+          <!-- Leaf 0: Front Cover & Inside Front Cover (Intro / TOC) -->
+          <div class="book-leaf" data-leaf="0" id="leaf-0">
+            <!-- Front Cover Face -->
+            <div class="leaf-face leaf-front cover-front">
+              <img src="./book-cover.jpg" alt="Terra Archives Volume I Cover Artwork" class="cover-art-img" draggable="false" />
+              <div class="cover-sheen-glare"></div>
+              <div class="cover-open-hint">
+                <span class="hint-pulse"></span>
+                <span>Click Cover to Open ➔</span>
+              </div>
+            </div>
+            <!-- Inside Front Cover Face (revealed on the left after Leaf 0 flips) -->
+            <div class="leaf-face leaf-back intro-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">TERRA ARCHIVES • VOL. I</span>
+                  <span class="page-num-mark">01</span>
+                </div>
+                <div class="ex-libris-block">
+                  <div class="ex-libris-ornament">✦ ✦ ✦</div>
+                  <h2 class="book-intro-title">EX LIBRIS<br><span class="gold-gradient">CREATIVE ENGINEERING</span></h2>
+                  <div class="ex-libris-divider"></div>
+                  <p class="book-intro-body">
+                    "We are the cosmos made conscious — writing equations in light, sculpting worlds in code, and extending human intellect into the stars."
+                  </p>
+                </div>
+                <div class="toc-container">
+                  <h4 class="toc-header">CATALOGUE OF SELECTED WORKS</h4>
+                  <ul class="toc-list" id="tocList">
+                    <li class="toc-item" data-goto="1">
+                      <span class="toc-num">01.</span>
+                      <span class="toc-title">Lumora: 3D Solar System</span>
+                      <span class="toc-dots"></span>
+                      <span class="toc-page">P. 02</span>
+                    </li>
+                    <li class="toc-item" data-goto="1">
+                      <span class="toc-num">02.</span>
+                      <span class="toc-title">NeuralCanvas: AI Studio</span>
+                      <span class="toc-dots"></span>
+                      <span class="toc-page">P. 03</span>
+                    </li>
+                    <li class="toc-item" data-goto="2">
+                      <span class="toc-num">03.</span>
+                      <span class="toc-title">AeroVision: Drone Swarm</span>
+                      <span class="toc-dots"></span>
+                      <span class="toc-page">P. 04</span>
+                    </li>
+                    <li class="toc-item" data-goto="2">
+                      <span class="toc-num">04.</span>
+                      <span class="toc-title">ApexFlow: DeFi Terminal</span>
+                      <span class="toc-dots"></span>
+                      <span class="toc-page">P. 05</span>
+                    </li>
+                    <li class="toc-item" data-goto="3">
+                      <span class="toc-num">05.</span>
+                      <span class="toc-title">Chronos: Quantum Clock</span>
+                      <span class="toc-dots"></span>
+                      <span class="toc-page">P. 06</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="page-footer-mini">
+                  <span>Sol-III Codex • First Edition</span>
+                  <span class="page-flip-cue">Click Right Page to Flip ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaf 1: Project 1 (Lumora) & Project 2 (NeuralCanvas) -->
+          <div class="book-leaf" data-leaf="1" id="leaf-1">
+            <!-- Page 2 (Front of Leaf 1): Project 1 — Lumora -->
+            <div class="leaf-face leaf-front project-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">PROJECT 01 // SPATIAL WEB</span>
+                  <span class="page-num-mark">02</span>
+                </div>
+                
+                <div class="project-card-layout">
+                  <div class="project-img-frame">
+                    <img src="./project-lumora.jpg" alt="Lumora 3D Solar System Project Visual" class="project-preview-img" draggable="false" />
+                    <span class="project-status-badge live">● Active Production</span>
+                  </div>
+                  
+                  <div class="project-meta-row">
+                    <span class="tech-tag">Three.js</span>
+                    <span class="tech-tag">WebGL</span>
+                    <span class="tech-tag">Spatial Audio</span>
+                    <span class="tech-tag">GLSL Shaders</span>
+                  </div>
+                  
+                  <h3 class="project-title">Lumora: 3D Solar System Simulator</h3>
+                  
+                  <p class="project-description">
+                    Interactive WebGL 3D interplanetary journey with parallel planetary orbits, real-time axial spin, custom procedural surfaces, physics-derived celestial bodies, and dynamic astronaut dossier HUD overlays.
+                  </p>
+                  
+                  <div class="project-highlights">
+                    <div class="highlight-item">
+                      <span class="h-val">60 FPS</span>
+                      <span class="h-label">Zero-Stutter WebGL</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">0 ms</span>
+                      <span class="h-label">Texture Latency</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">9 Bodies</span>
+                      <span class="h-label">Active Planetary Engines</span>
+                    </div>
+                  </div>
+                  
+                  <div class="project-links-row">
+                    <a href="https://github.com/lumora/solar-system-3d" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
+                      <span class="btn-icon">📦</span>
+                      <span>Repository</span>
+                    </a>
+                    <a href="https://lumora-space.vercel.app" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
+                      <span class="btn-icon">🚀</span>
+                      <span>Live Demo ↗</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="page-footer-mini">
+                  <span>Lumora Planetary Engine</span>
+                  <span class="page-flip-cue">Click to Flip ➔</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Page 3 (Back of Leaf 1): Project 2 — NeuralCanvas -->
+            <div class="leaf-face leaf-back project-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">PROJECT 02 // CREATIVE AI</span>
+                  <span class="page-num-mark">03</span>
+                </div>
+                
+                <div class="project-card-layout">
+                  <div class="project-img-frame">
+                    <img src="./project-neuralcanvas.jpg" alt="NeuralCanvas Creative Studio Project Visual" class="project-preview-img" draggable="false" />
+                    <span class="project-status-badge ai">✦ WebGPU Compute</span>
+                  </div>
+                  
+                  <div class="project-meta-row">
+                    <span class="tech-tag">Next.js 15</span>
+                    <span class="tech-tag">WebGPU</span>
+                    <span class="tech-tag">WASM</span>
+                    <span class="tech-tag">Diffusion Flow</span>
+                  </div>
+                  
+                  <h3 class="project-title">NeuralCanvas: Infinite AI Studio</h3>
+                  
+                  <p class="project-description">
+                    Infinite node-based generative artboard canvas executing local diffusion models via WebGPU compute shaders. Features real-time collaborative vectors, latent brush interpolation, and multi-resolution rendering pipelines.
+                  </p>
+                  
+                  <div class="project-highlights">
+                    <div class="highlight-item">
+                      <span class="h-val">10×</span>
+                      <span class="h-label">Local GPU Speedup</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">∞</span>
+                      <span class="h-label">Infinite Artboard</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">4K</span>
+                      <span class="h-label">Vector Export</span>
+                    </div>
+                  </div>
+                  
+                  <div class="project-links-row">
+                    <a href="https://github.com/neuralcanvas/core-engine" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
+                      <span class="btn-icon">📦</span>
+                      <span>Repository</span>
+                    </a>
+                    <a href="https://neuralcanvas.ai" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
+                      <span class="btn-icon">🚀</span>
+                      <span>Live Demo ↗</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="page-footer-mini">
+                  <span>Neural Latent Processing</span>
+                  <span class="page-flip-cue">Click to Flip ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaf 2: Project 3 (AeroVision) & Project 4 (ApexFlow) -->
+          <div class="book-leaf" data-leaf="2" id="leaf-2">
+            <!-- Page 4 (Front of Leaf 2): Project 3 — AeroVision -->
+            <div class="leaf-face leaf-front project-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">PROJECT 03 // AUTONOMOUS SYSTEMS</span>
+                  <span class="page-num-mark">04</span>
+                </div>
+                
+                <div class="project-card-layout">
+                  <div class="project-img-frame">
+                    <img src="./project-aerovision.jpg" alt="AeroVision Drone Telemetry Project Visual" class="project-preview-img" draggable="false" />
+                    <span class="project-status-badge telemetry">▲ Telemetry Online</span>
+                  </div>
+                  
+                  <div class="project-meta-row">
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">WebSockets</span>
+                    <span class="tech-tag">Mapbox GL</span>
+                    <span class="tech-tag">WebRTC</span>
+                  </div>
+                  
+                  <h3 class="project-title">AeroVision: Drone Fleet Mission Control</h3>
+                  
+                  <p class="project-description">
+                    Sub-50ms latency telemetry command dashboard monitoring multi-UAV autonomous fleets. Includes 3D topographical trajectory tracking, live battery health diagnostics, geofencing alarms, and autonomous return-to-home protocols.
+                  </p>
+                  
+                  <div class="project-highlights">
+                    <div class="highlight-item">
+                      <span class="h-val">&lt;45 ms</span>
+                      <span class="h-label">Telemetry Latency</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">250+</span>
+                      <span class="h-label">Swarm Node Capacity</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">1080p</span>
+                      <span class="h-label">Zero-Lag FPV Video</span>
+                    </div>
+                  </div>
+                  
+                  <div class="project-links-row">
+                    <a href="https://github.com/aerovision/mission-control" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
+                      <span class="btn-icon">📦</span>
+                      <span>Repository</span>
+                    </a>
+                    <a href="https://aerovision.telemetry.io" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
+                      <span class="btn-icon">🚀</span>
+                      <span>Live Demo ↗</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="page-footer-mini">
+                  <span>AeroVision Flight Operations</span>
+                  <span class="page-flip-cue">Click to Flip ➔</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Page 5 (Back of Leaf 2): Project 4 — ApexFlow -->
+            <div class="leaf-face leaf-back project-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">PROJECT 04 // HIGH FREQUENCY FINTECH</span>
+                  <span class="page-num-mark">05</span>
+                </div>
+                
+                <div class="project-card-layout">
+                  <div class="project-img-frame">
+                    <img src="./project-apexflow.jpg" alt="ApexFlow DeFi Terminal Project Visual" class="project-preview-img" draggable="false" />
+                    <span class="project-status-badge trading">◆ 120k Ticks/Sec</span>
+                  </div>
+                  
+                  <div class="project-meta-row">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Rust WASM</span>
+                    <span class="tech-tag">Web Workers</span>
+                    <span class="tech-tag">Order Book</span>
+                  </div>
+                  
+                  <h3 class="project-title">ApexFlow: High-Frequency DeFi Terminal</h3>
+                  
+                  <p class="project-description">
+                    Institutional-grade decentralized trading terminal engineered with off-thread Web Workers and shared array buffers to process 120,000 tick updates per second with microsecond order routing and slippage mitigation.
+                  </p>
+                  
+                  <div class="project-highlights">
+                    <div class="highlight-item">
+                      <span class="h-val">120k</span>
+                      <span class="h-label">Ticks/Sec Processed</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">0%</span>
+                      <span class="h-label">UI Frame Drop</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">12 ms</span>
+                      <span class="h-label">Order Fill Time</span>
+                    </div>
+                  </div>
+                  
+                  <div class="project-links-row">
+                    <a href="https://github.com/apexflow/dex-terminal" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
+                      <span class="btn-icon">📦</span>
+                      <span>Repository</span>
+                    </a>
+                    <a href="https://apexflow.finance" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
+                      <span class="btn-icon">🚀</span>
+                      <span>Live Demo ↗</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="page-footer-mini">
+                  <span>ApexFlow Liquidity Engine</span>
+                  <span class="page-flip-cue">Click to Flip ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaf 3: Project 5 (Chronos) & Back Cover -->
+          <div class="book-leaf" data-leaf="3" id="leaf-3">
+            <!-- Page 6 (Front of Leaf 3): Project 5 — Chronos -->
+            <div class="leaf-face leaf-front project-page">
+              <div class="parchment-texture"></div>
+              <div class="page-inner-content">
+                <div class="page-header-mini">
+                  <span class="page-book-tag">PROJECT 05 // QUANTUM SIMULATION</span>
+                  <span class="page-num-mark">06</span>
+                </div>
+                
+                <div class="project-card-layout">
+                  <div class="project-img-frame">
+                    <img src="./project-chronos.jpg" alt="Chronos Quantum Clock Project Visual" class="project-preview-img" draggable="false" />
+                    <span class="project-status-badge quantum">◉ Relativistic Engine</span>
+                  </div>
+                  
+                  <div class="project-meta-row">
+                    <span class="tech-tag">Web Audio API</span>
+                    <span class="tech-tag">Canvas 2D</span>
+                    <span class="tech-tag">WASM</span>
+                    <span class="tech-tag">Quantum Math</span>
+                  </div>
+                  
+                  <h3 class="project-title">Chronos: Quantum Relativity Clock</h3>
+                  
+                  <p class="project-description">
+                    A mathematical relativistic simulation modeling gravitational time dilation and quantum decoherence around event horizons. Features interactive tourbillon mechanics and custom procedural clockwork sound synthesis.
+                  </p>
+                  
+                  <div class="project-highlights">
+                    <div class="highlight-item">
+                      <span class="h-val">96 kHz</span>
+                      <span class="h-label">Audio Precision</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">0.85c</span>
+                      <span class="h-label">Velocity Horizon</span>
+                    </div>
+                    <div class="highlight-item">
+                      <span class="h-val">2.16×</span>
+                      <span class="h-label">Max Time Dilation</span>
+                    </div>
+                  </div>
+                  
+                  <div class="project-links-row">
+                    <a href="https://github.com/chronos/quantum-clock" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
+                      <span class="btn-icon">📦</span>
+                      <span>Repository</span>
+                    </a>
+                    <a href="https://chronos-engine.dev" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
+                      <span class="btn-icon">🚀</span>
+                      <span>Live Demo ↗</span>
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="page-footer-mini">
+                  <span>Chronos Spacetime Sim</span>
+                  <span class="page-flip-cue">Flip to Back Cover ➔</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Back Cover (Back of Leaf 3) -->
+            <div class="leaf-face leaf-back back-cover-face">
+              <div class="back-cover-leather">
+                <div class="back-cover-emboss">
+                  <div class="back-emblem">♁</div>
+                  <h3 class="back-title">TERRA ARCHIVES</h3>
+                  <p class="back-subtitle">Vol. I: Selected Engineering Chronicles</p>
+                  <div class="back-seal-mark">ORIGIN: PLANET EARTH (SOL-III) • VERIFIED DEPLOYMENTS</div>
+                  <div class="back-actions">
+                    <button class="book-jump-btn gold" id="btnBackCoverRestart" type="button">↺ Read From Beginning</button>
+                    <button class="book-jump-btn" id="btnBackCoverClose" type="button">✕ Close Archives</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Page Navigation Toolbar -->
+      <footer class="book-nav-toolbar">
+        <button id="btnPrevPage" class="book-nav-btn prev" type="button" aria-label="Previous Page">
+          <span class="nav-arrow">‹</span>
+          <span>Previous</span>
+        </button>
+        
+        <div class="book-pagination-indicator" id="bookPagination">
+          <span class="page-label" id="bookPageLabel">Cover: Terra Archives</span>
+          <div class="page-pills" id="pagePills">
+            <span class="page-pill active" data-leaf-idx="0"></span>
+            <span class="page-pill" data-leaf-idx="1"></span>
+            <span class="page-pill" data-leaf-idx="2"></span>
+            <span class="page-pill" data-leaf-idx="3"></span>
+          </div>
+        </div>
+
+        <button id="btnNextPage" class="book-nav-btn next" type="button" aria-label="Next Page">
+          <span>Next</span>
+          <span class="nav-arrow">›</span>
+        </button>
+      </footer>
+    </div>
+
+    <!-- Mars Section: 3D Video Background + Center 3D Button + Vertical Education Timeline -->
+    <div id="marsModal" class="mars-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mars Education Archive">
+      <!-- 3D Video Background -->
+      <div class="mars-video-wrapper">
+        <video
+          id="marsBgVideo"
+          class="mars-bg-video"
+          src="https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/cloudinarry%20to%20cloudflare/202606021731-e_hqa6sn.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="mars-video-overlay"></div>
+      </div>
+
+      <!-- Top action bar -->
+      <header class="mars-modal-topbar">
+        <div class="mars-tag-group">
+          <span class="mars-badge-dot"></span>
+          <span class="mars-badge-text">MARS // 4TH ORBIT • ACADEMIC ARCHIVES</span>
+        </div>
+        <div class="mars-topbar-controls">
+          <button id="btnViewMarsPlanetData" class="mars-ctrl-pill" type="button" title="View Full Scientific Telemetry">
+            <span class="btn-icon">♂</span>
+            <span>Planet Specs</span>
+          </button>
+          <button id="btnCloseMarsModal" class="mars-close-btn" type="button" aria-label="Close Mars View" title="Return to Solar System">
+            <span>✕</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 3D Button At The Centre Of The Screen -->
+      <div class="mars-center-stage">
+        <button id="btnMarsMyEducation" class="mars-3d-btn" type="button" aria-expanded="false" aria-controls="marsEducationTimeline" title="Click to view education timeline">
+          <div class="mars-3d-btn-top">
+            <span class="mars-3d-btn-glow"></span>
+            <span class="mars-3d-btn-icon">🎓</span>
+            <span class="mars-3d-btn-text">MY EDUCATION</span>
+            <span class="mars-3d-btn-sub">CLICK TO VIEW TIMELINE</span>
+          </div>
+          <div class="mars-3d-btn-base"></div>
+          <div class="mars-3d-btn-shadow"></div>
+        </button>
+      </div>
+
+      <!-- Vertical Education Timeline To The Left Of The Screen -->
+      <aside id="marsEducationTimeline" class="mars-education-timeline" aria-label="Education Timeline">
+        <div class="mars-timeline-card">
+          <header class="mars-timeline-header">
+            <div class="mars-timeline-tag">
+              <span class="pulse-marker"></span>
+              <span>ACADEMIC TRAJECTORY</span>
+            </div>
+            <button id="btnCloseMarsTimeline" class="mars-timeline-close-btn" type="button" aria-label="Collapse Timeline" title="Collapse Timeline">
+              ✕
+            </button>
+          </header>
+
+          <h3 class="mars-timeline-title">EDUCATION TIMELINE</h3>
+          <p class="mars-timeline-caption">Chronological academic journey from foundational schooling to advanced engineering.</p>
+
+          <div class="mars-vertical-track">
+            <!-- 1. First: 10th -->
+            <div class="mars-timeline-node" data-stage="10th">
+              <div class="timeline-indicator">
+                <span class="timeline-dot"></span>
+                <span class="timeline-pulse"></span>
+              </div>
+              <div class="timeline-content-card">
+                <div class="timeline-card-header">
+                  <span class="timeline-stage-pill stage-10">FIRST // 10TH</span>
+                  <span class="timeline-year">2018 – 2021</span>
+                </div>
+                <h4 class="timeline-school-name">SMP Progresif Bumi Shalawat</h4>
+                <p class="timeline-degree">Secondary School Certificate (Class 10th)</p>
+                <div class="timeline-meta-tags">
+                  <span class="meta-tag">Class X</span>
+                  <span class="meta-tag">Foundations</span>
+                  <span class="meta-tag">Science &amp; Maths</span>
+                </div>
+                <p class="timeline-summary">Rigorous secondary education focusing on fundamental sciences, mathematical reasoning, and logical problem solving.</p>
+              </div>
+            </div>
+
+            <!-- 2. Then: 12th -->
+            <div class="mars-timeline-node" data-stage="12th">
+              <div class="timeline-indicator">
+                <span class="timeline-dot"></span>
+                <span class="timeline-pulse"></span>
+              </div>
+              <div class="timeline-content-card">
+                <div class="timeline-card-header">
+                  <span class="timeline-stage-pill stage-12">THEN // 12TH</span>
+                  <span class="timeline-year">2021 – 2024</span>
+                </div>
+                <h4 class="timeline-school-name">SMA Progresif Bumi Shalawat</h4>
+                <p class="timeline-degree">Senior High School / Pre-University (Class 12th)</p>
+                <div class="timeline-meta-tags">
+                  <span class="meta-tag">Class XII</span>
+                  <span class="meta-tag">Natural Sciences</span>
+                  <span class="meta-tag">R&amp;D Division</span>
+                </div>
+                <p class="timeline-summary">Advanced scientific coursework in Physics, Advanced Calculus, and Computing. Spearheaded student enterprise R&amp;D projects and technical publications.</p>
+              </div>
+            </div>
+
+            <!-- 3. Then: College -->
+            <div class="mars-timeline-node" data-stage="college">
+              <div class="timeline-indicator">
+                <span class="timeline-dot"></span>
+                <span class="timeline-pulse"></span>
+              </div>
+              <div class="timeline-content-card">
+                <div class="timeline-card-header">
+                  <span class="timeline-stage-pill stage-college">FINALLY // COLLEGE</span>
+                  <span class="timeline-year">2024 – Present</span>
+                </div>
+                <h4 class="timeline-school-name">University Engineering Degree</h4>
+                <p class="timeline-degree">Bachelor of Technology / Computer Science</p>
+                <div class="timeline-meta-tags">
+                  <span class="meta-tag">Undergraduate</span>
+                  <span class="meta-tag">Computer Science</span>
+                  <span class="meta-tag">3D Web Systems</span>
+                </div>
+                <p class="timeline-summary">Specializing in spatial WebGL engineering, interactive 3D web systems, distributed architectures, and modern digital experiences.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Jupiter Section: Interactive 3D Winding Roadmap (Presentation Template transformed into 3D) -->
+    <div id="jupiterRoadmapModal" class="jupiter-roadmap-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Jupiter Interactive 3D Strategic Roadmap">
+      <!-- 3D Three.js WebGL Canvas for the Winding Road -->
+      <div class="jupiter-roadmap-canvas-wrapper" id="jupiterRoadmapCanvasWrapper">
+        <canvas id="jupiterRoadmapCanvas"></canvas>
+      </div>
+
+      <!-- Atmospheric Overlays & Ambient Vignette -->
+      <div class="jupiter-ambient-overlay"></div>
+
+      <!-- Roadmap Header Bar matching the Reference Image -->
+      <header class="jupiter-roadmap-header">
+        <div class="jupiter-header-branding">
+          <div class="jupiter-status-pill">
+            <span class="jup-status-dot"></span>
+            <span class="jup-status-text">JUPITER // 5TH ORBIT • STRATEGIC VOYAGE ROADMAP</span>
+          </div>
+          <h1 class="jupiter-main-title">Simple Roadmap Presentation Template</h1>
+          <p class="jupiter-subtitle">Interactive 3D Winding Highway • Orbit with mouse • Click milestones to navigate</p>
+        </div>
+
+        <div class="jupiter-header-controls">
+          <button id="btnJupiterViewSpecs" class="jupiter-ctrl-btn" type="button" title="View Scientific Telemetry">
+            <span class="btn-icon">♃</span>
+            <span>Planet Specs</span>
+          </button>
+          <button id="btnJupiterAutoTour" class="jupiter-ctrl-btn tour-btn" type="button" title="Cinematic 3D Camera Flythrough along the Road">
+            <span class="tour-icon">▶</span>
+            <span class="tour-text">Flythrough Tour</span>
+          </button>
+          <button id="btnCloseJupiterModal" class="jupiter-close-btn" type="button" aria-label="Close Jupiter Roadmap" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeJupiterRoadmapModal(true);}">
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- SVG Dynamic Dashed Connector Lines Overlay -->
+      <svg id="roadmapSvgLines" class="roadmap-svg-lines" aria-hidden="true">
+        <defs>
+          <filter id="glow-green" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="glow-red" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="glow-blue" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="glow-yellow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+        <!-- Lines will be dynamically updated in 3D frame loop -->
+        <g id="svgGroup-0" class="svg-milestone-group green-group">
+          <line id="svgLine-0" class="connector-line" stroke="#22c55e" stroke-width="2.2" stroke-dasharray="6,4" />
+          <circle id="svgDot-0" class="connector-road-dot" r="5" fill="#22c55e" filter="url(#glow-green)" />
+        </g>
+        <g id="svgGroup-1" class="svg-milestone-group red-group">
+          <line id="svgLine-1" class="connector-line" stroke="#ef4444" stroke-width="2.2" stroke-dasharray="6,4" />
+          <circle id="svgDot-1" class="connector-road-dot" r="5" fill="#ef4444" filter="url(#glow-red)" />
+        </g>
+        <g id="svgGroup-2" class="svg-milestone-group blue-group">
+          <line id="svgLine-2" class="connector-line" stroke="#0ea5e9" stroke-width="2.2" stroke-dasharray="6,4" />
+          <circle id="svgDot-2" class="connector-road-dot" r="5" fill="#0ea5e9" filter="url(#glow-blue)" />
+        </g>
+        <g id="svgGroup-3" class="svg-milestone-group yellow-group">
+          <line id="svgLine-3" class="connector-line" stroke="#f59e0b" stroke-width="2.2" stroke-dasharray="6,4" />
+          <circle id="svgDot-3" class="connector-road-dot" r="5" fill="#f59e0b" filter="url(#glow-yellow)" />
+        </g>
+      </svg>
+
+      <!-- 3D Projected Interactive Milestones Layer -->
+      <div id="jupiterMilestonesOverlay" class="jupiter-milestones-overlay" aria-label="Roadmap Milestones">
+        <!-- Milestone 1: Green (Bottom Left) -->
+        <div class="roadmap-milestone-card side-left" id="card-milestone-0" data-phase="0" role="button" tabindex="0">
+          <div class="milestone-badge-wrapper green-badge">
+            <div class="milestone-badge-circle">
+              <!-- Handshake Icon from reference -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon">
+                <path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2.3-2.3a1 1 0 0 0-1.4 0l-1 1" />
+                <path d="m18 10 1.3-1.3a1 1 0 0 0 0-1.4l-2.6-2.6a1 1 0 0 0-1.4 0L14 6" />
+                <path d="M7 21l-4-4a2 2 0 0 1 0-2.8l9.4-9.4a2 2 0 0 1 2.8 0l2.8 2.8a2 2 0 0 1 0 2.8L8.6 20" />
+                <path d="m2 14 6 6" />
+              </svg>
+            </div>
+            <div class="badge-pulse-glow"></div>
+          </div>
+          <div class="milestone-content">
+            <h3 class="milestone-title green-text">Phase 01 — Genesis &amp; Discovery</h3>
+            <p class="milestone-desc">Core architecture kickoff, deep telemetry sensor arrays, Jovian atmospheric probe deployment, and early cadet community onboarding.</p>
+            <div class="milestone-subrow">
+              <span class="status-chip completed">● Completed</span>
+              <span class="click-hint">Inspect Details →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestone 2: Coral Red (Lower Right) -->
+        <div class="roadmap-milestone-card side-right" id="card-milestone-1" data-phase="1" role="button" tabindex="0">
+          <div class="milestone-badge-wrapper red-badge">
+            <div class="milestone-badge-circle">
+              <!-- Handshake / Partnership Deal Icon from reference -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="badge-pulse-glow"></div>
+          </div>
+          <div class="milestone-content">
+            <h3 class="milestone-title red-text">Phase 02 — Core Architecture &amp; Expansion</h3>
+            <p class="milestone-desc">Multi-planetary data relay framework, magnetosphere radiation shielding protocols, and high-frequency Jovian communication relays.</p>
+            <div class="milestone-subrow">
+              <span class="status-chip active">● Active Phase</span>
+              <span class="click-hint">Inspect Details →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestone 3: Sky Blue (Mid Left) -->
+        <div class="roadmap-milestone-card side-left" id="card-milestone-2" data-phase="2" role="button" tabindex="0">
+          <div class="milestone-badge-wrapper blue-badge">
+            <div class="milestone-badge-circle">
+              <!-- Magnifier / Research Team Icon from reference -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+                <path d="M11 8a3 3 0 0 0-3 3" />
+              </svg>
+            </div>
+            <div class="badge-pulse-glow"></div>
+          </div>
+          <div class="milestone-content">
+            <h3 class="milestone-title blue-text">Phase 03 — Global Orbit &amp; Intelligence</h3>
+            <p class="milestone-desc">Planetary sensor fusion matrix, Great Red Spot turbulence machine learning models, and real-time autonomous trajectory correction.</p>
+            <div class="milestone-subrow">
+              <span class="status-chip in-dev">● In Development</span>
+              <span class="click-hint">Inspect Details →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Milestone 4: Gold Yellow (Upper Right) -->
+        <div class="roadmap-milestone-card side-right" id="card-milestone-3" data-phase="3" role="button" tabindex="0">
+          <div class="milestone-badge-wrapper yellow-badge">
+            <div class="milestone-badge-circle">
+              <!-- Speech / Dialogue Bubbles Icon from reference -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <path d="M8 9h8" />
+                <path d="M8 13h5" />
+              </svg>
+            </div>
+            <div class="badge-pulse-glow"></div>
+          </div>
+          <div class="milestone-content">
+            <h3 class="milestone-title yellow-text">Phase 04 — Infinite Horizons &amp; Ecosystem</h3>
+            <p class="milestone-desc">Colony mesh network deployment, inter-station collaborative research labs, and open interplanetary developer APIs for the next century of explorers.</p>
+            <div class="milestone-subrow">
+              <span class="status-chip planned">● Upcoming Era</span>
+              <span class="click-hint">Inspect Details →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Interactive Road Dock / View Selector -->
+      <nav class="jupiter-bottom-dock" aria-label="Roadmap Camera Views">
+        <div class="roadmap-nav-pills">
+          <button class="road-dock-btn is-active" id="btnRoadOverview" data-camera-view="overview" type="button">
+            <span class="dock-nav-icon">🛣️</span>
+            <span>Overview View</span>
+          </button>
+          <button class="road-dock-btn green-btn" data-camera-view="0" type="button">
+            <span class="badge-dot green"></span>
+            <span>Phase 01</span>
+          </button>
+          <button class="road-dock-btn red-btn" data-camera-view="1" type="button">
+            <span class="badge-dot red"></span>
+            <span>Phase 02</span>
+          </button>
+          <button class="road-dock-btn blue-btn" data-camera-view="2" type="button">
+            <span class="badge-dot blue"></span>
+            <span>Phase 03</span>
+          </button>
+          <button class="road-dock-btn yellow-btn" data-camera-view="3" type="button">
+            <span class="badge-dot yellow"></span>
+            <span>Phase 04</span>
+          </button>
+        </div>
+        <div class="roadmap-hints">
+          <span>💡 Click &amp; drag with mouse to orbit 3D road in 360° • Scroll to zoom • Click badges to fly</span>
+        </div>
+      </nav>
+
+      <!-- Expandable Milestone Detail Card / Modal Slide-Out -->
+      <div id="milestoneDetailDrawer" class="milestone-drawer" aria-hidden="true">
+        <div class="drawer-inner-card">
+          <button id="btnCloseMilestoneDrawer" class="drawer-close-btn" type="button" aria-label="Close detail panel">✕</button>
+          <div class="drawer-badge-row">
+            <span id="drawerPhaseBadge" class="drawer-phase-badge">PHASE 01</span>
+            <span id="drawerStatusBadge" class="drawer-status-badge">COMPLETED</span>
+          </div>
+          <h2 id="drawerTitle" class="drawer-title">Foundation &amp; Genesis</h2>
+          <p id="drawerDesc" class="drawer-desc">Full narrative and scope description...</p>
+          
+          <div class="drawer-deliverables">
+            <h4>Key Mission Milestones &amp; Deliverables:</h4>
+            <ul id="drawerDeliverablesList" class="deliverables-list"></ul>
+          </div>
+
+          <div class="drawer-metrics-grid" id="drawerMetricsGrid"></div>
+
+          <div class="drawer-actions-row">
+            <button id="btnPrevMilestone" class="drawer-action-btn" type="button">← Prev Phase</button>
+            <button id="btnResetOverviewFromDrawer" class="drawer-action-btn primary" type="button">Reset Overview View</button>
+            <button id="btnNextMilestone" class="drawer-action-btn" type="button">Next Phase →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Uranus Section: Cinematic 3D Opening Laptop & Interactive Pop-Out Resume -->
+    <div id="uranusResumeModal" class="uranus-resume-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Uranus Interactive 3D Laptop Resume">
+      <!-- 3D Three.js WebGL Canvas for the Laptop -->
+      <div class="uranus-laptop-canvas-wrapper" id="uranusLaptopCanvasWrapper">
+        <canvas id="uranusLaptopCanvas"></canvas>
+      </div>
+
+      <!-- Atmospheric Ambient Lighting & Aquamarine Space Vignette -->
+      <div class="uranus-ambient-overlay"></div>
+
+      <!-- Uranus Header Bar -->
+      <header class="uranus-modal-topbar">
+        <div class="uranus-tag-group">
+          <span class="uranus-badge-dot"></span>
+          <span class="uranus-badge-text">URANUS // 7TH ORBIT • ICE GIANT EMBEDDED WORKSPACE</span>
+        </div>
+        <div class="uranus-topbar-controls">
+          <button id="btnUranusPopResume" class="uranus-ctrl-pill resume-toggle-btn" type="button" title="Pop Out Resume Card">
+            <span class="btn-icon">📄</span>
+            <span class="pop-btn-text">Pop Out Resume</span>
+          </button>
+          <button id="btnViewUranusPlanetData" class="uranus-ctrl-pill" type="button" title="View Uranus Scientific Telemetry">
+            <span class="btn-icon">♅</span>
+            <span>Planet Specs</span>
+          </button>
+          <button id="btnCloseUranusModal" class="uranus-close-btn" type="button" aria-label="Close Uranus View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeUranusResumeModal(true);}">
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Interactive 3D Floating Resume Card Overlay -->
+      <div id="uranusFloatingResume" class="uranus-floating-resume" aria-hidden="true">
+        <article class="resume-glass-card" id="resumeGlassCard">
+          <!-- Card Header / Title -->
+          <div class="resume-card-header">
+            <div class="resume-profile-snippet">
+              <div class="resume-avatar-badge">TS</div>
+              <div>
+                <h2 class="resume-name">Tanishka Sahu</h2>
+                <p class="resume-headline">Creative 3D Developer &amp; Full-Stack Software Engineer</p>
+                <p class="resume-edu-sub">Vellore Institute of Technology (VIT) • Computer Science &amp; Engineering</p>
+              </div>
+            </div>
+            <div class="resume-header-actions">
+              <span class="resume-status-badge">● Available for Roles</span>
+              <button id="btnDockResume" class="resume-dock-btn" type="button" title="Dock resume back inside laptop screen">
+                <span>Dock to Screen ⤦</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Body Content: Skills, Experience, Projects -->
+          <div class="resume-card-body">
+            <!-- Left Column: Core Focus & Tech Stack -->
+            <div class="resume-col-left">
+              <div class="resume-section">
+                <h3 class="resume-sec-title">Core Expertise</h3>
+                <div class="resume-skill-cloud">
+                  <span class="skill-tag cyan">Three.js / WebGL</span>
+                  <span class="skill-tag">Interactive 3D UI</span>
+                  <span class="skill-tag">GLSL Shaders</span>
+                  <span class="skill-tag">Spatial Math</span>
+                  <span class="skill-tag">React / Next.js</span>
+                  <span class="skill-tag">JavaScript ES6+</span>
+                  <span class="skill-tag">Physics &amp; Animations</span>
+                  <span class="skill-tag">Node.js / Express</span>
+                  <span class="skill-tag">Distributed Systems</span>
+                  <span class="skill-tag">UI/UX Craft</span>
+                </div>
+              </div>
+
+              <div class="resume-section">
+                <h3 class="resume-sec-title">Education</h3>
+                <div class="resume-item">
+                  <div class="resume-item-header">
+                    <strong>B.Tech in Computer Science</strong>
+                    <span class="resume-date">2022 – 2026</span>
+                  </div>
+                  <p class="resume-place">Vellore Institute of Technology (VIT)</p>
+                  <p class="resume-notes">Focus on Spatial Graphics, Algorithms &amp; Cloud Distributed Computing.</p>
+                </div>
+              </div>
+
+              <div class="resume-section">
+                <h3 class="resume-sec-title">Contact &amp; Connect</h3>
+                <div class="resume-contact-links">
+                  <a href="mailto:tanishkasahuwork191@gmail.com" class="resume-contact-chip">
+                    <span class="contact-icon">✉</span>
+                    <span>tanishkasahuwork191@gmail.com</span>
+                  </a>
+                  <span class="resume-contact-chip">
+                    <span class="contact-icon">📍</span>
+                    <span>VIT Vellore, India</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Projects & Experience -->
+            <div class="resume-col-right">
+              <div class="resume-section">
+                <h3 class="resume-sec-title">Featured Highlights &amp; Projects</h3>
+                
+                <div class="resume-project-card">
+                  <div class="proj-header">
+                    <strong class="proj-title">Lumora — 3D Solar System &amp; Cadet Skyranger</strong>
+                    <span class="proj-tag">WebGL • Three.js</span>
+                  </div>
+                  <p class="proj-desc">Designed an ultra-performant interactive 3D solar system featuring procedural planet atmospheres, volumetric asteroid belts, orbital telemetry, and cursor-reactive 3D hero experiences.</p>
+                </div>
+
+                <div class="resume-project-card">
+                  <div class="proj-header">
+                    <strong class="proj-title">ApexFlow &amp; Chronos Engine</strong>
+                    <span class="proj-tag">Real-Time Systems</span>
+                  </div>
+                  <p class="proj-desc">High-throughput spatial telemetry visualization dashboards with zero-latency WebGL shaders, particle simulations, and dynamic data feeds.</p>
+                </div>
+
+                <div class="resume-project-card">
+                  <div class="proj-header">
+                    <strong class="proj-title">Interactive 3D Hardware Simulation</strong>
+                    <span class="proj-tag">Spatial UI</span>
+                  </div>
+                  <p class="proj-desc">Crafted kinematic 3D hardware models with hinge angle interpolation, illuminated chiclet keycap shaders, and smooth pop-out dimensional cards.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer -->
+          <footer class="resume-card-footer">
+            <div class="footer-links">
+              <a href="mailto:tanishkasahuwork191@gmail.com" class="resume-action-btn primary" title="Send Email">
+                <span>✉ Get in Touch</span>
+              </a>
+              <button id="btnReopenLaptopSequence" class="resume-action-btn" type="button" title="Replay 3D laptop opening animation">
+                <span>↺ Replay 3D Animation</span>
+              </button>
+            </div>
+            <span class="resume-hint">💡 Hover and move pointer for 3D card tilt • Click "Dock" to return to laptop screen</span>
+          </footer>
+        </article>
+      </div>
+
+      <!-- Bottom Camera & Animation Controls Dock -->
+      <nav class="uranus-bottom-dock" aria-label="Laptop Controls">
+        <div class="uranus-dock-pills">
+          <button class="uranus-dock-btn is-active" id="btnUranusViewFront" data-cam="front" type="button">
+            <span>💻 Front View</span>
+          </button>
+          <button class="uranus-dock-btn" id="btnUranusViewAngle" data-cam="angle" type="button">
+            <span>📐 Isometric 3D</span>
+          </button>
+          <button class="uranus-dock-btn" id="btnUranusViewKeyboard" data-cam="keyboard" type="button">
+            <span>⌨️ Keyboard Glow</span>
+          </button>
+          <button class="uranus-dock-btn toggle-resume-btn" id="btnUranusToggleResumeDock" type="button">
+            <span>📄 Pop-Out Resume</span>
+          </button>
+          <button class="uranus-dock-btn" id="btnUranusReplayAnim" type="button">
+            <span>↺ Replay Sequence</span>
+          </button>
+        </div>
+        <div class="uranus-hints">
+          <span>💡 Click screen to pop out resume • Drag to orbit laptop in 3D • Scroll to zoom</span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Glassmorphic Interactive Planet Dossier Dialog Modal -->
+    <dialog id="planetModal" class="planet-modal" aria-labelledby="modalPlanetName" aria-modal="true">
+      <div class="planet-modal-card">
+        <!-- Modal Top Bar -->
+        <header class="dossier-header">
+          <div class="dossier-id-block">
+            <span id="modalPlanetSymbol" class="planet-symbol">☉</span>
+            <div>
+              <div class="dossier-tagline">
+                <span id="modalPlanetCategory" class="badge-category">Category</span>
+                <span id="modalDistance" class="badge-distance">Distance</span>
+              </div>
+              <h2 id="modalPlanetName" class="planet-name">Celestial Body</h2>
+              <p id="modalPlanetTitle" class="planet-subtitle">Subheading</p>
+            </div>
+          </div>
+
+          <div class="dossier-nav-actions">
+            <button id="btnPrevPlanet" class="dossier-ctrl-btn" type="button" aria-label="Previous celestial body" title="Previous celestial body">
+              <span>←</span>
+            </button>
+            <button id="btnNextPlanet" class="dossier-ctrl-btn" type="button" aria-label="Next celestial body" title="Next celestial body">
+              <span>→</span>
+            </button>
+            <button id="btnClosePlanetModal" class="dossier-ctrl-btn close-btn" type="button" aria-label="Close dossier">
+              <span>✕</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Vital Telemetry Stats Strip -->
+        <div class="telemetry-grid">
+          <div class="telemetry-item">
+            <span class="tel-label">DIAMETER</span>
+            <span id="specDiameter" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">MASS</span>
+            <span id="specMass" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">GRAVITY</span>
+            <span id="specGravity" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">SURFACE TEMP</span>
+            <span id="specTemp" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">DAY LENGTH</span>
+            <span id="specRotation" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">ORBIT PERIOD</span>
+            <span id="specOrbit" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">MOONS</span>
+            <span id="specMoons" class="tel-val">—</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="tel-label">DISTANCE KM</span>
+            <span id="specDistanceKm" class="tel-val">—</span>
+          </div>
+        </div>
+
+        <!-- Dossier Tabs Header -->
+        <nav class="dossier-tabs" aria-label="Dossier Sections">
+          <button class="dossier-tab-btn is-active" data-tab="overview" type="button">
+            <span>Overview &amp; Origin</span>
+          </button>
+          <button class="dossier-tab-btn" data-tab="atmosphere" type="button">
+            <span>Atmosphere &amp; Composition</span>
+          </button>
+          <button class="dossier-tab-btn" data-tab="missions" type="button">
+            <span>Exploration Missions</span>
+          </button>
+          <button class="dossier-tab-btn" data-tab="notes" type="button">
+            <span>Cadet Field Notes</span>
+          </button>
+        </nav>
+
+        <!-- Dossier Tab Panels -->
+        <div class="dossier-panels-wrapper">
+          <!-- Overview Tab -->
+          <div id="panel-overview" class="dossier-tab-panel is-active">
+            <h3 class="panel-section-title">Planetary Profile</h3>
+            <p id="dossierOverviewText" class="panel-body-text"></p>
+
+            <h3 class="panel-section-title" style="margin-top: 18px;">Historical Discovery</h3>
+            <p id="dossierDiscoveryText" class="panel-body-text"></p>
+          </div>
+
+          <!-- Atmosphere & Composition Tab -->
+          <div id="panel-atmosphere" class="dossier-tab-panel">
+            <h3 class="panel-section-title">Atmospheric &amp; Chemical Abundance</h3>
+            <div id="dossierAtmoList" class="atmo-list"></div>
+          </div>
+
+          <!-- Missions Tab -->
+          <div id="panel-missions" class="dossier-tab-panel">
+            <h3 class="panel-section-title">Historic &amp; Future Spacecraft Missions</h3>
+            <div id="dossierMissionsList" class="missions-list"></div>
+          </div>
+
+          <!-- Cadet Field Notes Tab -->
+          <div id="panel-notes" class="dossier-tab-panel">
+            <h3 class="panel-section-title">Classified Explorer Insights</h3>
+            <ul id="dossierCadetNotes" class="cadet-notes-list"></ul>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Custom Cursor Ring & Dot -->
+    <div class="pointer-dot" id="pointerDot" aria-hidden="true"></div>
+    <div class="pointer-ring" id="pointerRing" aria-hidden="true"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="./solar-system.js"></script>
+    <script src="./script.js" defer></script>
+  </body>
+</html>
