@@ -220,6 +220,9 @@
       if (typeof window.solarAppInstance.closeUranusResumeModal === 'function') {
         window.solarAppInstance.closeUranusResumeModal(false);
       }
+      if (typeof window.solarAppInstance.closeSaturnCertificatesModal === 'function') {
+        window.solarAppInstance.closeSaturnCertificatesModal(false);
+      }
       if (typeof window.solarAppInstance.setMarsSceneBackground === 'function') {
         window.solarAppInstance.setMarsSceneBackground(false);
       }

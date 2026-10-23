@@ -1684,6 +1684,316 @@
       </nav>
     </div>
 
+    <!-- Saturn Section: 3D Glassmorphism Certificates & Achievements Hanging Vault -->
+    <div id="saturnCertificatesModal" class="saturn-cert-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Saturn Certificates & Achievements">
+      <!-- Ambient Cosmic Atmosphere & Golden Saturn Ring Backdrop -->
+      <div class="saturn-ambient-backdrop">
+        <div class="saturn-ring-glow"></div>
+        <div class="saturn-dust-particles"></div>
+      </div>
+
+      <!-- Top Header Navigation -->
+      <header class="saturn-modal-topbar">
+        <div class="saturn-tag-group">
+          <span class="saturn-badge-dot"></span>
+          <span class="saturn-badge-text">SATURN // 6TH ORBIT • CERTIFICATES &amp; ACHIEVEMENTS VAULT</span>
+        </div>
+        <div class="saturn-topbar-controls">
+          <button id="btnSaturnReplayDrop" class="saturn-ctrl-pill" type="button" title="Replay drop entrance animation">
+            <span class="btn-icon">↺</span>
+            <span>Replay Drop</span>
+          </button>
+          <button id="btnViewSaturnPlanetData" class="saturn-ctrl-pill" type="button" title="View Saturn Scientific Telemetry">
+            <span class="btn-icon">♄</span>
+            <span>Planet Specs</span>
+          </button>
+          <button id="btnCloseSaturnModal" class="saturn-close-btn" type="button" aria-label="Close Saturn View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeSaturnCertificatesModal(true);}">
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Architectural Ceiling Beam / String Mount Rail -->
+      <div class="saturn-ceiling-rail" id="saturnCeilingRail">
+        <div class="rail-glow-strip"></div>
+        <div class="rail-brackets" id="railBrackets">
+          <!-- 5 Anchor Mount Brackets dynamically aligned with each card -->
+          <div class="rail-bracket-item" data-idx="0"><span class="rail-bolt left"></span><span class="rail-lug"></span><span class="rail-bolt right"></span></div>
+          <div class="rail-bracket-item" data-idx="1"><span class="rail-bolt left"></span><span class="rail-lug"></span><span class="rail-bolt right"></span></div>
+          <div class="rail-bracket-item" data-idx="2"><span class="rail-bolt left"></span><span class="rail-lug"></span><span class="rail-bolt right"></span></div>
+          <div class="rail-bracket-item" data-idx="3"><span class="rail-bolt left"></span><span class="rail-lug"></span><span class="rail-bolt right"></span></div>
+          <div class="rail-bracket-item" data-idx="4"><span class="rail-bolt left"></span><span class="rail-lug"></span><span class="rail-bolt right"></span></div>
+        </div>
+      </div>
+
+      <!-- Dynamic High-Precision SVG Suspension Strings Layer (Pixel-perfect connection) -->
+      <svg class="saturn-strings-svg" id="saturnStringsSvg" aria-hidden="true">
+        <defs>
+          <linearGradient id="saturnStringGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.95" />
+            <stop offset="25%" stop-color="#fde047" stop-opacity="0.85" />
+            <stop offset="60%" stop-color="#fbbf24" stop-opacity="0.75" />
+            <stop offset="100%" stop-color="#d97706" stop-opacity="0.95" />
+          </linearGradient>
+          <filter id="stringGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- 5 pairs of dynamic lines connecting ceiling lugs to each card's eyelets -->
+        <g id="saturnStringsGroup"></g>
+      </svg>
+
+      <!-- 3D Hanging Stage for Glass Cards -->
+      <div class="saturn-hanging-stage" id="saturnHangingStage">
+        <div class="saturn-cards-container" id="saturnCardsContainer">
+          
+          <!-- Card 0: Smart India Hackathon -->
+          <article class="saturn-glass-card" data-idx="0" data-cat="hackathon" id="saturnCard0">
+            <div class="card-hanger-top">
+              <span class="hanger-eyelet left" data-eyelet="left"></span>
+              <div class="hanger-bracket-bar"></div>
+              <span class="hanger-eyelet right" data-eyelet="right"></span>
+            </div>
+            <div class="card-glass-body">
+              <div class="card-top-meta">
+                <span class="card-cat-badge gold">🏆 National Hackathon</span>
+                <span class="card-date-badge">2024</span>
+              </div>
+              <div class="card-icon-emblem gold">🏆</div>
+              <h3 class="card-title">Smart India Hackathon</h3>
+              <p class="card-org">Ministry of Education &amp; AICTE</p>
+              <div class="card-preview-strip">
+                <span class="seal-icon">🥇</span>
+                <span class="seal-text">Top Innovation Finalist</span>
+              </div>
+              <p class="card-summary">Engineered high-throughput spatial telemetry IoT command center with real-time WebGL visual mapping.</p>
+              
+              <!-- Expanded details shown when clicked -->
+              <div class="card-expanded-content">
+                <div class="expanded-divider"></div>
+                <h4 class="expanded-heading">Project &amp; Technical Scope</h4>
+                <p class="expanded-desc">Architected an end-to-end telemetry pipeline processing live sensor telemetry streams, visualized via hardware-accelerated Three.js orbital maps with zero dropouts.</p>
+                <div class="expanded-skills">
+                  <span class="exp-tag">Three.js</span>
+                  <span class="exp-tag">WebGL</span>
+                  <span class="exp-tag">Edge IoT</span>
+                  <span class="exp-tag">Real-Time Streams</span>
+                  <span class="exp-tag">Distributed Arch</span>
+                </div>
+                <div class="expanded-footer">
+                  <span class="credential-id">VERIFY: SIH-2024-NATL-891</span>
+                  <button class="btn-return-card" type="button">
+                    <span>Return to Hanging ⤦</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 1: 3D Graphics & Full-Stack Internship -->
+          <article class="saturn-glass-card" data-idx="1" data-cat="internship" id="saturnCard1">
+            <div class="card-hanger-top">
+              <span class="hanger-eyelet left" data-eyelet="left"></span>
+              <div class="hanger-bracket-bar"></div>
+              <span class="hanger-eyelet right" data-eyelet="right"></span>
+            </div>
+            <div class="card-glass-body">
+              <div class="card-top-meta">
+                <span class="card-cat-badge cyan">💼 Industry Internship</span>
+                <span class="card-date-badge">2024</span>
+              </div>
+              <div class="card-icon-emblem cyan">⚡</div>
+              <h3 class="card-title">3D WebGL Systems Intern</h3>
+              <p class="card-org">Spatial Dynamics Systems</p>
+              <div class="card-preview-strip">
+                <span class="seal-icon">✦</span>
+                <span class="seal-text">Engineering Excellence</span>
+              </div>
+              <p class="card-summary">Built custom shader pipelines, kinematic hardware rigs, and high-performance spatial UI components.</p>
+              
+              <!-- Expanded details shown when clicked -->
+              <div class="card-expanded-content">
+                <div class="expanded-divider"></div>
+                <h4 class="expanded-heading">Project &amp; Technical Scope</h4>
+                <p class="expanded-desc">Optimized WebGL rendering loops, cutting draw calls by 34% across high-density 3D geometry models. Crafted custom GLSL procedural materials and interactive perspective viewports.</p>
+                <div class="expanded-skills">
+                  <span class="exp-tag">GLSL Shaders</span>
+                  <span class="exp-tag">Three.js</span>
+                  <span class="exp-tag">React / Next.js</span>
+                  <span class="exp-tag">Draw-Call Opt</span>
+                  <span class="exp-tag">TypeScript</span>
+                </div>
+                <div class="expanded-footer">
+                  <span class="credential-id">VERIFY: SDL-ENG-2024-041</span>
+                  <button class="btn-return-card" type="button">
+                    <span>Return to Hanging ⤦</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: VIT College Club Lead & Creative Technologist -->
+          <article class="saturn-glass-card" data-idx="2" data-cat="leadership" id="saturnCard2">
+            <div class="card-hanger-top">
+              <span class="hanger-eyelet left" data-eyelet="left"></span>
+              <div class="hanger-bracket-bar"></div>
+              <span class="hanger-eyelet right" data-eyelet="right"></span>
+            </div>
+            <div class="card-glass-body">
+              <div class="card-top-meta">
+                <span class="card-cat-badge purple">🎓 College Leadership</span>
+                <span class="card-date-badge">2023 – 2025</span>
+              </div>
+              <div class="card-icon-emblem purple">🏛️</div>
+              <h3 class="card-title">Technical &amp; Graphics Lead</h3>
+              <p class="card-org">Vellore Institute of Technology (VIT)</p>
+              <div class="card-preview-strip">
+                <span class="seal-icon">★</span>
+                <span class="seal-text">Lead Technologist &amp; Mentor</span>
+              </div>
+              <p class="card-summary">Directing 3D WebGL workshops, orchestrating campus hackathons, and mentoring 400+ students in creative engineering.</p>
+              
+              <!-- Expanded details shown when clicked -->
+              <div class="card-expanded-content">
+                <div class="expanded-divider"></div>
+                <h4 class="expanded-heading">Project &amp; Technical Scope</h4>
+                <p class="expanded-desc">Spearheaded university technical chapters, authored hands-on curriculum on modern spatial web graphics, and managed cross-functional design and engineering teams.</p>
+                <div class="expanded-skills">
+                  <span class="exp-tag">Leadership</span>
+                  <span class="exp-tag">Workshops</span>
+                  <span class="exp-tag">Mentorship</span>
+                  <span class="exp-tag">Hackathon Org</span>
+                  <span class="exp-tag">WebGL Math</span>
+                </div>
+                <div class="expanded-footer">
+                  <span class="credential-id">VERIFY: VIT-LEAD-2024-88</span>
+                  <button class="btn-return-card" type="button">
+                    <span>Return to Hanging ⤦</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Global Game Jam / WebGL Graphics Award -->
+          <article class="saturn-glass-card" data-idx="3" data-cat="hackathon" id="saturnCard3">
+            <div class="card-hanger-top">
+              <span class="hanger-eyelet left" data-eyelet="left"></span>
+              <div class="hanger-bracket-bar"></div>
+              <span class="hanger-eyelet right" data-eyelet="right"></span>
+            </div>
+            <div class="card-glass-body">
+              <div class="card-top-meta">
+                <span class="card-cat-badge emerald">🎮 Global Competition</span>
+                <span class="card-date-badge">2023</span>
+              </div>
+              <div class="card-icon-emblem emerald">🌌</div>
+              <h3 class="card-title">Best Visuals &amp; Shaders</h3>
+              <p class="card-org">Global Game Jam International</p>
+              <div class="card-preview-strip">
+                <span class="seal-icon">✨</span>
+                <span class="seal-text">International Recognition</span>
+              </div>
+              <p class="card-summary">Won Best Visual Design for procedural cosmos simulations featuring real-time planetary volumetrics and shaders.</p>
+              
+              <!-- Expanded details shown when clicked -->
+              <div class="card-expanded-content">
+                <div class="expanded-divider"></div>
+                <h4 class="expanded-heading">Project &amp; Technical Scope</h4>
+                <p class="expanded-desc">Developed procedural planetary atmosphere shaders, raymarched planetary dust rings, and synchronized spatial audio synthesized on Web Audio API.</p>
+                <div class="expanded-skills">
+                  <span class="exp-tag">GLSL Shaders</span>
+                  <span class="exp-tag">Volumetrics</span>
+                  <span class="exp-tag">Procedural Gen</span>
+                  <span class="exp-tag">Game Design</span>
+                  <span class="exp-tag">Web Audio</span>
+                </div>
+                <div class="expanded-footer">
+                  <span class="credential-id">VERIFY: GGJ-VIS-2023-772</span>
+                  <button class="btn-return-card" type="button">
+                    <span>Return to Hanging ⤦</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Cloud & Distributed Computing Specialization -->
+          <article class="saturn-glass-card" data-idx="4" data-cat="specialization" id="saturnCard4">
+            <div class="card-hanger-top">
+              <span class="hanger-eyelet left" data-eyelet="left"></span>
+              <div class="hanger-bracket-bar"></div>
+              <span class="hanger-eyelet right" data-eyelet="right"></span>
+            </div>
+            <div class="card-glass-body">
+              <div class="card-top-meta">
+                <span class="card-cat-badge amber">☁️ Advanced Honors</span>
+                <span class="card-date-badge">2024</span>
+              </div>
+              <div class="card-icon-emblem amber">🏅</div>
+              <h3 class="card-title">Cloud Computing Honors</h3>
+              <p class="card-org">NPTEL / IIT Faculty &amp; AWS</p>
+              <div class="card-preview-strip">
+                <span class="seal-icon">🎖️</span>
+                <span class="seal-text">Top 2% National Elite Rank</span>
+              </div>
+              <p class="card-summary">Achieved top national percentile in scalable cloud architecture, distributed consensus, and microservices.</p>
+              
+              <!-- Expanded details shown when clicked -->
+              <div class="card-expanded-content">
+                <div class="expanded-divider"></div>
+                <h4 class="expanded-heading">Project &amp; Technical Scope</h4>
+                <p class="expanded-desc">Mastered CAP theorem trade-offs, raft consensus, elastic container orchestration, low-latency API gateways, and distributed caching topologies.</p>
+                <div class="expanded-skills">
+                  <span class="exp-tag">AWS Cloud</span>
+                  <span class="exp-tag">Distributed Systems</span>
+                  <span class="exp-tag">Microservices</span>
+                  <span class="exp-tag">Consensus Algorithms</span>
+                  <span class="exp-tag">High Availability</span>
+                </div>
+                <div class="expanded-footer">
+                  <span class="credential-id">VERIFY: NPTEL-CS-2024-TOP2</span>
+                  <button class="btn-return-card" type="button">
+                    <span>Return to Hanging ⤦</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Bottom Interactive Dock Filter Controls -->
+      <nav class="saturn-bottom-dock" aria-label="Certificates Filter">
+        <div class="saturn-dock-pills">
+          <button class="saturn-dock-btn is-active" data-filter="all" type="button">
+            <span>🌟 All Honors (5)</span>
+          </button>
+          <button class="saturn-dock-btn" data-filter="hackathon" type="button">
+            <span>🏆 Hackathons</span>
+          </button>
+          <button class="saturn-dock-btn" data-filter="internship" type="button">
+            <span>💼 Internships</span>
+          </button>
+          <button class="saturn-dock-btn" data-filter="leadership" type="button">
+            <span>🎓 Leadership</span>
+          </button>
+          <button class="saturn-dock-btn" data-filter="specialization" type="button">
+            <span>☁️ Certifications</span>
+          </button>
+        </div>
+        <div class="saturn-hints">
+          <span>💡 Click any hanging card to bring it forward in 3D • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
+        </div>
+      </nav>
+    </div>
+
     <!-- Glassmorphic Interactive Planet Dossier Dialog Modal -->
     <dialog id="planetModal" class="planet-modal" aria-labelledby="modalPlanetName" aria-modal="true">
       <div class="planet-modal-card">

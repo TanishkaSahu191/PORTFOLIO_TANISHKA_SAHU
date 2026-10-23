@@ -5752,6 +5752,761 @@ a.resume-contact-chip:hover {
   }
 }
 
+
+/* ========================================================
+   SATURN 3D GLASSMORPHISM CERTIFICATES & ACHIEVEMENTS MODAL
+   ======================================================== */
+.saturn-cert-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 125;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), visibility 400ms ease;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 15%, #19140a 0%, #0d0905 55%, #040302 100%);
+  font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #f8fafc;
+  user-select: none;
+}
+
+.saturn-cert-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* Ambient Saturn Rings Halo & Cosmic Atmosphere */
+.saturn-ambient-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.saturn-ring-glow {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-8deg);
+  width: 140vw;
+  height: 380px;
+  background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 40%, rgba(251, 191, 36, 0.04) 70%, transparent 85%);
+  filter: blur(50px);
+}
+
+.saturn-dust-particles {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 20px 30px, #fbbf24, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 60px 170px, #fef08a, rgba(0,0,0,0)),
+    radial-gradient(1.8px 1.8px at 120px 80px, #f59e0b, rgba(0,0,0,0)),
+    radial-gradient(1.2px 1.2px at 200px 240px, #fbbf24, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 280px 110px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  opacity: 0.35;
+  animation: saturnParticleDrift 80s linear infinite;
+}
+
+@keyframes saturnParticleDrift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-320px); }
+}
+
+/* Saturn Top Navigation Bar */
+.saturn-modal-topbar {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.saturn-tag-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 18px;
+  background: rgba(22, 16, 9, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 999px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(245, 158, 11, 0.2);
+}
+
+.saturn-badge-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 10px #fbbf24, 0 0 20px #d97706;
+  animation: saturnPulseDot 2s ease-in-out infinite alternate;
+}
+
+@keyframes saturnPulseDot {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.3); opacity: 1; filter: brightness(1.3); }
+}
+
+.saturn-badge-text {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fef08a;
+  text-transform: uppercase;
+}
+
+.saturn-topbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.saturn-ctrl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fef08a;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.saturn-ctrl-pill:hover {
+  background: rgba(245, 158, 11, 0.24);
+  border-color: #fbbf24;
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+}
+
+.saturn-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  pointer-events: auto;
+}
+
+.saturn-close-btn * {
+  pointer-events: none;
+}
+
+.saturn-close-btn:hover {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ========================================================
+   ARCHITECTURAL CEILING RAIL (Anchor for Strings)
+   ======================================================== */
+.saturn-ceiling-rail {
+  position: relative;
+  z-index: 25;
+  width: min(1380px, 94vw);
+  height: 18px;
+  margin-top: 4px;
+  background: linear-gradient(180deg, #2c2013 0%, #1a140a 45%, #0e0a05 100%);
+  border-radius: 9px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85),
+              0 0 25px rgba(245, 158, 11, 0.25),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 24px;
+}
+
+.rail-glow-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent 0%, #d97706 20%, #fef08a 50%, #d97706 80%, transparent 100%);
+  box-shadow: 0 0 12px #fbbf24;
+}
+
+.rail-brackets {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  padding: 0 min(5vw, 60px);
+}
+
+.rail-bracket-item {
+  width: 32px;
+  height: 14px;
+  background: #140f09;
+  border: 1.5px solid #fbbf24;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  position: relative;
+}
+
+.rail-lug {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fef08a;
+  box-shadow: 0 0 8px #fbbf24;
+}
+
+/* ========================================================
+   DYNAMIC SVG SUSPENSION STRINGS (Pixel-Perfect Connection)
+   ======================================================== */
+.saturn-strings-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.saturn-string-line {
+  stroke: url(#saturnStringGrad);
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.7));
+  transition: opacity 300ms ease;
+}
+
+/* ========================================================
+   3D HANGING STAGE & GLASS CARDS
+   ======================================================== */
+.saturn-hanging-stage {
+  perspective: 2200px;
+  perspective-origin: 50% 30%;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 48px;
+  position: relative;
+  z-index: 20;
+}
+
+.saturn-cards-container {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  justify-content: center;
+  width: min(1420px, 98vw);
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* Individual Hanging Glass Card */
+.saturn-glass-card {
+  width: min(255px, 18.5vw);
+  min-height: 400px;
+  position: relative;
+  border-radius: 24px;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  cursor: pointer;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease,
+              opacity 0.4s ease,
+              filter 0.4s ease;
+  transform-origin: 50% 0%; /* Swings naturally from top hanger! */
+}
+
+/* Top Eyelets where strings attach */
+.card-hanger-top {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hanger-eyelet {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #0f0b07;
+  border: 2.5px solid #fbbf24;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.85);
+  box-sizing: border-box;
+}
+
+.hanger-bracket-bar {
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(90deg, #fbbf24 0%, #d97706 50%, #fbbf24 100%);
+  margin: 0 6px;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+
+/* Glass Card Body */
+.card-glass-body {
+  background: rgba(22, 16, 10, 0.72);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(251, 191, 36, 0.32);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85),
+              0 0 35px rgba(245, 158, 11, 0.15),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 400px;
+  transition: all 400ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Metallic Top Flare / Glass Reflection */
+.card-glass-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%);
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+}
+
+/* Hover State */
+.saturn-glass-card:hover:not(.is-expanded) .card-glass-body {
+  border-color: rgba(251, 191, 36, 0.65);
+  box-shadow: 0 30px 75px rgba(0, 0, 0, 0.9),
+              0 0 50px rgba(245, 158, 11, 0.35),
+              inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  background: rgba(30, 22, 14, 0.82);
+}
+
+/* Card Header Meta */
+.card-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.card-cat-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.card-cat-badge.gold {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  color: #fef08a;
+}
+
+.card-cat-badge.cyan {
+  background: rgba(14, 165, 233, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #a5f3fc;
+}
+
+.card-cat-badge.purple {
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(192, 132, 252, 0.45);
+  color: #e9d5ff;
+}
+
+.card-cat-badge.emerald {
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #a7f3d0;
+}
+
+.card-cat-badge.amber {
+  background: rgba(217, 119, 6, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fed7aa;
+}
+
+.card-date-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* Card Icon Emblem */
+.card-icon-emblem {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.card-icon-emblem.gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.card-icon-emblem.cyan {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(2, 132, 199, 0.1) 100%);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.card-icon-emblem.purple {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(126, 34, 206, 0.1) 100%);
+  border-color: rgba(192, 132, 252, 0.4);
+}
+
+.card-icon-emblem.emerald {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.card-icon-emblem.amber {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(180, 83, 9, 0.1) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Card Titles */
+.card-title {
+  margin: 0 0 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.card-org {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.card-preview-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  margin-bottom: 12px;
+}
+
+.seal-icon {
+  font-size: 13px;
+}
+
+.seal-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+.card-summary {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+
+/* ========================================================
+   EXPANDED FOREGROUND STATE (Clicked Card)
+   ======================================================== */
+.saturn-glass-card.is-expanded {
+  position: absolute;
+  left: 50% !important;
+  top: 10px !important;
+  transform: translate(-50%, 0) translateZ(260px) !important;
+  width: min(620px, 92vw) !important;
+  z-index: 100;
+  cursor: default;
+}
+
+.saturn-glass-card.is-expanded .card-glass-body {
+  background: rgba(18, 13, 8, 0.94);
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border-color: #fbbf24;
+  box-shadow: 0 35px 100px rgba(0, 0, 0, 0.95),
+              0 0 80px rgba(245, 158, 11, 0.45),
+              inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  padding: 30px 32px;
+}
+
+.saturn-glass-card.is-expanded .card-title {
+  font-size: 24px;
+}
+
+.saturn-glass-card.is-expanded .card-org {
+  font-size: 14px;
+}
+
+.saturn-glass-card.is-expanded .card-summary {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #e2e8f0;
+}
+
+/* Expanded Content Block */
+.card-expanded-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 350ms ease 100ms;
+}
+
+.saturn-glass-card.is-expanded .card-expanded-content {
+  display: block;
+  opacity: 1;
+}
+
+.expanded-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(245, 158, 11, 0.4) 30%, rgba(251, 191, 36, 0.4) 70%, transparent 100%);
+  margin: 18px 0;
+}
+
+.expanded-heading {
+  margin: 0 0 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+
+.expanded-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #cbd5e1;
+}
+
+.expanded-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.exp-tag {
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fef08a;
+}
+
+.expanded-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.credential-id {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+}
+
+.btn-return-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.25) 100%);
+  border: 1px solid #fbbf24;
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+  transition: all 180ms ease;
+}
+
+.btn-return-card:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.55) 0%, rgba(217, 119, 6, 0.45) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.5);
+}
+
+/* Dimmed non-active cards when one card is expanded */
+.saturn-glass-card.is-dimmed {
+  opacity: 0.22 !important;
+  filter: blur(3px);
+  pointer-events: none;
+  transform: scale(0.88) translateZ(-60px) !important;
+}
+
+/* Filter Hidden State */
+.saturn-glass-card.is-filtered-out {
+  opacity: 0.1 !important;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+/* ========================================================
+   BOTTOM DOCK CONTROLS
+   ======================================================== */
+.saturn-bottom-dock {
+  position: relative;
+  z-index: 50;
+  width: 100%;
+  padding: 12px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.saturn-dock-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(18, 13, 8, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.saturn-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #94a3b8;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 220ms ease;
+}
+
+.saturn-dock-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.saturn-dock-btn.is-active {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(251, 191, 36, 0.6);
+  color: #fef08a;
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3);
+}
+
+.saturn-hints {
+  font-size: 12px;
+  color: #78716c;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .saturn-cards-container {
+    gap: 12px;
+  }
+  .saturn-glass-card {
+    min-height: 360px;
+  }
+  .card-glass-body {
+    padding: 18px 14px;
+  }
+}
+
+@media (max-width: 860px) {
+  .saturn-cards-container {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0 20px 20px;
+    width: 100%;
+  }
+  .saturn-glass-card {
+    min-width: 240px;
+  }
+  .saturn-ceiling-rail {
+    display: none;
+  }
+  .saturn-strings-svg {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;

@@ -2993,12 +2993,358 @@
   }
 
 
+
+  // =========================================================================
+  // SATURN 3D GLASSMORPHISM CERTIFICATES & ACHIEVEMENTS HANGING ENGINE
+  // 5 translucent glass cards hanging from visible strings, gentle drop
+  // into place, natural pendulum sway, and smooth forward 3D expansion!
+  // =========================================================================
+  class SaturnCertificates3D {
+    constructor(modalEl, audio) {
+      this.modal = modalEl;
+      this.audio = audio;
+
+      this.stage = document.getElementById('saturnHangingStage');
+      this.container = document.getElementById('saturnCardsContainer');
+      this.rail = document.getElementById('saturnCeilingRail');
+      this.svg = document.getElementById('saturnStringsSvg');
+      this.stringsGroup = document.getElementById('saturnStringsGroup');
+      this.cards = Array.from(document.querySelectorAll('.saturn-glass-card'));
+      this.brackets = Array.from(document.querySelectorAll('.rail-bracket-item'));
+
+      this.isRunning = false;
+      this.animId = null;
+      this.startTime = 0;
+      this.expandedCard = null;
+      this.activeFilter = 'all';
+
+      // Card Physics & Sway State
+      this.cardPhysics = this.cards.map((card, i) => ({
+        index: i,
+        el: card,
+        // Individualized pendulum frequencies and phase offsets
+        speed: 1.15 + (i * 0.14) + (Math.sin(i * 1.5) * 0.08),
+        phase: (i * 1.35),
+        maxSwayAngle: 2.6 + (i % 2 === 0 ? 0.6 : -0.4),
+        currentAngle: 0,
+        currentX: 0,
+        currentY: -500, // Starts above viewport for drop entrance
+        dropProgress: 0,
+        isDropped: false,
+        dropStartTime: 0,
+        dropDelay: i * 110, // Staggered drop
+        mouseTiltX: 0,
+        mouseTiltY: 0,
+        isHovered: false
+      }));
+
+      // String line SVG references (2 lines per card: left and right)
+      this.stringLines = [];
+
+      this.initSvgStrings();
+      this.bindInteractions();
+    }
+
+    initSvgStrings() {
+      if (!this.stringsGroup) return;
+      this.stringsGroup.innerHTML = '';
+      this.stringLines = [];
+
+      this.cards.forEach((card, idx) => {
+        // Left suspension cable
+        const lineL = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lineL.setAttribute('class', 'saturn-string-line');
+        lineL.setAttribute('stroke', 'url(#saturnStringGrad)');
+        lineL.setAttribute('data-card', idx);
+        lineL.setAttribute('data-side', 'left');
+        this.stringsGroup.appendChild(lineL);
+
+        // Right suspension cable
+        const lineR = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lineR.setAttribute('class', 'saturn-string-line');
+        lineR.setAttribute('stroke', 'url(#saturnStringGrad)');
+        lineR.setAttribute('data-card', idx);
+        lineR.setAttribute('data-side', 'right');
+        this.stringsGroup.appendChild(lineR);
+
+        this.stringLines.push({ left: lineL, right: lineR });
+      });
+    }
+
+    bindInteractions() {
+      // 1. Click on card to expand forward or return
+      this.cards.forEach((card, idx) => {
+        card.addEventListener('click', (e) => {
+          // If clicked the return button
+          if (e.target.closest('.btn-return-card')) {
+            e.stopPropagation();
+            this.collapseCard();
+            return;
+          }
+
+          // If already expanded, clicking it again collapses it back to hanging
+          if (this.expandedCard === card) {
+            this.collapseCard();
+            return;
+          }
+
+          // If clicking a dimmed or standard card, expand it
+          this.expandCard(card);
+        });
+
+        // 2. Interactive pointer hover tilt
+        card.addEventListener('pointermove', (e) => {
+          if (this.expandedCard === card) return;
+          const rect = card.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = (e.clientX - cx) / (rect.width / 2);
+          const dy = (e.clientY - cy) / (rect.height / 2);
+
+          const phys = this.cardPhysics[idx];
+          if (phys) {
+            phys.mouseTiltX = -dy * 8;
+            phys.mouseTiltY = dx * 8;
+            phys.isHovered = true;
+          }
+        });
+
+        card.addEventListener('pointerenter', () => {
+          const phys = this.cardPhysics[idx];
+          if (phys) phys.isHovered = true;
+          if (this.audio && !this.expandedCard) {
+            try { this.audio.playSelectBlip(); } catch (err) {}
+          }
+        });
+
+        card.addEventListener('pointerleave', () => {
+          const phys = this.cardPhysics[idx];
+          if (phys) {
+            phys.mouseTiltX = 0;
+            phys.mouseTiltY = 0;
+            phys.isHovered = false;
+          }
+        });
+      });
+
+      // 3. Stage click to collapse if clicking outside expanded card
+      if (this.stage) {
+        this.stage.addEventListener('click', (e) => {
+          if (this.expandedCard && !e.target.closest('.saturn-glass-card')) {
+            this.collapseCard();
+          }
+        });
+      }
+
+      // 4. Replay Drop Animation Button
+      const btnReplay = document.getElementById('btnSaturnReplayDrop');
+      if (btnReplay) {
+        btnReplay.addEventListener('click', () => {
+          this.replayDropSequence();
+        });
+      }
+
+      // 5. Category Filter Dock Buttons
+      const filterBtns = document.querySelectorAll('.saturn-dock-btn[data-filter]');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          const filter = btn.getAttribute('data-filter');
+          this.setFilter(filter);
+        });
+      });
+    }
+
+    start() {
+      this.isRunning = true;
+      this.startTime = performance.now();
+      this.collapseCard(false);
+      this.replayDropSequence();
+      this.animId = requestAnimationFrame(this.tick.bind(this));
+    }
+
+    stop() {
+      this.isRunning = false;
+      if (this.animId) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+      this.collapseCard(false);
+    }
+
+    replayDropSequence() {
+      const now = performance.now();
+      this.cardPhysics.forEach((phys) => {
+        phys.isDropped = false;
+        phys.dropStartTime = now + phys.dropDelay;
+        phys.currentY = -520;
+        phys.currentAngle = (Math.random() * 8) - 4;
+        phys.el.style.transform = `translate3d(0, -520px, 0)`;
+      });
+      if (this.audio) {
+        try { this.audio.playWhoosh(); } catch (err) {}
+      }
+    }
+
+    expandCard(card) {
+      if (this.expandedCard === card) return;
+      this.collapseCard(false);
+
+      this.expandedCard = card;
+      card.classList.add('is-expanded');
+
+      // Dim other cards
+      this.cards.forEach(c => {
+        if (c !== card) c.classList.add('is-dimmed');
+      });
+
+      if (this.audio) {
+        try { this.audio.playCardClink(); } catch (err) {}
+      }
+    }
+
+    collapseCard(playAudio = true) {
+      if (!this.expandedCard) return;
+
+      this.expandedCard.classList.remove('is-expanded');
+      this.cards.forEach(c => c.classList.remove('is-dimmed'));
+      this.expandedCard = null;
+
+      if (playAudio && this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    setFilter(filter) {
+      this.activeFilter = filter;
+      if (this.expandedCard) this.collapseCard(false);
+
+      this.cards.forEach(card => {
+        const cat = card.getAttribute('data-cat');
+        const matches = (filter === 'all' || cat === filter);
+        card.classList.toggle('is-filtered-out', !matches);
+      });
+
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    tick(time) {
+      if (!this.isRunning) return;
+
+      const elapsed = (time - this.startTime) * 0.001;
+
+      // 1. Update Card Physics (Drop & Natural Pendulum Sway)
+      this.cardPhysics.forEach((phys) => {
+        if (phys.el === this.expandedCard) {
+          // If expanded, it is centered in foreground, handled by CSS
+          return;
+        }
+
+        // Staggered drop entrance
+        if (time >= phys.dropStartTime) {
+          const dropElapsed = (time - phys.dropStartTime) * 0.001;
+          const dropDuration = 1.35; // seconds
+
+          if (dropElapsed < dropDuration) {
+            const t = dropElapsed / dropDuration;
+            // Elastic bounce ease-out
+            const p = 0.38;
+            const easeOutElastic = Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+            phys.currentY = -520 + (520 * easeOutElastic);
+          } else {
+            phys.currentY = 0;
+            phys.isDropped = true;
+          }
+        } else {
+          phys.currentY = -520;
+        }
+
+        // Natural harmonic pendulum sway once dropped
+        if (phys.isDropped) {
+          const swayDamping = phys.isHovered ? 0.35 : 1.0;
+          const hoverLift = phys.isHovered ? -10 : 0;
+
+          // Pure harmonic angular oscillation
+          phys.currentAngle = Math.sin((elapsed * phys.speed) + phys.phase) * phys.maxSwayAngle * swayDamping;
+          phys.currentX = Math.sin((elapsed * phys.speed) + phys.phase) * 5.5 * swayDamping;
+
+          // Apply 3D transform (swaying from the top hinge!)
+          const finalY = phys.currentY + hoverLift;
+          const rotX = phys.mouseTiltX;
+          const rotY = phys.mouseTiltY;
+
+          phys.el.style.transform = `translate3d(${phys.currentX.toFixed(2)}px, ${finalY.toFixed(2)}px, 0px) rotateZ(${phys.currentAngle.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        }
+      });
+
+      // 2. Real-Time String Line Connections (Strings STAY CONNECTED during motion!)
+      this.updateStringLines();
+
+      this.animId = requestAnimationFrame(this.tick.bind(this));
+    }
+
+    updateStringLines() {
+      if (!this.modal || !this.svg) return;
+      const modalRect = this.modal.getBoundingClientRect();
+
+      this.cards.forEach((card, idx) => {
+        const lines = this.stringLines[idx];
+        if (!lines) return;
+
+        // Find top eyelet elements on the card
+        const eyeletL = card.querySelector('[data-eyelet="left"]');
+        const eyeletR = card.querySelector('[data-eyelet="right"]');
+        if (!eyeletL || !eyeletR) return;
+
+        const eyeRectL = eyeletL.getBoundingClientRect();
+        const eyeRectR = eyeletR.getBoundingClientRect();
+
+        // Eyelet target coordinates relative to SVG
+        const cardX1 = (eyeRectL.left + eyeRectL.width / 2) - modalRect.left;
+        const cardY1 = (eyeRectL.top + eyeRectL.height / 2) - modalRect.top;
+
+        const cardX2 = (eyeRectR.left + eyeRectR.width / 2) - modalRect.left;
+        const cardY2 = (eyeRectR.top + eyeRectR.height / 2) - modalRect.top;
+
+        // Top ceiling mount anchor coordinates
+        // Corresponding rail bracket or evenly spaced along the rail
+        const bracket = this.brackets[idx];
+        let anchorX1 = cardX1;
+        let anchorX2 = cardX2;
+        let anchorY = 70; // Rail height
+
+        if (bracket) {
+          const bRect = bracket.getBoundingClientRect();
+          const bCenter = (bRect.left + bRect.width / 2) - modalRect.left;
+          anchorX1 = bCenter - 14;
+          anchorX2 = bCenter + 14;
+          anchorY = (bRect.top + bRect.height / 2) - modalRect.top;
+        }
+
+        // Set line coordinates
+        lines.left.setAttribute('x1', anchorX1.toFixed(1));
+        lines.left.setAttribute('y1', anchorY.toFixed(1));
+        lines.left.setAttribute('x2', cardX1.toFixed(1));
+        lines.left.setAttribute('y2', cardY1.toFixed(1));
+
+        lines.right.setAttribute('x1', anchorX2.toFixed(1));
+        lines.right.setAttribute('y1', anchorY.toFixed(1));
+        lines.right.setAttribute('x2', cardX2.toFixed(1));
+        lines.right.setAttribute('y2', cardY2.toFixed(1));
+      });
+    }
+  }
+
   // Solar System 3D Manager
   class SolarSystemApp {
     constructor() {
       this.container = document.getElementById('solarCanvasContainer');
       this.audio = new SpaceAudioEngine();
       this.uranusLaptop3D = null;
+      this.saturnCertificates3D = null;
 
       this.scene = null;
       this.camera = null;
@@ -3842,6 +4188,45 @@
         });
       }
 
+      // Saturn 3D Hanging Certificates Modal Listeners
+      const btnCloseSaturn = document.getElementById('btnCloseSaturnModal');
+      if (btnCloseSaturn) {
+        const handleCloseSaturn = (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (this.audio && typeof this.audio.playSelectBlip === 'function') {
+            try { this.audio.playSelectBlip(); } catch (err) {}
+          }
+          this.closeSaturnCertificatesModal(true);
+        };
+        btnCloseSaturn.addEventListener('click', handleCloseSaturn);
+        btnCloseSaturn.addEventListener('pointerdown', (e) => e.stopPropagation());
+      }
+
+      const btnSaturnSpecs = document.getElementById('btnViewSaturnPlanetData');
+      if (btnSaturnSpecs) {
+        btnSaturnSpecs.addEventListener('click', () => {
+          this.closeSaturnCertificatesModal(false);
+          this.populatePlanetModal('saturn');
+          const modal = document.getElementById('planetModal');
+          if (modal && typeof modal.showModal === 'function') {
+            if (!modal.open) modal.showModal();
+            modal.classList.add('is-open');
+          }
+        });
+      }
+
+      const saturnModal = document.getElementById('saturnCertificatesModal');
+      if (saturnModal) {
+        saturnModal.addEventListener('click', (e) => {
+          if (e.target === saturnModal) {
+            this.closeSaturnCertificatesModal(true);
+          }
+        });
+      }
+
       // Keyboard Controls (Page Turning & ESC)
       window.addEventListener('keydown', (e) => {
         const eBookModal = document.getElementById('earthBookModal');
@@ -3863,6 +4248,11 @@
         }
 
         if (e.key === 'Escape') {
+          const sM = document.getElementById('saturnCertificatesModal');
+          if (sM && sM.classList.contains('is-open')) {
+            this.closeSaturnCertificatesModal(true);
+            return;
+          }
           const uM = document.getElementById('uranusResumeModal');
           if (uM && uM.classList.contains('is-open')) {
             this.closeUranusResumeModal(true);
@@ -3991,6 +4381,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('mercuryIdModal');
@@ -4035,6 +4426,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('venusAboutModal');
@@ -4082,6 +4474,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('earthBookModal');
@@ -4134,6 +4527,7 @@
       this.closeEarthBookModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
 
       // Set Mars background video playing on scene layer
       this.setMarsSceneBackground(true);
@@ -4211,6 +4605,7 @@
       this.closeEarthBookModal(false);
       this.closeMarsModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('jupiterRoadmapModal');
@@ -4267,6 +4662,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('uranusResumeModal');
@@ -4299,6 +4695,60 @@
       }
       if (this.uranusLaptop3D) {
         this.uranusLaptop3D.stop();
+      }
+      if (shouldResetCamera) {
+        this.selectedBodyId = null;
+        document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
+        this.resetToDiagramView();
+      }
+    }
+
+    // ==========================================
+    // SATURN 3D HANGING CERTIFICATES VAULT MODAL
+    // ==========================================
+    openSaturnCertificatesModal() {
+      // Close standard planet modal if open
+      const pModal = document.getElementById('planetModal');
+      if (pModal && pModal.open) {
+        pModal.classList.remove('is-open');
+        pModal.close();
+      }
+      this.closeMercuryIdCard(false);
+      this.closeVenusAboutModal(false);
+      this.closeEarthBookModal(false);
+      this.closeMarsModal(false);
+      this.closeJupiterRoadmapModal(false);
+      this.closeUranusResumeModal(false);
+      this.setMarsSceneBackground(false);
+
+      const modal = document.getElementById('saturnCertificatesModal');
+      if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      // Initialize or start 3D Hanging Certificates Engine
+      if (!this.saturnCertificates3D) {
+        if (modal) {
+          this.saturnCertificates3D = new SaturnCertificates3D(modal, this.audio);
+        }
+      }
+
+      if (this.saturnCertificates3D) {
+        this.saturnCertificates3D.start();
+      }
+
+      this.audio.playScanTelemetry();
+    }
+
+    closeSaturnCertificatesModal(shouldResetCamera = true) {
+      const modal = document.getElementById('saturnCertificatesModal');
+      if (modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (this.saturnCertificates3D) {
+        this.saturnCertificates3D.stop();
       }
       if (shouldResetCamera) {
         this.selectedBodyId = null;
@@ -4472,6 +4922,12 @@
         return;
       }
 
+      // Special 3D Glassmorphism Certificates Vault for Saturn!
+      if (planetId === 'saturn') {
+        this.openSaturnCertificatesModal();
+        return;
+      }
+
       // Special 3D Laptop & Floating Resume for Uranus!
       if (planetId === 'uranus') {
         this.openUranusResumeModal();
@@ -4603,6 +5059,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
       this.selectedBodyId = null;
       document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
@@ -4616,6 +5073,7 @@
       this.closeMarsModal(false);
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
       this.setMarsSceneBackground(false);
       this.cameraTargetPos.copy(this.diagramCameraPos);
       this.cameraTargetLook.copy(this.diagramCameraLook);
