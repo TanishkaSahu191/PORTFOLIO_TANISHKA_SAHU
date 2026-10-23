@@ -3338,6 +3338,132 @@
     }
   }
 
+
+  // =========================================================================
+  // NEPTUNE SUBSPACE NEXUS & COMMS DIRECTORY ENGINE
+  // Important links (LeetCode, GitHub, LinkedIn, TUF) and direct transmission
+  // =========================================================================
+  class NeptuneNexus3D {
+    constructor(modalEl, audio) {
+      this.modal = modalEl;
+      this.audio = audio;
+      this.cards = Array.from(document.querySelectorAll('.link-portal-card'));
+      this.copyBtn = document.getElementById('btnCopyNeptuneEmail');
+      this.copyBtnText = document.getElementById('copyEmailBtnText');
+      this.emailAddress = document.getElementById('neptuneEmailAddress');
+      this.transmitForm = document.getElementById('neptuneTransmitForm');
+      this.transmitStatus = document.getElementById('transmitStatusMsg');
+
+      this.bindInteractions();
+    }
+
+    bindInteractions() {
+      // 1. One-click Email Copy with Animated Feedback
+      if (this.copyBtn && this.emailAddress) {
+        this.copyBtn.addEventListener('click', () => {
+          const text = this.emailAddress.textContent.trim();
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            navigator.clipboard.writeText(text).then(() => {
+              this.showCopyFeedback();
+            }).catch(() => {
+              this.fallbackCopy(text);
+            });
+          } else {
+            this.fallbackCopy(text);
+          }
+        });
+      }
+
+      // 2. Global window handler for quick transmission form
+      window.handleNeptuneMessageSend = () => {
+        const nameEl = document.getElementById('neptuneSenderName');
+        const emailEl = document.getElementById('neptuneSenderContact');
+        const msgEl = document.getElementById('neptuneSenderMessage');
+
+        const name = nameEl ? nameEl.value.trim() : '';
+        const email = emailEl ? emailEl.value.trim() : '';
+        const msg = msgEl ? msgEl.value.trim() : '';
+
+        if (!name || !email || !msg) return;
+
+        if (this.audio) {
+          try { this.audio.playScanTelemetry(); } catch (err) {}
+        }
+
+        if (this.transmitStatus) {
+          this.transmitStatus.textContent = 'Transmitting to Tanishka... 📡';
+        }
+
+        // Open mailto with pre-composed content
+        const subject = encodeURIComponent(`Transmission from ${name} [${email}]`);
+        const body = encodeURIComponent(`Hi Tanishka,
+
+${msg}
+
+---
+From: ${name}
+Contact: ${email}`);
+        const mailtoUrl = `mailto:tanishkasahuwork191@gmail.com?subject=${subject}&body=${body}`;
+
+        setTimeout(() => {
+          window.location.href = mailtoUrl;
+          if (this.transmitStatus) {
+            this.transmitStatus.textContent = 'Transmission Dispatched! ✨';
+            setTimeout(() => {
+              if (this.transmitStatus) this.transmitStatus.textContent = '';
+            }, 6000);
+          }
+          if (this.transmitForm) this.transmitForm.reset();
+        }, 500);
+      };
+
+      // 3. Audio blips on clicking links
+      this.cards.forEach(card => {
+        card.addEventListener('click', () => {
+          if (this.audio) {
+            try { this.audio.playCardClink(); } catch (err) {}
+          }
+        });
+      });
+    }
+
+    showCopyFeedback() {
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+      if (this.copyBtnText) {
+        const originalText = this.copyBtnText.textContent;
+        this.copyBtnText.textContent = 'Copied to Clipboard! ✨';
+        if (this.copyBtn) this.copyBtn.style.borderColor = '#86efac';
+        setTimeout(() => {
+          if (this.copyBtnText) this.copyBtnText.textContent = originalText;
+          if (this.copyBtn) this.copyBtn.style.borderColor = '';
+        }, 3000);
+      }
+    }
+
+    fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        this.showCopyFeedback();
+      } catch (err) {}
+      document.body.removeChild(textarea);
+    }
+
+    start() {
+      // Reset form status
+      if (this.transmitStatus) this.transmitStatus.textContent = '';
+    }
+
+    stop() {}
+  }
+
   // Solar System 3D Manager
   class SolarSystemApp {
     constructor() {
@@ -3345,6 +3471,7 @@
       this.audio = new SpaceAudioEngine();
       this.uranusLaptop3D = null;
       this.saturnCertificates3D = null;
+      this.neptuneNexus3D = null;
 
       this.scene = null;
       this.camera = null;
@@ -4227,6 +4354,45 @@
         });
       }
 
+      // Neptune Subspace Nexus Modal Listeners
+      const btnCloseNeptune = document.getElementById('btnCloseNeptuneModal');
+      if (btnCloseNeptune) {
+        const handleCloseNeptune = (e) => {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (this.audio && typeof this.audio.playSelectBlip === 'function') {
+            try { this.audio.playSelectBlip(); } catch (err) {}
+          }
+          this.closeNeptuneLinksModal(true);
+        };
+        btnCloseNeptune.addEventListener('click', handleCloseNeptune);
+        btnCloseNeptune.addEventListener('pointerdown', (e) => e.stopPropagation());
+      }
+
+      const btnNeptuneSpecs = document.getElementById('btnViewNeptunePlanetData');
+      if (btnNeptuneSpecs) {
+        btnNeptuneSpecs.addEventListener('click', () => {
+          this.closeNeptuneLinksModal(false);
+          this.populatePlanetModal('neptune');
+          const modal = document.getElementById('planetModal');
+          if (modal && typeof modal.showModal === 'function') {
+            if (!modal.open) modal.showModal();
+            modal.classList.add('is-open');
+          }
+        });
+      }
+
+      const neptuneModal = document.getElementById('neptuneLinksModal');
+      if (neptuneModal) {
+        neptuneModal.addEventListener('click', (e) => {
+          if (e.target === neptuneModal) {
+            this.closeNeptuneLinksModal(true);
+          }
+        });
+      }
+
       // Keyboard Controls (Page Turning & ESC)
       window.addEventListener('keydown', (e) => {
         const eBookModal = document.getElementById('earthBookModal');
@@ -4248,6 +4414,11 @@
         }
 
         if (e.key === 'Escape') {
+          const nval = document.getElementById('neptuneLinksModal');
+          if (nval && nval.classList.contains('is-open')) {
+            this.closeNeptuneLinksModal(true);
+            return;
+          }
           const sM = document.getElementById('saturnCertificatesModal');
           if (sM && sM.classList.contains('is-open')) {
             this.closeSaturnCertificatesModal(true);
@@ -4382,6 +4553,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('mercuryIdModal');
@@ -4427,6 +4599,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('venusAboutModal');
@@ -4475,6 +4648,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('earthBookModal');
@@ -4528,6 +4702,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
 
       // Set Mars background video playing on scene layer
       this.setMarsSceneBackground(true);
@@ -4663,6 +4838,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('uranusResumeModal');
@@ -4749,6 +4925,61 @@
       }
       if (this.saturnCertificates3D) {
         this.saturnCertificates3D.stop();
+      }
+      if (shouldResetCamera) {
+        this.selectedBodyId = null;
+        document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
+        this.resetToDiagramView();
+      }
+    }
+
+    // ==========================================
+    // NEPTUNE SUBSPACE NEXUS & COMMS DIRECTORY MODAL
+    // ==========================================
+    openNeptuneLinksModal() {
+      // Close standard planet modal if open
+      const pModal = document.getElementById('planetModal');
+      if (pModal && pModal.open) {
+        pModal.classList.remove('is-open');
+        pModal.close();
+      }
+      this.closeMercuryIdCard(false);
+      this.closeVenusAboutModal(false);
+      this.closeEarthBookModal(false);
+      this.closeMarsModal(false);
+      this.closeJupiterRoadmapModal(false);
+      this.closeSaturnCertificatesModal(false);
+      this.closeUranusResumeModal(false);
+      this.setMarsSceneBackground(false);
+
+      const modal = document.getElementById('neptuneLinksModal');
+      if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      // Initialize or start Neptune Subspace Nexus Engine
+      if (!this.neptuneNexus3D) {
+        if (modal) {
+          this.neptuneNexus3D = new NeptuneNexus3D(modal, this.audio);
+        }
+      }
+
+      if (this.neptuneNexus3D) {
+        this.neptuneNexus3D.start();
+      }
+
+      this.audio.playScanTelemetry();
+    }
+
+    closeNeptuneLinksModal(shouldResetCamera = true) {
+      const modal = document.getElementById('neptuneLinksModal');
+      if (modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (this.neptuneNexus3D) {
+        this.neptuneNexus3D.stop();
       }
       if (shouldResetCamera) {
         this.selectedBodyId = null;
@@ -4934,6 +5165,12 @@
         return;
       }
 
+      // Special Subspace Nexus & Important Links for Neptune!
+      if (planetId === 'neptune') {
+        this.openNeptuneLinksModal();
+        return;
+      }
+
       // Close custom modals if opening another planet
       this.closeMercuryIdCard(false);
       this.closeVenusAboutModal(false);
@@ -5074,6 +5311,7 @@
       this.closeJupiterRoadmapModal(false);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
       this.setMarsSceneBackground(false);
       this.cameraTargetPos.copy(this.diagramCameraPos);
       this.cameraTargetLook.copy(this.diagramCameraLook);

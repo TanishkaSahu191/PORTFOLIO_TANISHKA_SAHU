@@ -223,6 +223,9 @@
       if (typeof window.solarAppInstance.closeSaturnCertificatesModal === 'function') {
         window.solarAppInstance.closeSaturnCertificatesModal(false);
       }
+      if (typeof window.solarAppInstance.closeNeptuneLinksModal === 'function') {
+        window.solarAppInstance.closeNeptuneLinksModal(false);
+      }
       if (typeof window.solarAppInstance.setMarsSceneBackground === 'function') {
         window.solarAppInstance.setMarsSceneBackground(false);
       }
