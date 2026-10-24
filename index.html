@@ -181,7 +181,7 @@
 
           <button id="btnSolarSpeed" class="solar-action-btn" type="button" title="Toggle simulation orbit speed">
             <span class="btn-icon">⚡</span>
-            <span class="btn-label">1.0x Speed</span>
+            <span class="btn-label">2.5x Speed</span>
           </button>
 
           <button id="btnSolarAudio" class="solar-action-btn" type="button" aria-pressed="false" title="Toggle cosmic ambient audio">
@@ -326,10 +326,6 @@
             <span class="btn-icon">✉</span>
             <span>tanishkasahuwork191@gmail.com</span>
           </a>
-          <button id="btnViewMercuryPlanetData" class="card-action-btn data-btn" type="button" title="View Mercury Scientific Data">
-            <span class="btn-icon">☿</span>
-            <span>Planetary Data</span>
-          </button>
         </div>
       </div>
     </div>
@@ -641,9 +637,6 @@
 
           <!-- Bottom Action Controls -->
           <div class="sheet-bottom-actions">
-            <button id="btnViewVenusPlanetData" class="sheet-action-pill" type="button" title="View Venus Scientific Planetary Data">
-              <span>♀ Planetary Science Data</span>
-            </button>
             <button id="btnSheetCloseBottom" class="sheet-action-pill close" type="button">
               <span>✕ Return to Orbit</span>
             </button>
@@ -679,10 +672,6 @@
           <button id="btnEarthAutoFlip" class="book-ctrl-pill" type="button" title="Auto-play Page Turning">
             <span class="ctrl-icon">▶</span>
             <span class="btn-text">Auto-Flip</span>
-          </button>
-          <button id="btnViewEarthPlanetData" class="book-ctrl-pill" type="button" title="View Earth Scientific Planetary Data">
-            <span class="ctrl-icon">♁</span>
-            <span class="btn-text">Planetary Data</span>
           </button>
           <button id="btnCloseEarthBook" class="earth-close-btn" type="button" aria-label="Close Project Book" title="Close Project Book">
             <span>✕</span>
@@ -1174,10 +1163,6 @@
           <span class="mars-badge-text">MARS // 4TH ORBIT • ACADEMIC ARCHIVES</span>
         </div>
         <div class="mars-topbar-controls">
-          <button id="btnViewMarsPlanetData" class="mars-ctrl-pill" type="button" title="View Full Scientific Telemetry">
-            <span class="btn-icon">♂</span>
-            <span>Planet Specs</span>
-          </button>
           <button id="btnCloseMarsModal" class="mars-close-btn" type="button" aria-label="Close Mars View" title="Return to Solar System">
             <span>✕</span>
           </button>
@@ -1307,10 +1292,6 @@
         </div>
 
         <div class="jupiter-header-controls">
-          <button id="btnJupiterViewSpecs" class="jupiter-ctrl-btn" type="button" title="View Scientific Telemetry">
-            <span class="btn-icon">♃</span>
-            <span>Planet Specs</span>
-          </button>
           <button id="btnJupiterAutoTour" class="jupiter-ctrl-btn tour-btn" type="button" title="Cinematic 3D Camera Flythrough along the Road">
             <span class="tour-icon">▶</span>
             <span class="tour-text">Flythrough Tour</span>
@@ -1534,10 +1515,6 @@
             <span class="btn-icon">📄</span>
             <span class="pop-btn-text">Pop Out Resume</span>
           </button>
-          <button id="btnViewUranusPlanetData" class="uranus-ctrl-pill" type="button" title="View Uranus Scientific Telemetry">
-            <span class="btn-icon">♅</span>
-            <span>Planet Specs</span>
-          </button>
           <button id="btnCloseUranusModal" class="uranus-close-btn" type="button" aria-label="Close Uranus View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeUranusResumeModal(true);}">
             <span aria-hidden="true">✕</span>
           </button>
@@ -1686,6 +1663,20 @@
 
     <!-- Saturn Section: 3D Glassmorphism Certificates & Achievements Hanging Vault -->
     <div id="saturnCertificatesModal" class="saturn-cert-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Saturn Certificates & Achievements">
+      <!-- 3D Video Background -->
+      <div class="saturn-video-wrapper">
+        <video
+          id="saturnBgVideo"
+          class="saturn-bg-video"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260815_032550_05c8a435-0fb5-41a0-ad67-c7158d7aa425.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="saturn-video-overlay"></div>
+      </div>
+
       <!-- Ambient Cosmic Atmosphere & Golden Saturn Ring Backdrop -->
       <div class="saturn-ambient-backdrop">
         <div class="saturn-ring-glow"></div>
@@ -1702,10 +1693,6 @@
           <button id="btnSaturnReplayDrop" class="saturn-ctrl-pill" type="button" title="Replay drop entrance animation">
             <span class="btn-icon">↺</span>
             <span>Replay Drop</span>
-          </button>
-          <button id="btnViewSaturnPlanetData" class="saturn-ctrl-pill" type="button" title="View Saturn Scientific Telemetry">
-            <span class="btn-icon">♄</span>
-            <span>Planet Specs</span>
           </button>
           <button id="btnCloseSaturnModal" class="saturn-close-btn" type="button" aria-label="Close Saturn View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeSaturnCertificatesModal(true);}">
             <span aria-hidden="true">✕</span>
@@ -1996,6 +1983,20 @@
 
     <!-- Neptune Section: Subspace Nexus — Important Links & Contact Me -->
     <div id="neptuneLinksModal" class="neptune-links-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Neptune Subspace Nexus - Important Links and Contact">
+      <!-- 3D Video Background -->
+      <div class="neptune-video-wrapper">
+        <video
+          id="neptuneBgVideo"
+          class="neptune-bg-video"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260815_034306_165449ef-7d2e-4e81-850f-1939c5cb442d.mp4"
+          playsinline
+          loop
+          muted
+          preload="auto"
+        ></video>
+        <div class="neptune-video-overlay"></div>
+      </div>
+
       <!-- Ambient Cosmic Atmosphere & Deep Azure Methane Vortex -->
       <div class="neptune-ambient-backdrop">
         <div class="neptune-vortex-glow"></div>
@@ -2009,10 +2010,6 @@
           <span class="neptune-badge-text">NEPTUNE // 8TH ORBIT • SUBSPACE NEXUS &amp; COMMS DIRECTORY</span>
         </div>
         <div class="neptune-topbar-controls">
-          <button id="btnViewNeptunePlanetData" class="neptune-ctrl-pill" type="button" title="View Neptune Scientific Telemetry">
-            <span class="btn-icon">♆</span>
-            <span>Planet Specs</span>
-          </button>
           <button id="btnCloseNeptuneModal" class="neptune-close-btn" type="button" aria-label="Close Neptune View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeNeptuneLinksModal(true);}">
             <span aria-hidden="true">✕</span>
           </button>

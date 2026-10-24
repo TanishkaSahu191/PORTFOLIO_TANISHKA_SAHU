@@ -3486,7 +3486,7 @@ Contact: ${email}`);
       this.labelElements = {};
 
       this.isSimulationRunning = true;
-      this.simSpeed = 1.0;
+      this.simSpeed = 2.5;
       this.selectedBodyId = null;
       this.isFocusingCamera = false;
       this.cameraTargetPos = new THREE.Vector3();
@@ -4898,9 +4898,14 @@ Contact: ${email}`);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('saturnCertificatesModal');
+      const video = document.getElementById('saturnBgVideo');
       if (modal) {
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
+      }
+      if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
       }
 
       // Initialize or start 3D Hanging Certificates Engine
@@ -4919,9 +4924,13 @@ Contact: ${email}`);
 
     closeSaturnCertificatesModal(shouldResetCamera = true) {
       const modal = document.getElementById('saturnCertificatesModal');
+      const video = document.getElementById('saturnBgVideo');
       if (modal) {
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
+      }
+      if (video) {
+        video.pause();
       }
       if (this.saturnCertificates3D) {
         this.saturnCertificates3D.stop();
@@ -4953,9 +4962,14 @@ Contact: ${email}`);
       this.setMarsSceneBackground(false);
 
       const modal = document.getElementById('neptuneLinksModal');
+      const video = document.getElementById('neptuneBgVideo');
       if (modal) {
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
+      }
+      if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
       }
 
       // Initialize or start Neptune Subspace Nexus Engine
@@ -4974,9 +4988,13 @@ Contact: ${email}`);
 
     closeNeptuneLinksModal(shouldResetCamera = true) {
       const modal = document.getElementById('neptuneLinksModal');
+      const video = document.getElementById('neptuneBgVideo');
       if (modal) {
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
+      }
+      if (video) {
+        video.pause();
       }
       if (this.neptuneNexus3D) {
         this.neptuneNexus3D.stop();
