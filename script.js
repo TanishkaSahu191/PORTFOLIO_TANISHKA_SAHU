@@ -191,6 +191,11 @@
           window.solarAppInstance.resetToDiagramView();
         }
 
+        const cosmicVid = document.getElementById('solarCosmicBgVideo');
+        if (cosmicVid) {
+          cosmicVid.play().catch(() => { });
+        }
+
         setTimeout(() => {
           flash.classList.remove('is-flashing');
         }, 250);

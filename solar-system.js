@@ -299,8 +299,8 @@
       name: 'Neptune',
       title: 'Neptune — The Supersonic Azure Outpost',
       category: 'Ice Giant',
-      color: '#4973ff',
-      secondaryColor: '#1d35a8',
+      color: '#2dd4bf',
+      secondaryColor: '#0f766e',
       symbol: '♆',
       distance: '30.05 AU',
       distanceKm: '4.50 Billion km',
@@ -942,29 +942,29 @@
     {
       phase: 0,
       id: 'green',
-      code: 'PHASE 01',
+      code: 'ACHIEVEMENT 01 // 2018',
       color: '#22c55e',
       colorHex: 0x22c55e,
       side: 'left',
-      title: 'Phase 01 — Genesis & Discovery',
-      subtitle: 'Foundation & Preliminary Orbital Telemetry',
-      summary: 'Core architecture kickoff, deep telemetry sensor arrays, Jovian atmospheric probe deployment, and early cadet community onboarding.',
-      status: 'COMPLETED',
+      title: 'Haryana State Winner — National Spell Quest',
+      subtitle: 'State Championship in Academic Linguistics & Vocabulary Rigor',
+      summary: 'In 2018, I was recognized as the Haryana State Winner in the National Spell Quest, an achievement that reflects both strong language skills, vocabulary mastery, and dedicated effort across rigorous competitive rounds.',
+      status: 'STATE WINNER',
       statusClass: 'completed',
       progress: 100,
-      timeline: 'Q1 Launch Era',
+      timeline: '2018 State Finals',
       curveT: 0.18,
       badgeOffset: new THREE.Vector3(-13, 3.2, 4),
       deliverables: [
-        { text: 'Jovian Telemetry Sensor Array Initialized', done: true },
-        { text: 'Core Spatial WebGL Engine & 3D Shaders', done: true },
-        { text: 'Zero-Gravity Propulsion Protocol Tested', done: true },
-        { text: 'Initial 120,000 Cadet Flight Licenses Granted', done: true }
+        { text: 'Conquered school, district, and state competitive linguistic rounds', done: true },
+        { text: 'Honored as Haryana State Champion in National Spell Quest (2018)', done: true },
+        { text: 'Demonstrated advanced lexical recall, etymology, and verbal reasoning', done: true },
+        { text: 'Built foundational discipline, poise under pressure, and perseverance', done: true }
       ],
       metrics: [
-        { label: 'CADETS ONBOARDED', val: '120K+' },
-        { label: 'ORBIT UPTIME', val: '99.98%' },
-        { label: 'SECURITY AUDITS', val: '4 PASSED' }
+        { label: 'HONOR', val: 'STATE WINNER' },
+        { label: 'TERRITORY', val: 'HARYANA, INDIA' },
+        { label: 'YEAR', val: '2018' }
       ],
       camPos: new THREE.Vector3(18, 9, 28),
       camLook: new THREE.Vector3(4, 2.2, 14)
@@ -972,29 +972,29 @@
     {
       phase: 1,
       id: 'red',
-      code: 'PHASE 02',
+      code: 'ACHIEVEMENT 02 // 2022',
       color: '#ef4444',
       colorHex: 0xef4444,
       side: 'right',
-      title: 'Phase 02 — Core Architecture & Expansion',
-      subtitle: 'Magnetosphere Shielding & Deep Data Relay',
-      summary: 'Multi-planetary data relay framework, magnetosphere radiation shielding protocols, and high-frequency Jovian communication relays.',
-      status: 'ACTIVE PHASE',
+      title: 'Junior Game Developer Certification — WhiteHat Jr.',
+      subtitle: 'Early JavaScript Programming, Version Control & Game Physics',
+      summary: 'In 2022, I hold a Junior Game Developer certification from WhiteHat Jr., where I built simple games like Football, T-Rex, and Ping Pong. This helped me learn basic JavaScript, and version control with Git and GitHub, along with simple game mechanics like a catapult, inspired by games like Angry Birds.',
+      status: 'CERTIFIED DEVELOPER',
       statusClass: 'active',
-      progress: 78,
-      timeline: 'Q2 Current Expedition',
+      progress: 100,
+      timeline: '2022 Certification',
       curveT: 0.42,
       badgeOffset: new THREE.Vector3(14, 3.8, -2),
       deliverables: [
-        { text: 'Radiation Hardened Sub-Systems Live', done: true },
-        { text: 'Autonomous Atmospheric Drone Relays', done: true },
-        { text: 'Galilean Satellites Direct Sync Protocol', done: false },
-        { text: 'High-Throughput Quantum Telemetry Mesh', done: false }
+        { text: 'Earned Junior Game Developer Certification from WhiteHat Jr.', done: true },
+        { text: 'Engineered playable games: Football, T-Rex Runner, and Ping Pong', done: true },
+        { text: 'Implemented catapult trajectory and collision mechanics (Angry Birds inspired)', done: true },
+        { text: 'Mastered core version control workflows using Git and GitHub repository hosting', done: true }
       ],
       metrics: [
-        { label: 'ACTIVE RELAYS', val: '4 PROBES' },
-        { label: 'BANDWIDTH', val: '1.2 GB/S' },
-        { label: 'RADIATION SHIELD', val: 'NOMINAL' }
+        { label: 'CERTIFICATE', val: 'WHITEHAT JR.' },
+        { label: 'LANGUAGES', val: 'JAVASCRIPT' },
+        { label: 'TOOLS', val: 'GIT & GITHUB' }
       ],
       camPos: new THREE.Vector3(22, 10, 8),
       camLook: new THREE.Vector3(6, 3, -6)
@@ -1002,29 +1002,29 @@
     {
       phase: 2,
       id: 'blue',
-      code: 'PHASE 03',
+      code: 'ACHIEVEMENT 03 // 2025',
       color: '#0ea5e9',
       colorHex: 0x0ea5e9,
       side: 'left',
-      title: 'Phase 03 — Global Orbit & Intelligence',
-      subtitle: 'Storm Vortex Neural Predictors & Cognitive AI',
-      summary: 'Planetary sensor fusion matrix, Great Red Spot turbulence machine learning models, and real-time autonomous trajectory correction.',
-      status: 'IN DEVELOPMENT',
+      title: 'Johns Hopkins University Hackathon — "Swasthyam"',
+      subtitle: 'Digital Healthcare Solutions for Women and Children',
+      summary: 'In 2025, I participated in a hackathon organized by Johns Hopkins University, where my team developed Swasthyam, focused on digital solutions for women\'s and children\'s healthcare.',
+      status: 'GLOBAL HACKATHON',
       statusClass: 'in-dev',
-      progress: 42,
-      timeline: 'Q3 Upcoming',
+      progress: 100,
+      timeline: '2025 Hackathon',
       curveT: 0.64,
       badgeOffset: new THREE.Vector3(-14, 3.8, 2),
       deliverables: [
-        { text: 'Neural Vortex Atmospheric Simulator v1', done: true },
-        { text: 'Autonomous Trajectory Re-router Testing', done: false },
-        { text: 'Cross-Colony Sensory Synthesis Cloud', done: false },
-        { text: 'Federated Planetary AI Inference Engine', done: false }
+        { text: 'Architected and developed "Swasthyam" for maternal and pediatric healthcare', done: true },
+        { text: 'Collaborated in an intensive, multidisciplinary hackathon team sprint', done: true },
+        { text: 'Engineered user-centric digital triage and health record tracking flows', done: true },
+        { text: 'Showcased before Johns Hopkins University clinical & tech evaluation panels', done: true }
       ],
       metrics: [
-        { label: 'DATA POINTS', val: '10M / HR' },
-        { label: 'NEURAL ACCURACY', val: '96.4%' },
-        { label: 'TARGET DEPLOY', val: 'OCTOBER' }
+        { label: 'ORGANIZATION', val: 'JOHNS HOPKINS' },
+        { label: 'PLATFORM', val: 'SWASTHYAM' },
+        { label: 'FOCUS', val: 'WOMEN & CHILD' }
       ],
       camPos: new THREE.Vector3(-24, 11, -16),
       camLook: new THREE.Vector3(-10, 4, -30)
@@ -1032,29 +1032,29 @@
     {
       phase: 3,
       id: 'yellow',
-      code: 'PHASE 04',
+      code: 'ACHIEVEMENT 04 // 2025',
       color: '#f59e0b',
       colorHex: 0xf59e0b,
       side: 'right',
-      title: 'Phase 04 — Infinite Horizons & Ecosystem',
-      subtitle: 'Decentralized Colony Network & Open Horizon',
-      summary: 'Colony mesh network deployment, inter-station collaborative research labs, and open interplanetary developer APIs for the next century of explorers.',
-      status: 'PLANNED',
+      title: '6th Position (Solo Participant) — College DSA League',
+      subtitle: 'Algorithmic Problem-Solving in Graphs, Trees & Dynamic Programming',
+      summary: 'In 2025, Secured 6th position as a solo participant in my college\'s DSA League, with a focus on problem-solving and core topics such as graphs, trees, and dynamic programming.',
+      status: '6TH RANK SOLO',
       statusClass: 'planned',
-      progress: 15,
-      timeline: 'Q4 & Beyond',
+      progress: 100,
+      timeline: '2025 DSA League',
       curveT: 0.84,
       badgeOffset: new THREE.Vector3(14, 4.2, -2),
       deliverables: [
-        { text: 'Interplanetary Developer API Specification', done: false },
-        { text: 'Autonomous Outpost Life-Support Mesh', done: false },
-        { text: 'Cadet Sovereign Governance & Research DAO', done: false },
-        { text: 'Next-Generation Warp Drive Proof of Concept', done: false }
+        { text: 'Competed as a solo contender against university-wide engineering participants', done: true },
+        { text: 'Solved complex algorithmic challenges in Graphs (BFS, DFS, shortest paths)', done: true },
+        { text: 'Demonstrated mastery in Tree traversals and Dynamic Programming states', done: true },
+        { text: 'Ranked in the top 6 solo finishers for algorithmic speed and precision', done: true }
       ],
       metrics: [
-        { label: 'COLONY NODES', val: '12 PLANNED' },
-        { label: 'API ENDPOINTS', val: '140+ SPECS' },
-        { label: 'EXPEDITION ERA', val: '2027+' }
+        { label: 'RANK', val: '6TH PLACE (SOLO)' },
+        { label: 'CORE DSA', val: 'GRAPHS, TREES, DP' },
+        { label: 'EVENT', val: 'COLLEGE DSA LEAGUE' }
       ],
       camPos: new THREE.Vector3(18, 12, -44),
       camLook: new THREE.Vector3(4, 5.5, -66)
@@ -3492,9 +3492,9 @@ Contact: ${email}`);
       this.cameraTargetPos = new THREE.Vector3();
       this.cameraTargetLook = new THREE.Vector3();
 
-      // Reference Blueprint diagram camera preset (Sun on left, all planets visible parallelly across screen)
-      this.diagramCameraPos = new THREE.Vector3(-20, 110, 860);
-      this.diagramCameraLook = new THREE.Vector3(-20, 0, 0);
+      // Reference Blueprint diagram camera preset (Sun on left, all planets visible diagonally across screen matching user alignment)
+      this.diagramCameraPos = new THREE.Vector3(-187, 457, 500);
+      this.diagramCameraLook = new THREE.Vector3(-6, -55, -45);
 
       this.activeTab = 'overview';
       this.hoveredBody = null;
@@ -3525,6 +3525,7 @@ Contact: ${email}`);
       this.camera = new THREE.PerspectiveCamera(45, width / height, 1, 12000);
       this.updateCameraForAspect(width / height);
       this.camera.position.copy(this.diagramCameraPos);
+      this.camera.lookAt(this.diagramCameraLook);
 
       // WebGL Renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -3542,6 +3543,7 @@ Contact: ${email}`);
         this.controls.maxDistance = 2600;
         this.controls.minDistance = 25;
         this.controls.target.copy(this.diagramCameraLook);
+        this.controls.update();
       }
 
       this.buildLighting();
@@ -3550,16 +3552,23 @@ Contact: ${email}`);
       this.buildDomLabels();
       this.bindEvents();
 
+      // Start cosmic background video
+      const cosmicVid = document.getElementById('solarCosmicBgVideo');
+      if (cosmicVid) {
+        cosmicVid.play().catch(() => { });
+      }
+
       // Start render loop
       this.lastTime = performance.now();
       requestAnimationFrame(this.render.bind(this));
     }
 
     updateCameraForAspect(aspect) {
-      const baseZ = 860;
-      const targetZ = aspect < 1.75 ? baseZ * (1.75 / Math.max(aspect, 0.72)) : baseZ;
-      this.diagramCameraPos.set(-20, targetZ * 0.12, targetZ);
-      this.diagramCameraLook.set(-20, 0, 0);
+      const baseTarget = new THREE.Vector3(-6, -55, -45);
+      const baseOffset = new THREE.Vector3(-181, 512, 545);
+      const scale = aspect < 1.75 ? (1.75 / Math.max(aspect, 0.72)) : 1.0;
+      this.diagramCameraPos.copy(baseTarget).addScaledVector(baseOffset, scale);
+      this.diagramCameraLook.copy(baseTarget);
     }
 
     buildLighting() {
@@ -4202,14 +4211,14 @@ Contact: ${email}`);
             btnMarsMyEdu.classList.add('is-active');
             btnMarsMyEdu.setAttribute('aria-expanded', 'true');
             const sub = btnMarsMyEdu.querySelector('.mars-3d-btn-sub');
-            if (sub) sub.textContent = 'CLICK TO CLOSE TIMELINE';
+            if (sub) sub.textContent = 'CLOSE';
             this.audio.playScanTelemetry();
           } else {
             marsEduTimeline.classList.remove('is-visible');
             btnMarsMyEdu.classList.remove('is-active');
             btnMarsMyEdu.setAttribute('aria-expanded', 'false');
             const sub = btnMarsMyEdu.querySelector('.mars-3d-btn-sub');
-            if (sub) sub.textContent = 'CLICK TO VIEW TIMELINE';
+            if (sub) sub.textContent = 'TIMELINE';
             this.audio.playClick();
           }
         });
@@ -4223,7 +4232,7 @@ Contact: ${email}`);
           btnMarsMyEdu.classList.remove('is-active');
           btnMarsMyEdu.setAttribute('aria-expanded', 'false');
           const sub = btnMarsMyEdu.querySelector('.mars-3d-btn-sub');
-          if (sub) sub.textContent = 'CLICK TO VIEW TIMELINE';
+          if (sub) sub.textContent = 'TIMELINE';
           this.audio.playClick();
         });
       }
@@ -4720,7 +4729,7 @@ Contact: ${email}`);
         btnMarsMyEdu.classList.remove('is-active');
         btnMarsMyEdu.setAttribute('aria-expanded', 'false');
         const sub = btnMarsMyEdu.querySelector('.mars-3d-btn-sub');
-        if (sub) sub.textContent = 'CLICK TO VIEW TIMELINE';
+        if (sub) sub.textContent = 'TIMELINE';
       }
 
       if (modal) {
@@ -4747,7 +4756,7 @@ Contact: ${email}`);
         btnMarsMyEdu.classList.remove('is-active');
         btnMarsMyEdu.setAttribute('aria-expanded', 'false');
         const sub = btnMarsMyEdu.querySelector('.mars-3d-btn-sub');
-        if (sub) sub.textContent = 'CLICK TO VIEW TIMELINE';
+        if (sub) sub.textContent = 'TIMELINE';
       }
 
       if (modal) {
