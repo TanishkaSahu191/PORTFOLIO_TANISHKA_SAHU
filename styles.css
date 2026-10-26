@@ -3215,7 +3215,7 @@ body.solar-active .solar-system-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 2400px;
+  perspective: 2000px;
   perspective-origin: 50% 50%;
   padding: 10px 24px;
   overflow: visible;
@@ -3240,6 +3240,61 @@ body.solar-active .solar-system-section {
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: 0 35px 80px rgba(0, 0, 0, 0.85);
   border-radius: 12px;
+}
+
+/* Dynamic Traveling Cast Shadow Beneath Turning Paper */
+.book-3d::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  bottom: 15px;
+  left: 10%;
+  right: 10%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(10, 5, 2, 0.42) 0%, rgba(10, 5, 2, 0.12) 55%, transparent 75%);
+  filter: blur(14px);
+  pointer-events: none;
+  z-index: 35;
+  opacity: 0;
+  transform: scaleY(0.7);
+  transition: opacity 0.3s ease;
+}
+
+.book-3d.has-page-turning-next::after {
+  animation: bookFloorShadowNext 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.book-3d.has-page-turning-prev::after {
+  animation: bookFloorShadowPrev 0.88s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes bookFloorShadowNext {
+  0% {
+    opacity: 0;
+    transform: translateX(60px) scale(0.65, 0.6);
+  }
+  48% {
+    opacity: 0.85;
+    transform: translateX(0px) scale(1.2, 0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.65, 0.6);
+  }
+}
+
+@keyframes bookFloorShadowPrev {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.65, 0.6);
+  }
+  48% {
+    opacity: 0.85;
+    transform: translateX(0px) scale(1.2, 0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(60px) scale(0.65, 0.6);
+  }
 }
 
 /* Spine Hinge */
@@ -3272,30 +3327,38 @@ body.solar-active .solar-system-section {
   transform: rotateZ(3deg);
 }
 
-/* Base Leaves (Underneath active flipping leaves) */
+/* Base Leaves with Layered Paper Stack Edge Illusion */
 .book-base-leaf {
   position: absolute;
   top: 0;
   width: 50%;
   height: 100%;
-  background: #f1ebd9;
-  border: 1px solid #d4c8af;
+  background: #fbf7ec;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .book-base-leaf.base-left {
   left: 0;
   border-radius: 12px 0 0 12px;
   border-right: none;
-  box-shadow: inset -15px 0 25px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: inset -24px 0 32px -10px rgba(0, 0, 0, 0.24),
+              -1px 1px 0 #ede4cf,
+              -2px 2px 0 #e4dabf,
+              -3px 3px 0 #dbd0b5,
+              -4px 4px 0 #d2c6aa,
+              -6px 12px 28px rgba(0, 0, 0, 0.35);
 }
 
 .book-base-leaf.base-right {
   left: 50%;
   border-radius: 0 12px 12px 0;
   border-left: none;
-  box-shadow: inset 15px 0 25px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 24px 0 32px -10px rgba(0, 0, 0, 0.24),
+              1px 1px 0 #ede4cf,
+              2px 2px 0 #e4dabf,
+              3px 3px 0 #dbd0b5,
+              4px 4px 0 #d2c6aa,
+              6px 12px 28px rgba(0, 0, 0, 0.35);
 }
 
 .base-page-content {
@@ -3382,7 +3445,7 @@ body.solar-active .solar-system-section {
 }
 
 /* ========================================================
-   FLIPPABLE 3D LEAVES (PAGES)
+   FLIPPABLE 3D LEAVES (THIN REALISTIC NOTEBOOK PAPER)
    ======================================================== */
 .book-leaf {
   position: absolute;
@@ -3392,16 +3455,100 @@ body.solar-active .solar-system-section {
   height: 100%;
   transform-origin: 0% 50%;
   transform-style: preserve-3d;
-  transition: transform 0.85s cubic-bezier(0.645, 0.045, 0.355, 1);
   cursor: pointer;
   user-select: none;
+  will-change: transform, box-shadow;
+  transition: transform 0.82s cubic-bezier(0.25, 1, 0.38, 1), box-shadow 0.82s cubic-bezier(0.25, 1, 0.38, 1);
 }
 
-.book-leaf.is-flipped {
-  transform: rotateY(-180deg);
+/* Resting States with Thickness Offset */
+.book-leaf:not(.is-flipped):not(.is-flipping-forward):not(.is-flipping-backward) {
+  transform: rotateY(0deg) translateZ(var(--z-stack, 2px));
 }
 
-/* Leaf Faces (Front and Back) */
+.book-leaf.is-flipped:not(.is-flipping-forward):not(.is-flipping-backward) {
+  transform: rotateY(-180deg) translateZ(var(--z-stack, 2px));
+}
+
+/* Natural Corner Peel / Curl Preview on Hover */
+.book-leaf:not(.is-flipped):not(.is-flipping-forward):not(.is-flipping-backward):hover {
+  transform: rotateY(-5.8deg) rotateZ(0.7deg) skewY(0.8deg) translateZ(calc(var(--z-stack, 2px) + 8px));
+  box-shadow: -4px 8px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.32s ease;
+}
+
+.book-leaf.is-flipped:not(.is-flipping-forward):not(.is-flipping-backward):hover {
+  transform: rotateY(-174.2deg) rotateZ(-0.7deg) skewY(-0.8deg) translateZ(calc(var(--z-stack, 2px) + 8px));
+  box-shadow: 4px 8px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.32s ease;
+}
+
+/* Dynamic Multi-Axis Paper Bending Animations */
+.book-leaf.is-flipping-forward {
+  z-index: 60 !important;
+  animation: realisticPageTurnNext 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.book-leaf.is-flipping-backward {
+  z-index: 60 !important;
+  animation: realisticPageTurnPrev 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes realisticPageTurnNext {
+  0% {
+    transform: rotateY(0deg) rotateZ(0deg) skewY(0deg) translateZ(var(--z-start, 2px));
+    box-shadow: 4px 8px 20px rgba(0, 0, 0, 0.22);
+  }
+  24% {
+    /* Lift & early curl: outer corner lifts and paper arches */
+    transform: rotateY(-38deg) rotateZ(2.2deg) skewY(2.8deg) translateZ(26px);
+    box-shadow: -8px 16px 36px rgba(0, 0, 0, 0.36);
+  }
+  52% {
+    /* Peak flex: maximum paper arch as the page sweeps over vertical */
+    transform: rotateY(-95deg) rotateZ(-2.8deg) skewY(-2.2deg) translateZ(44px);
+    box-shadow: -16px 26px 48px rgba(0, 0, 0, 0.42);
+  }
+  78% {
+    /* Descent & roll: paper curves gently toward the left stack */
+    transform: rotateY(-155deg) rotateZ(-1.4deg) skewY(-0.9deg) translateZ(20px);
+    box-shadow: -8px 14px 28px rgba(0, 0, 0, 0.32);
+  }
+  100% {
+    /* Settled flat on the left stack */
+    transform: rotateY(-180deg) rotateZ(0deg) skewY(0deg) translateZ(var(--z-end, 4px));
+    box-shadow: -4px 8px 18px rgba(0, 0, 0, 0.22);
+  }
+}
+
+@keyframes realisticPageTurnPrev {
+  0% {
+    transform: rotateY(-180deg) rotateZ(0deg) skewY(0deg) translateZ(var(--z-start, 2px));
+    box-shadow: -4px 8px 18px rgba(0, 0, 0, 0.22);
+  }
+  24% {
+    /* Lift & early curl from left stack */
+    transform: rotateY(-142deg) rotateZ(-2.2deg) skewY(-2.8deg) translateZ(26px);
+    box-shadow: 8px 16px 36px rgba(0, 0, 0, 0.36);
+  }
+  52% {
+    /* Peak flex over vertical */
+    transform: rotateY(-85deg) rotateZ(2.8deg) skewY(2.2deg) translateZ(44px);
+    box-shadow: 16px 26px 48px rgba(0, 0, 0, 0.42);
+  }
+  78% {
+    /* Descent & roll toward right stack */
+    transform: rotateY(-25deg) rotateZ(1.4deg) skewY(0.9deg) translateZ(20px);
+    box-shadow: 8px 14px 28px rgba(0, 0, 0, 0.32);
+  }
+  100% {
+    /* Settled flat on the right stack */
+    transform: rotateY(0deg) rotateZ(0deg) skewY(0deg) translateZ(var(--z-end, 4px));
+    box-shadow: 4px 8px 20px rgba(0, 0, 0, 0.22);
+  }
+}
+
+/* Leaf Faces (Front and Back) with Delicate Paper Edge */
 .leaf-face {
   position: absolute;
   inset: 0;
@@ -3410,19 +3557,126 @@ body.solar-active .solar-system-section {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   overflow: hidden;
-  box-shadow: 6px 12px 28px rgba(0, 0, 0, 0.4), inset 0 0 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 1px rgba(185, 168, 140, 0.3), 4px 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.leaf-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0;
+  border-radius: inherit;
+}
+
+/* Dynamic Traveling Light & Shadow on the Turning Page */
+.book-leaf.is-flipping-forward .leaf-front::after {
+  animation: leafFrontLightNext 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.book-leaf.is-flipping-forward .leaf-back::after {
+  animation: leafBackLightNext 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.book-leaf.is-flipping-backward .leaf-back::after {
+  animation: leafBackLightPrev 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.book-leaf.is-flipping-backward .leaf-front::after {
+  animation: leafFrontLightPrev 0.86s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes leafFrontLightNext {
+  0% {
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0%, transparent 60%);
+  }
+  32% {
+    opacity: 0.52;
+    background: linear-gradient(105deg, rgba(0, 0, 0, 0.22) 0%, rgba(255, 255, 255, 0.26) 45%, rgba(0, 0, 0, 0.32) 90%);
+  }
+  65% {
+    opacity: 0.72;
+    background: linear-gradient(115deg, rgba(0, 0, 0, 0.38) 0%, rgba(255, 255, 255, 0.15) 55%, rgba(0, 0, 0, 0.55) 100%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes leafBackLightNext {
+  0% {
+    opacity: 0.85;
+    background: linear-gradient(255deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%);
+  }
+  50% {
+    opacity: 0.62;
+    background: linear-gradient(255deg, rgba(0, 0, 0, 0.42) 0%, rgba(255, 255, 255, 0.2) 48%, rgba(0, 0, 0, 0.22) 100%);
+  }
+  85% {
+    opacity: 0.22;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.22) 0%, transparent 60%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes leafBackLightPrev {
+  0% {
+    opacity: 0;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.12) 0%, transparent 60%);
+  }
+  32% {
+    opacity: 0.52;
+    background: linear-gradient(255deg, rgba(0, 0, 0, 0.22) 0%, rgba(255, 255, 255, 0.26) 45%, rgba(0, 0, 0, 0.32) 90%);
+  }
+  65% {
+    opacity: 0.72;
+    background: linear-gradient(245deg, rgba(0, 0, 0, 0.38) 0%, rgba(255, 255, 255, 0.15) 55%, rgba(0, 0, 0, 0.55) 100%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes leafFrontLightPrev {
+  0% {
+    opacity: 0.85;
+    background: linear-gradient(105deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%);
+  }
+  50% {
+    opacity: 0.62;
+    background: linear-gradient(105deg, rgba(0, 0, 0, 0.42) 0%, rgba(255, 255, 255, 0.2) 48%, rgba(0, 0, 0, 0.22) 100%);
+  }
+  85% {
+    opacity: 0.22;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0%, transparent 60%);
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .leaf-front {
   transform: rotateY(0deg);
-  border-radius: 0 12px 12px 0;
-  box-shadow: inset 18px 0 25px -10px rgba(0, 0, 0, 0.22);
+  border-radius: 0 10px 10px 0;
+  box-shadow: inset 24px 0 35px -12px rgba(25, 18, 12, 0.22),
+              inset -1px 0 0 rgba(255, 255, 255, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+              4px 6px 18px rgba(0, 0, 0, 0.16);
 }
 
 .leaf-back {
   transform: rotateY(180deg);
-  border-radius: 12px 0 0 12px;
-  box-shadow: inset -18px 0 25px -10px rgba(0, 0, 0, 0.22);
+  border-radius: 10px 0 0 10px;
+  box-shadow: inset -24px 0 35px -12px rgba(25, 18, 12, 0.22),
+              inset 1px 0 0 rgba(255, 255, 255, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+              -4px 6px 18px rgba(0, 0, 0, 0.16);
 }
 
 /* Cover Styling */
@@ -3479,13 +3733,27 @@ body.solar-active .solar-system-section {
   box-shadow: 0 0 8px #fbbf24;
 }
 
-/* Parchment / Interior Page Design */
+/* High-Grade Parchment / Realistic Thin Notebook Paper */
 .parchment-texture {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, #faf6ec 0%, #f4ede0 65%, #eae0cd 100%);
+  background: radial-gradient(ellipse at 45% 35%, #fefcf7 0%, #faf5ec 58%, #f3ead7 100%);
   pointer-events: none;
   opacity: 0.98;
+}
+
+.parchment-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(140, 115, 80, 0.015) 2px,
+    rgba(140, 115, 80, 0.015) 4px
+  );
+  pointer-events: none;
 }
 
 .page-inner-content {

@@ -5059,16 +5059,16 @@ Contact: ${email}`);
         });
       }
 
-      // Click on any book leaf to flip forward or backward
+      // Click on any book leaf to flip forward or backward with realistic paper flex
       document.querySelectorAll('.book-leaf').forEach((leaf) => {
         leaf.addEventListener('click', (e) => {
           if (e.target.closest('a') || e.target.closest('button')) return;
           const leafIdx = parseInt(leaf.getAttribute('data-leaf'), 10);
           if (isNaN(leafIdx)) return;
           if (leafIdx < this.currentBookLeaf) {
-            this.flipBookTo(leafIdx);
+            this.flipBookPrev();
           } else {
-            this.flipBookTo(leafIdx + 1);
+            this.flipBookNext();
           }
         });
       });
@@ -5939,26 +5939,88 @@ Contact: ${email}`);
     }
 
     flipBookNext() {
+      if (this.isPageTurning) return;
       if (this.currentBookLeaf < this.totalBookLeaves) {
-        this.currentBookLeaf++;
+        const leafToFlip = document.querySelector(`.book-leaf[data-leaf="${this.currentBookLeaf}"]`);
+        this.isPageTurning = true;
         this.audio.playPageFlip();
-        this.updateBookState();
+
+        if (leafToFlip) {
+          const book3d = document.getElementById('book3D');
+          if (book3d) {
+            book3d.classList.remove('has-page-turning-prev');
+            book3d.classList.add('has-page-turning-next');
+          }
+
+          leafToFlip.style.transform = '';
+          leafToFlip.style.setProperty('--z-start', `${(this.totalBookLeaves - this.currentBookLeaf) * 2}px`);
+          leafToFlip.style.setProperty('--z-end', `${(this.currentBookLeaf + 1) * 2}px`);
+          leafToFlip.classList.remove('is-flipping-backward');
+          leafToFlip.classList.add('is-flipping-forward');
+
+          setTimeout(() => {
+            leafToFlip.classList.remove('is-flipping-forward');
+            if (book3d) book3d.classList.remove('has-page-turning-next');
+            this.currentBookLeaf++;
+            this.updateBookState();
+            this.isPageTurning = false;
+          }, 840);
+        } else {
+          this.currentBookLeaf++;
+          this.updateBookState();
+          this.isPageTurning = false;
+        }
       }
     }
 
     flipBookPrev() {
+      if (this.isPageTurning) return;
       if (this.currentBookLeaf > 0) {
-        this.currentBookLeaf--;
+        const prevIdx = this.currentBookLeaf - 1;
+        const leafToFlip = document.querySelector(`.book-leaf[data-leaf="${prevIdx}"]`);
+        this.isPageTurning = true;
         this.audio.playPageFlip();
-        this.updateBookState();
+
+        if (leafToFlip) {
+          const book3d = document.getElementById('book3D');
+          if (book3d) {
+            book3d.classList.remove('has-page-turning-next');
+            book3d.classList.add('has-page-turning-prev');
+          }
+
+          leafToFlip.style.transform = '';
+          leafToFlip.style.setProperty('--z-start', `${(prevIdx + 1) * 2}px`);
+          leafToFlip.style.setProperty('--z-end', `${(this.totalBookLeaves - prevIdx) * 2}px`);
+          leafToFlip.classList.remove('is-flipping-forward');
+          leafToFlip.classList.add('is-flipping-backward');
+
+          setTimeout(() => {
+            leafToFlip.classList.remove('is-flipping-backward');
+            if (book3d) book3d.classList.remove('has-page-turning-prev');
+            this.currentBookLeaf--;
+            this.updateBookState();
+            this.isPageTurning = false;
+          }, 840);
+        } else {
+          this.currentBookLeaf--;
+          this.updateBookState();
+          this.isPageTurning = false;
+        }
       }
     }
 
     flipBookTo(targetLeaf) {
-      if (targetLeaf >= 0 && targetLeaf <= this.totalBookLeaves) {
-        this.currentBookLeaf = targetLeaf;
-        this.audio.playPageFlip();
-        this.updateBookState();
+      if (this.isPageTurning) return;
+      if (targetLeaf >= 0 && targetLeaf <= this.totalBookLeaves && targetLeaf !== this.currentBookLeaf) {
+        if (targetLeaf === this.currentBookLeaf + 1) {
+          this.flipBookNext();
+        } else if (targetLeaf === this.currentBookLeaf - 1) {
+          this.flipBookPrev();
+        } else {
+          this.currentBookLeaf = targetLeaf;
+          this.audio.playPageFlip();
+          this.updateBookState();
+        }
       }
     }
 
@@ -5980,7 +6042,7 @@ Contact: ${email}`);
           } else {
             this.flipBookNext();
           }
-        }, 4200);
+        }, 4400);
       } else {
         if (this.autoFlipTimer) {
           clearInterval(this.autoFlipTimer);
@@ -5994,13 +6056,16 @@ Contact: ${email}`);
       const N = leaves.length;
       leaves.forEach((leaf) => {
         const idx = parseInt(leaf.getAttribute('data-leaf'), 10);
+        leaf.classList.remove('is-flipping-forward', 'is-flipping-backward');
         if (idx < this.currentBookLeaf) {
           leaf.classList.add('is-flipped');
           leaf.style.zIndex = idx + 1;
-          leaf.style.transform = `rotateY(-180deg) translateZ(${idx * 2}px)`;
+          leaf.style.setProperty('--z-stack', `${(idx + 1) * 2}px`);
+          leaf.style.transform = `rotateY(-180deg) translateZ(${(idx + 1) * 2}px)`;
         } else {
           leaf.classList.remove('is-flipped');
           leaf.style.zIndex = N - idx;
+          leaf.style.setProperty('--z-stack', `${(N - idx) * 2}px`);
           leaf.style.transform = `rotateY(0deg) translateZ(${(N - idx) * 2}px)`;
         }
       });
