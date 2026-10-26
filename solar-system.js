@@ -353,6 +353,16 @@
       if (this.ctx && this.ctx.state === 'suspended') {
         this.ctx.resume();
       }
+      if (this.ambientNodes && this.ambientNodes.length > 0) {
+        this.ambientNodes.forEach(node => {
+          try { node.stop(); node.disconnect(); } catch (err) {}
+        });
+        this.ambientNodes = [];
+      }
+      if (this.ambientGain) {
+        try { this.ambientGain.disconnect(); } catch (err) {}
+        this.ambientGain = null;
+      }
     }
 
     playVisorLock() {
@@ -574,33 +584,8 @@
     }
 
     startAmbientSpace() {
-      this.init();
-      if (!this.ctx || this.ambientGain) return;
-
-      this.ambientGain = this.ctx.createGain();
-      this.ambientGain.gain.setValueAtTime(this.muted ? 0 : 0.045, this.ctx.currentTime);
-      this.ambientGain.connect(this.ctx.destination);
-
-      // Deep space harmonic chord: Root (55Hz / A1), 5th (82.5Hz), Octave (110Hz)
-      const freqs = [55, 82.5, 110, 164.8];
-      freqs.forEach(freq => {
-        const osc = this.ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        // Subtle LFO drift
-        const lfo = this.ctx.createOscillator();
-        const lfoGain = this.ctx.createGain();
-        lfo.frequency.value = 0.12 + Math.random() * 0.08;
-        lfoGain.gain.value = 1.5;
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
-        lfo.start();
-        this.ambientNodes.push(lfo);
-
-        osc.connect(this.ambientGain);
-        osc.start();
-        this.ambientNodes.push(osc);
-      });
+      // Background ambient sound disabled as requested
+      return;
     }
 
     toggleMute() {
@@ -612,103 +597,288 @@
     }
   }
 
-  // Procedural Texture Generator for High Quality, 0-Latency Planet Spheres
+  // High-performance 2D Permutation Noise with Octave fBm for cinematic planetary surfaces
+  class Noise2D {
+    constructor(seed = 1984) {
+      this.p = new Uint8Array(512);
+      const perm = new Uint8Array(256);
+      for (let i = 0; i < 256; i++) perm[i] = i;
+      let s = seed;
+      for (let i = 255; i > 0; i--) {
+        s = (s * 16807) % 2147483647;
+        const j = s % (i + 1);
+        const t = perm[i]; perm[i] = perm[j]; perm[j] = t;
+      }
+      for (let i = 0; i < 512; i++) this.p[i] = perm[i & 255];
+    }
+    fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    lerp(t, a, b) { return a + t * (b - a); }
+    grad(hash, x, y) {
+      const h = hash & 3;
+      const u = h < 2 ? x : y;
+      const v = h < 2 ? y : x;
+      return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+    }
+    noise(x, y) {
+      const X = Math.floor(x) & 255;
+      const Y = Math.floor(y) & 255;
+      const xf = x - Math.floor(x);
+      const yf = y - Math.floor(y);
+      const u = this.fade(xf);
+      const v = this.fade(yf);
+      const a = this.p[X] + Y;
+      const b = this.p[X + 1] + Y;
+      const x1 = this.lerp(u, this.grad(this.p[a], xf, yf), this.grad(this.p[b], xf - 1, yf));
+      const x2 = this.lerp(u, this.grad(this.p[a + 1], xf, yf - 1), this.grad(this.p[b + 1], xf - 1, yf - 1));
+      return (this.lerp(v, x1, x2) + 1) * 0.5;
+    }
+    fbm(x, y, octaves = 4, persistence = 0.5, lacunarity = 2.0) {
+      let total = 0, freq = 1, amp = 1, max = 0;
+      for (let i = 0; i < octaves; i++) {
+        total += this.noise(x * freq, y * freq) * amp;
+        max += amp;
+        amp *= persistence;
+        freq *= lacunarity;
+      }
+      return total / max;
+    }
+  }
+
+  const _noise = new Noise2D(2026);
+
+  // Procedural Texture Generator for Photorealistic, Zero-Latency Celestial Bodies
   class ProceduralTextures {
     static createSunTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 1024;
       canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      // Base radiant gradient
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#ffe066');
-      grad.addColorStop(0.3, '#ff9900');
-      grad.addColorStop(0.7, '#ff5500');
-      grad.addColorStop(1, '#ff3300');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Photosphere convective granulation & turbulent incandescent plasma
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const poleDim = Math.sin(ny * Math.PI);
+        const poleFactor = 0.75 + 0.25 * Math.pow(poleDim, 0.4);
 
-      // Convective granulation noise & flares
-      for (let i = 0; i < 900; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const r = Math.random() * 32 + 8;
-        const radial = ctx.createRadialGradient(x, y, 0, x, y, r);
-        radial.addColorStop(0, 'rgba(255, 255, 220, 0.45)');
-        radial.addColorStop(0.5, 'rgba(255, 170, 0, 0.25)');
-        radial.addColorStop(1, 'rgba(200, 30, 0, 0)');
-        ctx.fillStyle = radial;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+
+          const nFine = _noise.fbm(nx * 48, ny * 24, 3, 0.55);
+          const nCoarse = _noise.fbm(nx * 8 + 12, ny * 6, 2, 0.5);
+          const val = nFine * 0.7 + nCoarse * 0.3;
+
+          let r, g, b;
+          if (val < 0.45) {
+            const t = val / 0.45;
+            r = Math.floor(190 + 65 * t);
+            g = Math.floor(45 + 105 * t);
+            b = Math.floor(5 + 10 * t);
+          } else if (val < 0.8) {
+            const t = (val - 0.45) / 0.35;
+            r = 255;
+            g = Math.floor(150 + 85 * t);
+            b = Math.floor(15 + 110 * t);
+          } else {
+            const t = (val - 0.8) / 0.2;
+            r = 255;
+            g = Math.floor(235 + 20 * t);
+            b = Math.floor(125 + 130 * t);
+          }
+
+          data[idx] = Math.floor(r * poleFactor);
+          data[idx + 1] = Math.floor(g * poleFactor);
+          data[idx + 2] = Math.floor(b * poleFactor);
+          data[idx + 3] = 255;
+        }
       }
+      ctx.putImageData(img, 0, 0);
 
-      // Sunspots
-      for (let s = 0; s < 18; s++) {
-        const sx = Math.random() * canvas.width;
-        const sy = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
-        const sr = Math.random() * 9 + 4;
-        ctx.fillStyle = 'rgba(60, 15, 0, 0.7)';
-        ctx.beginPath();
-        ctx.arc(sx, sy, sr, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = 'rgba(20, 5, 0, 0.9)';
-        ctx.beginPath();
-        ctx.arc(sx, sy, sr * 0.45, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      // Realistic, fibrous active sunspot groups (dark umbra, magnetic penumbra)
+      const sunspots = [
+        { cx: 320, cy: 220, rx: 14, ry: 9, angle: 0.15 },
+        { cx: 345, cy: 228, rx: 8, ry: 6, angle: -0.1 },
+        { cx: 680, cy: 290, rx: 18, ry: 11, angle: -0.2 },
+        { cx: 710, cy: 298, rx: 10, ry: 7, angle: 0.1 },
+        { cx: 735, cy: 292, rx: 6, ry: 5, angle: 0 }
+      ];
 
-      return new THREE.CanvasTexture(canvas);
+      sunspots.forEach(sp => {
+        const penGrad = ctx.createRadialGradient(sp.cx, sp.cy, sp.rx * 0.3, sp.cx, sp.cy, sp.rx);
+        penGrad.addColorStop(0, 'rgba(110, 32, 2, 0.95)');
+        penGrad.addColorStop(0.65, 'rgba(180, 70, 8, 0.75)');
+        penGrad.addColorStop(1, 'rgba(255, 160, 20, 0)');
+        ctx.fillStyle = penGrad;
+        ctx.beginPath();
+        ctx.ellipse(sp.cx, sp.cy, sp.rx, sp.ry, sp.angle, 0, Math.PI * 2);
+        ctx.fill();
+
+        const umbraGrad = ctx.createRadialGradient(sp.cx, sp.cy, 0, sp.cx, sp.cy, sp.rx * 0.45);
+        umbraGrad.addColorStop(0, 'rgba(18, 4, 1, 0.98)');
+        umbraGrad.addColorStop(1, 'rgba(45, 10, 2, 0.92)');
+        ctx.fillStyle = umbraGrad;
+        ctx.beginPath();
+        ctx.ellipse(sp.cx, sp.cy, sp.rx * 0.48, sp.ry * 0.48, sp.angle, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(255, 250, 210, 0.45)';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.ellipse(sp.cx, sp.cy, sp.rx * 1.35, sp.ry * 1.35, sp.angle, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.ClampToEdgeWrapping;
+      return tex;
     }
 
     static createMercuryTexture() {
       const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
+
+      // Realistic heavily cratered anorthosite & dark volcanic basalt plains
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+
+          const n1 = _noise.fbm(nx * 10, ny * 10, 4, 0.52);
+          const n2 = _noise.fbm(nx * 32, ny * 32, 3, 0.5);
+          const craterNoise = _noise.fbm(nx * 64, ny * 64, 2, 0.4);
+          const v = n1 * 0.55 + n2 * 0.3 + craterNoise * 0.15;
+
+          const base = 85 + v * 95;
+          const r = Math.floor(base * 1.05);
+          const g = Math.floor(base * 0.98);
+          const b = Math.floor(base * 0.92);
+
+          data[idx] = Math.min(255, r);
+          data[idx + 1] = Math.min(255, g);
+          data[idx + 2] = Math.min(255, b);
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+
+      // Prominent impact craters with radiating glass ejecta rays
+      const craters = [
+        { cx: 320, cy: 210, r: 42, rays: 12 },
+        { cx: 650, cy: 290, r: 35, rays: 8 },
+        { cx: 480, cy: 380, r: 25, rays: 6 },
+        { cx: 780, cy: 160, r: 28, rays: 7 },
+        { cx: 160, cy: 310, r: 22, rays: 5 }
+      ];
+
+      craters.forEach(cr => {
+        for (let a = 0; a < cr.rays; a++) {
+          const angle = (a / cr.rays) * Math.PI * 2 + (cr.cx * 0.01);
+          const rayLen = cr.r * (2.5 + Math.random() * 2.2);
+          const grad = ctx.createLinearGradient(cr.cx, cr.cy, cr.cx + Math.cos(angle) * rayLen, cr.cy + Math.sin(angle) * rayLen);
+          grad.addColorStop(0, 'rgba(235, 230, 220, 0.32)');
+          grad.addColorStop(1, 'rgba(235, 230, 220, 0)');
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(cr.cx, cr.cy);
+          ctx.lineTo(cr.cx + Math.cos(angle) * rayLen, cr.cy + Math.sin(angle) * rayLen);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = 'rgba(220, 215, 205, 0.75)';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.arc(cr.cx, cr.cy, cr.r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        const crGrad = ctx.createRadialGradient(cr.cx - cr.r * 0.2, cr.cy - cr.r * 0.2, 0, cr.cx, cr.cy, cr.r);
+        crGrad.addColorStop(0, 'rgba(170, 165, 155, 0.9)');
+        crGrad.addColorStop(0.7, 'rgba(65, 60, 55, 0.95)');
+        crGrad.addColorStop(1, 'rgba(40, 36, 32, 0.85)');
+        ctx.fillStyle = crGrad;
+        ctx.beginPath();
+        ctx.arc(cr.cx, cr.cy, cr.r * 0.92, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(225, 220, 210, 0.85)';
+        ctx.beginPath();
+        ctx.arc(cr.cx, cr.cy, cr.r * 0.16, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    static createMercuryBump() {
+      const canvas = document.createElement('canvas');
       canvas.width = 512;
       canvas.height = 256;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      ctx.fillStyle = '#8f8880';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Rocky cratered surface
-      for (let i = 0; i < 400; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const r = Math.random() * 14 + 2;
-        ctx.strokeStyle = 'rgba(50, 45, 40, 0.4)';
-        ctx.lineWidth = 1.5;
-        ctx.fillStyle = 'rgba(175, 170, 160, 0.35)';
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+          const v = Math.floor(_noise.fbm(nx * 20, ny * 20, 3, 0.5) * 255);
+          data[idx] = v;
+          data[idx + 1] = v;
+          data[idx + 2] = v;
+          data[idx + 3] = 255;
+        }
       }
+      ctx.putImageData(img, 0, 0);
       return new THREE.CanvasTexture(canvas);
     }
 
     static createVenusTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 256;
+      canvas.width = 1024;
+      canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      // Golden sulfuric cloud swaths
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#edd198');
-      grad.addColorStop(0.35, '#c99b54');
-      grad.addColorStop(0.65, '#e0b875');
-      grad.addColorStop(1, '#baa072');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Realistic dense super-rotating cloud deck with chevron Rossby waves
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const chevron = Math.abs(ny - 0.5) * 1.8;
 
-      // Swirling atmospheric bands
-      for (let b = 0; b < 24; b++) {
-        const y = (canvas.height / 24) * b + Math.random() * 8;
-        ctx.fillStyle = b % 2 === 0 ? 'rgba(255, 235, 180, 0.25)' : 'rgba(160, 110, 45, 0.25)';
-        ctx.fillRect(0, y, canvas.width, Math.random() * 16 + 6);
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = (x / canvas.width + chevron * 0.15) % 1.0;
+          const idx = (y * canvas.width + x) * 4;
+
+          const nSmooth = _noise.fbm(nx * 6, ny * 14, 4, 0.5);
+          const nWave = Math.sin(nx * Math.PI * 8 + ny * Math.PI * 4) * 0.08;
+          const val = THREE.MathUtils.clamp(nSmooth + nWave, 0, 1);
+
+          const r = Math.floor(222 + val * 30);
+          const g = Math.floor(190 + val * 45);
+          const b = Math.floor(135 + val * 55);
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
       }
-      return new THREE.CanvasTexture(canvas);
+      ctx.putImageData(img, 0, 0);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
 
     static createEarthTexture() {
@@ -717,96 +887,292 @@
       canvas.height = 512;
       const ctx = canvas.getContext('2d');
 
-      // Ocean blue base
-      ctx.fillStyle = '#1c4d8f';
+      // Ocean base: deep sapphire with oceanic depth variation
+      const oceanGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      oceanGrad.addColorStop(0, '#0c2242');
+      oceanGrad.addColorStop(0.5, '#14386b');
+      oceanGrad.addColorStop(1, '#0c2242');
+      ctx.fillStyle = oceanGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Deep ocean variations
-      for (let i = 0; i < 15; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const r = Math.random() * 120 + 40;
-        const rad = ctx.createRadialGradient(x, y, 0, x, y, r);
-        rad.addColorStop(0, '#16386b');
-        rad.addColorStop(1, 'rgba(28, 77, 143, 0)');
-        ctx.fillStyle = rad;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Continents (Americas, Eurasia, Africa, Australia)
-      ctx.fillStyle = '#3f7842';
-      // Africa & Europe
+      // Continental shelf coastal turquoise fringes
+      ctx.fillStyle = 'rgba(28, 98, 148, 0.45)';
       ctx.beginPath();
-      ctx.ellipse(540, 260, 85, 110, 0.1, 0, Math.PI * 2);
-      ctx.ellipse(530, 160, 70, 50, -0.1, 0, Math.PI * 2);
+      ctx.ellipse(560, 255, 150, 160, 0.05, 0, Math.PI * 2);
+      ctx.ellipse(280, 240, 130, 170, -0.1, 0, Math.PI * 2);
       ctx.fill();
 
-      // Asia
-      ctx.fillStyle = '#4c8547';
+      // 1. Africa
+      const africaGrad = ctx.createLinearGradient(500, 160, 560, 360);
+      africaGrad.addColorStop(0, '#788242');
+      africaGrad.addColorStop(0.25, '#c99b4e');
+      africaGrad.addColorStop(0.6, '#285e2b');
+      africaGrad.addColorStop(1, '#5a7536');
+      ctx.fillStyle = africaGrad;
       ctx.beginPath();
-      ctx.ellipse(690, 180, 120, 80, 0.2, 0, Math.PI * 2);
+      ctx.moveTo(490, 190);
+      ctx.bezierCurveTo(530, 175, 610, 190, 630, 230);
+      ctx.bezierCurveTo(620, 280, 580, 340, 560, 370);
+      ctx.bezierCurveTo(535, 360, 520, 300, 480, 260);
+      ctx.bezierCurveTo(460, 240, 470, 200, 490, 190);
+      ctx.closePath();
       ctx.fill();
 
-      // North America
-      ctx.fillStyle = '#39703f';
+      // 2. Eurasia
+      const eurasiaGrad = ctx.createLinearGradient(520, 80, 800, 260);
+      eurasiaGrad.addColorStop(0, '#365c32');
+      eurasiaGrad.addColorStop(0.3, '#3f6b32');
+      eurasiaGrad.addColorStop(0.55, '#d4a85b');
+      eurasiaGrad.addColorStop(0.7, '#2f5e2d');
+      ctx.fillStyle = eurasiaGrad;
       ctx.beginPath();
-      ctx.ellipse(260, 170, 95, 65, -0.2, 0, Math.PI * 2);
+      ctx.moveTo(480, 180);
+      ctx.bezierCurveTo(500, 110, 560, 90, 650, 95);
+      ctx.bezierCurveTo(760, 80, 850, 110, 880, 170);
+      ctx.bezierCurveTo(870, 230, 780, 270, 730, 270);
+      ctx.bezierCurveTo(680, 280, 660, 240, 620, 220);
+      ctx.bezierCurveTo(570, 230, 520, 200, 480, 180);
+      ctx.closePath();
       ctx.fill();
 
-      // South America
+      // 3. North America
+      const naGrad = ctx.createLinearGradient(160, 90, 330, 230);
+      naGrad.addColorStop(0, '#426139');
+      naGrad.addColorStop(0.4, '#547d40');
+      naGrad.addColorStop(0.75, '#b09650');
+      naGrad.addColorStop(1, '#3b6e36');
+      ctx.fillStyle = naGrad;
       ctx.beginPath();
-      ctx.ellipse(330, 330, 60, 95, 0.2, 0, Math.PI * 2);
+      ctx.moveTo(130, 130);
+      ctx.bezierCurveTo(200, 90, 290, 95, 340, 140);
+      ctx.bezierCurveTo(345, 190, 305, 220, 290, 240);
+      ctx.bezierCurveTo(260, 250, 240, 225, 200, 200);
+      ctx.bezierCurveTo(160, 180, 120, 160, 130, 130);
+      ctx.closePath();
       ctx.fill();
 
-      // Australia
-      ctx.fillStyle = '#7a703d';
+      // 4. South America
+      const saGrad = ctx.createLinearGradient(250, 250, 340, 440);
+      saGrad.addColorStop(0, '#225925');
+      saGrad.addColorStop(0.5, '#2e6b2c');
+      saGrad.addColorStop(0.85, '#69753c');
+      saGrad.addColorStop(1, '#8f9474');
+      ctx.fillStyle = saGrad;
       ctx.beginPath();
-      ctx.ellipse(780, 360, 45, 35, 0, 0, Math.PI * 2);
+      ctx.moveTo(260, 250);
+      ctx.bezierCurveTo(310, 255, 360, 280, 350, 330);
+      ctx.bezierCurveTo(330, 390, 290, 440, 275, 455);
+      ctx.bezierCurveTo(260, 420, 250, 340, 250, 280);
+      ctx.closePath();
       ctx.fill();
 
-      // Polar ice caps
-      ctx.fillStyle = '#f0f5fa';
+      // 5. Australia
+      ctx.fillStyle = '#9e5a2f';
       ctx.beginPath();
-      ctx.ellipse(canvas.width / 2, 10, canvas.width / 2, 28, 0, 0, Math.PI * 2);
-      ctx.ellipse(canvas.width / 2, canvas.height - 10, canvas.width / 2, 34, 0, 0, Math.PI * 2);
+      ctx.ellipse(780, 350, 52, 38, -0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#4f7535';
+      ctx.beginPath();
+      ctx.ellipse(815, 355, 14, 28, 0.2, 0, Math.PI * 2);
       ctx.fill();
 
-      return new THREE.CanvasTexture(canvas);
+      // 6. Polar Ice Caps & Himalayas
+      ctx.fillStyle = '#f2f8fc';
+      ctx.beginPath();
+      ctx.ellipse(canvas.width / 2, 490, canvas.width * 0.48, 25, 0, 0, Math.PI * 2);
+      ctx.ellipse(canvas.width / 2, 14, canvas.width * 0.38, 16, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.ellipse(660, 195, 26, 6, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
 
-    static createMarsTexture() {
+    static createEarthCloudTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
+
+      // Realistic meteorological cloud systems (cyclonic vortices, cold fronts, trade wind belts)
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const itcz = Math.exp(-Math.pow((ny - 0.5) / 0.12, 2)) * 0.35;
+        const stormNorth = Math.exp(-Math.pow((ny - 0.28) / 0.14, 2)) * 0.4;
+        const stormSouth = Math.exp(-Math.pow((ny - 0.72) / 0.14, 2)) * 0.4;
+        const beltBias = itcz + stormNorth + stormSouth;
+
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+
+          const n1 = _noise.fbm(nx * 12, ny * 12, 4, 0.55);
+          const n2 = _noise.fbm(nx * 28 + 5, ny * 28, 2, 0.5);
+          const raw = n1 * 0.7 + n2 * 0.3 + beltBias;
+          const cloudDensity = THREE.MathUtils.smoothstep(raw, 0.48, 0.82);
+
+          const brightness = Math.floor(235 + cloudDensity * 20);
+          const alpha = Math.floor(cloudDensity * 225);
+
+          data[idx] = brightness;
+          data[idx + 1] = brightness;
+          data[idx + 2] = brightness;
+          data[idx + 3] = alpha;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    static createMoonTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
       canvas.height = 256;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      // Rust red / terracotta base
-      ctx.fillStyle = '#c75836';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Realistic Lunar Maria and Anorthosite Highlands
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
 
-      // Dark basalt plains (Syrtis Major, etc.)
-      for (let i = 0; i < 40; i++) {
-        const x = Math.random() * canvas.width;
-        const y = canvas.height * 0.2 + Math.random() * (canvas.height * 0.6);
-        const r = Math.random() * 45 + 15;
-        const rad = ctx.createRadialGradient(x, y, 0, x, y, r);
-        rad.addColorStop(0, 'rgba(84, 30, 16, 0.65)');
-        rad.addColorStop(1, 'rgba(199, 88, 54, 0)');
-        ctx.fillStyle = rad;
+          const n1 = _noise.fbm(nx * 6, ny * 6, 4, 0.52);
+          const n2 = _noise.fbm(nx * 24, ny * 24, 3, 0.5);
+          const val = n1 * 0.65 + n2 * 0.35;
+
+          const base = val < 0.42 ? (60 + val * 60) : (115 + val * 105);
+          data[idx] = Math.floor(base);
+          data[idx + 1] = Math.floor(base * 0.98);
+          data[idx + 2] = Math.floor(base * 0.95);
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+
+      // Tycho crater with radiating ray system
+      const tychoX = 220, tychoY = 195;
+      for (let r = 0; r < 14; r++) {
+        const ang = (r / 14) * Math.PI * 2;
+        const len = 65 + Math.random() * 30;
+        const grad = ctx.createLinearGradient(tychoX, tychoY, tychoX + Math.cos(ang) * len, tychoY + Math.sin(ang) * len);
+        grad.addColorStop(0, 'rgba(240, 240, 240, 0.5)');
+        grad.addColorStop(1, 'rgba(240, 240, 240, 0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(tychoX, tychoY);
+        ctx.lineTo(tychoX + Math.cos(ang) * len, tychoY + Math.sin(ang) * len);
+        ctx.stroke();
       }
 
-      // Polar white ice caps
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    static createMarsTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
+
+      // Authentic Martian geology: iron-oxide deserts and dark volcanic basalt provinces
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+
+          const n1 = _noise.fbm(nx * 8, ny * 8, 4, 0.54);
+          const n2 = _noise.fbm(nx * 26, ny * 26, 3, 0.48);
+          const v = n1 * 0.6 + n2 * 0.4;
+
+          let r, g, b;
+          if (v < 0.42) {
+            r = Math.floor(75 + v * 90);
+            g = Math.floor(32 + v * 40);
+            b = Math.floor(22 + v * 28);
+          } else {
+            const t = (v - 0.42) / 0.58;
+            r = Math.floor(165 + t * 65);
+            g = Math.floor(68 + t * 45);
+            b = Math.floor(38 + t * 25);
+          }
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+
+      // Valles Marineris (4,000 km grand canyon rift along equatorial zone)
+      ctx.strokeStyle = 'rgba(52, 18, 10, 0.85)';
+      ctx.lineWidth = 4.5;
       ctx.beginPath();
-      ctx.ellipse(canvas.width / 2, 8, canvas.width * 0.35, 14, 0, 0, Math.PI * 2);
-      ctx.ellipse(canvas.width / 2, canvas.height - 8, canvas.width * 0.25, 12, 0, 0, Math.PI * 2);
+      ctx.moveTo(340, 260);
+      ctx.bezierCurveTo(400, 265, 470, 280, 520, 275);
+      ctx.stroke();
+
+      // Olympus Mons volcanic caldera & Tharsis Montes
+      ctx.fillStyle = 'rgba(185, 95, 55, 0.9)';
+      ctx.beginPath();
+      ctx.ellipse(260, 220, 22, 20, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(65, 22, 12, 0.95)';
+      ctx.beginPath();
+      ctx.arc(260, 220, 5, 0, Math.PI * 2);
       ctx.fill();
 
+      // Polar Ice Caps: North and South frosted CO2 ice with spiral melt troughs
+      ctx.fillStyle = '#f8fbfd';
+      ctx.beginPath();
+      ctx.ellipse(canvas.width / 2, 10, canvas.width * 0.32, 14, 0, 0, Math.PI * 2);
+      ctx.ellipse(canvas.width / 2, canvas.height - 10, canvas.width * 0.22, 12, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    static createMarsBump() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
+
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+          const v = Math.floor(_noise.fbm(nx * 14, ny * 14, 3, 0.5) * 255);
+          data[idx] = v;
+          data[idx + 1] = v;
+          data[idx + 2] = v;
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
       return new THREE.CanvasTexture(canvas);
     }
 
@@ -815,122 +1181,260 @@
       canvas.width = 1024;
       canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      // Base gas layers
-      const colors = ['#f4e7d3', '#cf9964', '#dfb07a', '#a66838', '#f2d6b3', '#965328', '#ecd1ad', '#c4874c'];
-      const bandHeight = canvas.height / colors.length;
+      // Authentic Jovian atmospheric zones and belts with shear turbulence
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
 
-      colors.forEach((col, idx) => {
-        ctx.fillStyle = col;
-        ctx.fillRect(0, idx * bandHeight, canvas.width, bandHeight);
-      });
+        const bandPattern = Math.sin(ny * Math.PI * 18) * 0.4 +
+                            Math.sin(ny * Math.PI * 34) * 0.2 +
+                            Math.sin(ny * Math.PI * 6) * 0.4;
 
-      // Swirling atmospheric turbulence
-      for (let i = 0; i < 60; i++) {
-        const y = Math.random() * canvas.height;
-        ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 255, 255, 0.18)' : 'rgba(110, 45, 15, 0.18)';
-        ctx.fillRect(0, y, canvas.width, Math.random() * 18 + 4);
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+
+          const turbulence = _noise.fbm(nx * 16 + ny * 3, ny * 16, 4, 0.52) * 0.45;
+          const val = THREE.MathUtils.clamp((bandPattern + 1) * 0.5 + turbulence * 0.35, 0, 1);
+
+          let r, g, b;
+          if (val < 0.35) {
+            r = Math.floor(140 + val * 70);
+            g = Math.floor(75 + val * 45);
+            b = Math.floor(38 + val * 25);
+          } else if (val < 0.7) {
+            const t = (val - 0.35) / 0.35;
+            r = Math.floor(215 + t * 30);
+            g = Math.floor(165 + t * 40);
+            b = Math.floor(110 + t * 45);
+          } else {
+            const t = (val - 0.7) / 0.3;
+            r = Math.floor(245 + t * 10);
+            g = Math.floor(235 + t * 15);
+            b = Math.floor(215 + t * 25);
+          }
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
       }
+      ctx.putImageData(img, 0, 0);
 
-      // Great Red Spot (Iconic storm oval)
-      const spotX = canvas.width * 0.62;
-      const spotY = canvas.height * 0.65;
-      const rad = ctx.createRadialGradient(spotX, spotY, 0, spotX, spotY, 52);
-      rad.addColorStop(0, '#b83b1d');
-      rad.addColorStop(0.6, '#cf5332');
-      rad.addColorStop(1, 'rgba(200, 140, 90, 0)');
-      ctx.fillStyle = rad;
+      // Great Red Spot with inner vortex spiral & turbulent wake
+      const grsX = canvas.width * 0.64;
+      const grsY = canvas.height * 0.67;
+      const grsW = 68, grsH = 38;
+
+      const grsOuter = ctx.createRadialGradient(grsX, grsY, grsH * 0.3, grsX, grsY, grsW * 0.95);
+      grsOuter.addColorStop(0, 'rgba(215, 85, 45, 0.95)');
+      grsOuter.addColorStop(0.55, 'rgba(195, 65, 30, 0.88)');
+      grsOuter.addColorStop(0.85, 'rgba(235, 145, 95, 0.5)');
+      grsOuter.addColorStop(1, 'rgba(240, 200, 150, 0)');
+      ctx.fillStyle = grsOuter;
       ctx.beginPath();
-      ctx.ellipse(spotX, spotY, 52, 28, 0, 0, Math.PI * 2);
+      ctx.ellipse(grsX, grsY, grsW, grsH, 0.05, 0, Math.PI * 2);
       ctx.fill();
 
-      return new THREE.CanvasTexture(canvas);
+      const grsCore = ctx.createRadialGradient(grsX, grsY, 0, grsX, grsY, grsW * 0.45);
+      grsCore.addColorStop(0, 'rgba(155, 35, 15, 0.98)');
+      grsCore.addColorStop(1, 'rgba(185, 55, 25, 0.92)');
+      ctx.fillStyle = grsCore;
+      ctx.beginPath();
+      ctx.ellipse(grsX, grsY, grsW * 0.45, grsH * 0.48, 0.05, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Trailing wake eddies
+      for (let e = 1; e <= 4; e++) {
+        ctx.fillStyle = 'rgba(245, 235, 215, 0.35)';
+        ctx.beginPath();
+        ctx.ellipse(grsX + e * 45, grsY + (e % 2 === 0 ? 8 : -8), 14 - e * 2, 7 - e, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
 
     static createSaturnTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 256;
+      canvas.width = 1024;
+      canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#d1bf9d');
-      grad.addColorStop(0.3, '#f2dfbc');
-      grad.addColorStop(0.5, '#e0caa2');
-      grad.addColorStop(0.7, '#d6be96');
-      grad.addColorStop(1, '#bda377');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Silky pastel golden-cream gas bands
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const band = Math.sin(ny * Math.PI * 14) * 0.35 + Math.sin(ny * Math.PI * 28) * 0.15;
 
-      for (let b = 0; b < 20; b++) {
-        ctx.fillStyle = b % 2 === 0 ? 'rgba(255, 255, 255, 0.12)' : 'rgba(140, 115, 75, 0.12)';
-        ctx.fillRect(0, (canvas.height / 20) * b, canvas.width, 7);
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+          const turb = _noise.fbm(nx * 10, ny * 10, 3, 0.5) * 0.15;
+          const val = THREE.MathUtils.clamp((band + 1) * 0.5 + turb, 0, 1);
+
+          const r = Math.floor(215 + val * 35);
+          const g = Math.floor(190 + val * 38);
+          const b = Math.floor(145 + val * 42);
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
       }
+      ctx.putImageData(img, 0, 0);
 
-      return new THREE.CanvasTexture(canvas);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
 
     static createSaturnRingTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
+      canvas.width = 1024;
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
 
       const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-      grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      grad.addColorStop(0.15, 'rgba(215, 195, 160, 0.85)');
-      grad.addColorStop(0.48, 'rgba(185, 165, 130, 0.95)');
-      // Cassini Division (dark gap)
-      grad.addColorStop(0.52, 'rgba(15, 10, 5, 0.1)');
-      grad.addColorStop(0.58, 'rgba(15, 10, 5, 0.1)');
-      // Outer A Ring
-      grad.addColorStop(0.62, 'rgba(205, 185, 150, 0.75)');
-      grad.addColorStop(0.92, 'rgba(165, 145, 115, 0.55)');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      grad.addColorStop(0.00, 'rgba(0, 0, 0, 0)');
+      grad.addColorStop(0.10, 'rgba(165, 140, 105, 0.15)');
+      grad.addColorStop(0.25, 'rgba(185, 160, 125, 0.45)');
+      grad.addColorStop(0.35, 'rgba(215, 190, 150, 0.85)');
+      // B Ring
+      grad.addColorStop(0.50, 'rgba(240, 220, 185, 0.98)');
+      grad.addColorStop(0.64, 'rgba(220, 195, 160, 0.92)');
+      // Cassini Division
+      grad.addColorStop(0.66, 'rgba(15, 10, 5, 0.05)');
+      grad.addColorStop(0.71, 'rgba(15, 10, 5, 0.05)');
+      // A Ring
+      grad.addColorStop(0.73, 'rgba(215, 190, 155, 0.82)');
+      grad.addColorStop(0.84, 'rgba(200, 175, 140, 0.78)');
+      grad.addColorStop(0.86, 'rgba(40, 30, 20, 0.2)');
+      grad.addColorStop(0.88, 'rgba(195, 170, 135, 0.75)');
+      grad.addColorStop(0.96, 'rgba(160, 135, 105, 0.35)');
+      grad.addColorStop(1.00, 'rgba(0, 0, 0, 0)');
 
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      return new THREE.CanvasTexture(canvas);
+
+      for (let i = 0; i < 280; i++) {
+        const x = Math.random() * canvas.width;
+        if (x > canvas.width * 0.65 && x < canvas.width * 0.72) continue;
+        ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.08)' : 'rgba(30, 20, 10, 0.08)';
+        ctx.fillRect(x, 0, Math.random() * 2 + 0.5, canvas.height);
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      return tex;
     }
 
     static createUranusTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 256;
+      canvas.width = 1024;
+      canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#b8f2f2');
-      grad.addColorStop(0.5, '#7ee0e0');
-      grad.addColorStop(1, '#56c2c2');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const polarCollar = Math.exp(-Math.pow((ny - 0.22) / 0.16, 2)) * 0.18;
 
-      return new THREE.CanvasTexture(canvas);
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+          const n = _noise.fbm(nx * 4, ny * 8, 3, 0.5) * 0.08;
+          const val = THREE.MathUtils.clamp(polarCollar + n, 0, 1);
+
+          const r = Math.floor(135 + val * 60);
+          const g = Math.floor(215 + val * 35);
+          const b = Math.floor(215 + val * 35);
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
 
     static createNeptuneTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 256;
+      canvas.width = 1024;
+      canvas.height = 512;
       const ctx = canvas.getContext('2d');
+      const img = ctx.createImageData(canvas.width, canvas.height);
+      const data = img.data;
 
-      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#537dff');
-      grad.addColorStop(0.4, '#3058db');
-      grad.addColorStop(0.7, '#2445b8');
-      grad.addColorStop(1, '#152c8a');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < canvas.height; y++) {
+        const ny = y / canvas.height;
+        const band = Math.sin(ny * Math.PI * 12) * 0.12;
 
-      // Faint high-altitude white cirrus storm streaks
-      for (let s = 0; s < 12; s++) {
-        const y = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
-        ctx.fillRect(Math.random() * canvas.width * 0.5, y, Math.random() * 120 + 30, 4);
+        for (let x = 0; x < canvas.width; x++) {
+          const nx = x / canvas.width;
+          const idx = (y * canvas.width + x) * 4;
+          const n = _noise.fbm(nx * 8, ny * 16, 3, 0.5) * 0.15;
+          const val = THREE.MathUtils.clamp((band + 0.5) * 0.5 + n, 0, 1);
+
+          const r = Math.floor(35 + val * 45);
+          const g = Math.floor(85 + val * 65);
+          const b = Math.floor(210 + val * 45);
+
+          data[idx] = r;
+          data[idx + 1] = g;
+          data[idx + 2] = b;
+          data[idx + 3] = 255;
+        }
       }
+      ctx.putImageData(img, 0, 0);
 
-      return new THREE.CanvasTexture(canvas);
+      // Great Dark Spot
+      const gdsX = canvas.width * 0.55;
+      const gdsY = canvas.height * 0.58;
+      const gdsGrad = ctx.createRadialGradient(gdsX, gdsY, 0, gdsX, gdsY, 32);
+      gdsGrad.addColorStop(0, 'rgba(12, 38, 120, 0.95)');
+      gdsGrad.addColorStop(0.7, 'rgba(20, 60, 175, 0.85)');
+      gdsGrad.addColorStop(1, 'rgba(40, 100, 240, 0)');
+      ctx.fillStyle = gdsGrad;
+      ctx.beginPath();
+      ctx.ellipse(gdsX, gdsY, 36, 20, -0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // High-altitude white methane cirrus cloud streaks ("Scooter")
+      const cirrus = [
+        { cx: gdsX - 10, cy: gdsY - 14, len: 75 },
+        { cx: gdsX + 35, cy: gdsY + 12, len: 55 },
+        { cx: 320, cy: 190, len: 90 },
+        { cx: 780, cy: 340, len: 85 }
+      ];
+
+      cirrus.forEach(c => {
+        const cGrad = ctx.createLinearGradient(c.cx, c.cy, c.cx + c.len, c.cy);
+        cGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+        cGrad.addColorStop(0.3, 'rgba(255, 255, 255, 0.75)');
+        cGrad.addColorStop(0.7, 'rgba(255, 255, 255, 0.7)');
+        cGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = cGrad;
+        ctx.beginPath();
+        ctx.ellipse(c.cx + c.len * 0.5, c.cy, c.len * 0.5, 3.5, 0.05, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      return tex;
     }
   }
 
@@ -2382,12 +2886,12 @@
 
       // File Tree Items in Sidebar
       const treeItems = [
-        { icon: '⭐', label: 'Overview: Tanishka Sahu' },
-        { icon: '📄', label: 'Resume_Engineering.ts', active: true },
-        { icon: '🪐', label: 'Lumora_SolarSystem.webgl' },
-        { icon: '⚡', label: 'Shaders & Kinematics' },
-        { icon: '🎓', label: 'VIT Academic Honors' },
-        { icon: '📬', label: 'Get in Touch' }
+        { icon: '•', label: 'Overview: Tanishka Sahu' },
+        { icon: 'TS', label: 'Resume_Engineering.ts', active: true },
+        { icon: 'GL', label: 'Lumora_SolarSystem.webgl' },
+        { icon: 'FX', label: 'Shaders & Kinematics' },
+        { icon: 'ED', label: 'VIT Academic Honors' },
+        { icon: '@', label: 'Get in Touch' }
       ];
 
       treeItems.forEach((item, idx) => {
@@ -2416,7 +2920,7 @@
       ctx.fill();
       ctx.fillStyle = '#8be5e5';
       ctx.font = '600 17px "Space Grotesk", sans-serif';
-      ctx.fillText('📄 TanishkaSahu_Resume.ts  ✕', editorX + 24, 110);
+      ctx.fillText('TanishkaSahu_Resume.ts  ✕', editorX + 24, 110);
 
       editorY = 160;
 
@@ -2481,7 +2985,7 @@
       ctx.font = '40px "Space Grotesk", sans-serif';
       ctx.fillStyle = '#8be5e5';
       ctx.textAlign = 'center';
-      ctx.fillText('⚡', bannerX + 55, bannerY + 68);
+      ctx.fillText('✦', bannerX + 55, bannerY + 68);
 
       // Banner Text
       ctx.textAlign = 'left';
@@ -2602,7 +3106,7 @@
 
       ctx.fillStyle = '#ffffff';
       ctx.font = '700 26px "Space Grotesk", sans-serif';
-      ctx.fillText('📬 Contact: tanishkasahuwork191@gmail.com', 110, 710);
+      ctx.fillText('Contact: tanishkasahuwork191@gmail.com', 110, 710);
 
       ctx.fillStyle = '#86efac';
       ctx.font = '600 21px "Space Grotesk", sans-serif';
@@ -2885,14 +3389,14 @@
       if (btnHeader) {
         btnHeader.classList.toggle('is-active', this.isCardPopped);
         const txt = btnHeader.querySelector('.pop-btn-text');
-        if (txt) txt.textContent = this.isCardPopped ? 'Dock Resume ⤦' : 'Pop Out Resume';
+        if (txt) txt.textContent = this.isCardPopped ? 'Dock Resume' : 'Pop Out Resume';
       }
 
       const btnDock = document.getElementById('btnUranusToggleResumeDock');
       if (btnDock) {
         btnDock.classList.toggle('is-active', this.isCardPopped);
         const span = btnDock.querySelector('span');
-        if (span) span.textContent = this.isCardPopped ? '⤦ Dock to Screen' : '📄 Pop-Out Resume';
+        if (span) span.textContent = this.isCardPopped ? 'Dock to Screen' : 'Pop-Out Resume';
       }
     }
 
@@ -3391,7 +3895,7 @@
         }
 
         if (this.transmitStatus) {
-          this.transmitStatus.textContent = 'Transmitting to Tanishka... 📡';
+          this.transmitStatus.textContent = 'Transmitting to Tanishka...';
         }
 
         // Open mailto with pre-composed content
@@ -3408,7 +3912,7 @@ Contact: ${email}`);
         setTimeout(() => {
           window.location.href = mailtoUrl;
           if (this.transmitStatus) {
-            this.transmitStatus.textContent = 'Transmission Dispatched! ✨';
+            this.transmitStatus.textContent = 'Transmission Dispatched!';
             setTimeout(() => {
               if (this.transmitStatus) this.transmitStatus.textContent = '';
             }, 6000);
@@ -3433,7 +3937,7 @@ Contact: ${email}`);
       }
       if (this.copyBtnText) {
         const originalText = this.copyBtnText.textContent;
-        this.copyBtnText.textContent = 'Copied to Clipboard! ✨';
+        this.copyBtnText.textContent = 'Copied to Clipboard!';
         if (this.copyBtn) this.copyBtn.style.borderColor = '#86efac';
         setTimeout(() => {
           if (this.copyBtnText) this.copyBtnText.textContent = originalText;
@@ -3572,36 +4076,49 @@ Contact: ${email}`);
     }
 
     buildLighting() {
-      // Ambient space glow
-      const ambient = new THREE.AmbientLight(0x283248, 0.45);
+      // Cosmic ambient light: balanced so night sides have dramatic, cinematic terminator shadows without being completely invisible
+      const ambient = new THREE.AmbientLight(0x182033, 0.32);
       this.scene.add(ambient);
 
-      // Radiant PointLight emanating directly from the Sun's core
-      this.sunLight = new THREE.PointLight(0xfff3d6, 3.4, 5000, 0.65);
-      this.sunLight.position.set(-460, 0, 0); // Sun at far left matching user image
+      // Radiant PointLight directly at the Sun's core
+      this.sunLight = new THREE.PointLight(0xfff6e8, 3.8, 5500, 0.62);
+      this.sunLight.position.set(-460, 0, 0);
       this.scene.add(this.sunLight);
 
-      // Subtle directional rim light for volumetric depth
-      const rimLight = new THREE.DirectionalLight(0x7799dd, 0.38);
-      rimLight.position.set(100, 450, 400);
+      // Key Sunlight casting cinematic directional rays and authentic day/night terminator lines across all planets
+      const sunDirLight = new THREE.DirectionalLight(0xfff5e6, 1.35);
+      sunDirLight.position.set(-460, 15, 8);
+      const sunTarget = new THREE.Object3D();
+      sunTarget.position.set(100, 0, 0);
+      this.scene.add(sunTarget);
+      sunDirLight.target = sunTarget;
+      this.scene.add(sunDirLight);
+
+      // Subtle cool rim light for volumetric depth
+      const rimLight = new THREE.DirectionalLight(0x6688cc, 0.28);
+      rimLight.position.set(50, 400, 350);
       this.scene.add(rimLight);
     }
 
     buildStarfield() {
       const starGeo = new THREE.BufferGeometry();
-      const count = 3500;
+      const count = 4200;
       const positions = new Float32Array(count * 3);
       const colors = new Float32Array(count * 3);
 
+      // Spectral star classification colors: O (deep blue), B (blue-white), A (pure white), F/G (warm yellow-white), K (amber-orange), M (crimson)
       const colorPalette = [
         new THREE.Color(0xffffff),
         new THREE.Color(0xbcdcff),
-        new THREE.Color(0xffe6c2),
-        new THREE.Color(0x99ccff)
+        new THREE.Color(0x99ccff),
+        new THREE.Color(0xffeedd),
+        new THREE.Color(0xffd59e),
+        new THREE.Color(0xffa882),
+        new THREE.Color(0x82b4ff)
       ];
 
       for (let i = 0; i < count; i++) {
-        const radius = 2800 + Math.random() * 3000;
+        const radius = 2600 + Math.random() * 3200;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -3619,10 +4136,10 @@ Contact: ${email}`);
       starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
       const starMat = new THREE.PointsMaterial({
-        size: 2.2,
+        size: 2.4,
         vertexColors: true,
         transparent: true,
-        opacity: 0.85
+        opacity: 0.88
       });
 
       this.starField = new THREE.Points(starGeo, starMat);
@@ -3638,95 +4155,130 @@ Contact: ${email}`);
       this.planetSpecs = [
         {
           id: 'sun',
-          name: 'Sun',
+          name: 'Ask Nova AI',
+          labelHtml: 'Ask Nova AI',
           x: -460,
-          radius: 64,
-          rotSpeed: 0.002,
+          radius: 76.8, // 64 * 1.20
+          rotSpeed: 0.0018,
           tilt: 7.25,
-          labelOffsetDir: 'center',
+          labelOffsetDir: 'down',
           texture: ProceduralTextures.createSunTexture()
         },
         {
           id: 'mercury',
-          name: 'Mercury',
+          name: 'Cosmic ID',
+          labelHtml: 'Cosmic ID',
           x: -330,
-          radius: 5.5,
-          rotSpeed: 0.007,
+          radius: 6.6, // 5.5 * 1.20
+          rotSpeed: 0.006,
           tilt: 0.03,
           labelOffsetDir: 'up',
-          texture: ProceduralTextures.createMercuryTexture()
+          texture: ProceduralTextures.createMercuryTexture(),
+          bumpTexture: ProceduralTextures.createMercuryBump(),
+          bumpScale: 0.14,
+          roughness: 0.92,
+          metalness: 0.04
         },
         {
           id: 'venus',
-          name: 'Venus',
+          name: 'Meet Tanishka Sahu',
+          labelHtml: 'Meet Tanishka<br>Sahu',
           x: -255,
-          radius: 10,
-          rotSpeed: -0.005,
+          radius: 12.0, // 10 * 1.20
+          rotSpeed: -0.004,
           tilt: 177.3,
           labelOffsetDir: 'down',
-          texture: ProceduralTextures.createVenusTexture()
+          texture: ProceduralTextures.createVenusTexture(),
+          roughness: 0.58,
+          metalness: 0.02,
+          atmosphereColor: 0xffe2a3
         },
         {
           id: 'earth',
-          name: 'Earth',
+          name: 'Planet of Projects',
+          labelHtml: 'Planet of Projects',
           x: -170,
-          radius: 11.5,
-          rotSpeed: 0.012,
+          radius: 13.8, // 11.5 * 1.20
+          rotSpeed: 0.010,
           tilt: 23.4,
           labelOffsetDir: 'up',
           texture: ProceduralTextures.createEarthTexture(),
+          cloudTexture: ProceduralTextures.createEarthCloudTexture(),
+          roughness: 0.42,
+          metalness: 0.12,
+          atmosphereColor: 0x4aa3ff,
           hasMoon: true
         },
         {
           id: 'mars',
-          name: 'Mars',
+          name: 'Education',
+          labelHtml: 'Education',
           x: -90,
-          radius: 7.5,
-          rotSpeed: 0.011,
+          radius: 9.0, // 7.5 * 1.20
+          rotSpeed: 0.009,
           tilt: 25.2,
           labelOffsetDir: 'down',
-          texture: ProceduralTextures.createMarsTexture()
+          texture: ProceduralTextures.createMarsTexture(),
+          bumpTexture: ProceduralTextures.createMarsBump(),
+          bumpScale: 0.16,
+          roughness: 0.84,
+          metalness: 0.06,
+          atmosphereColor: 0xdf8253
         },
         {
           id: 'jupiter',
-          name: 'Jupiter',
+          name: 'Achievements belt',
+          labelHtml: 'Achievements belt',
           x: 30,
-          radius: 32,
-          rotSpeed: 0.022,
+          radius: 38.4, // 32 * 1.20
+          rotSpeed: 0.018,
           tilt: 3.1,
           labelOffsetDir: 'up',
-          texture: ProceduralTextures.createJupiterTexture()
+          texture: ProceduralTextures.createJupiterTexture(),
+          roughness: 0.62,
+          metalness: 0.02
         },
         {
           id: 'saturn',
-          name: 'Saturn',
+          name: 'Certifications and Activities',
+          labelHtml: 'Certifications &amp;<br>Activities',
           x: 170,
-          radius: 24,
-          rotSpeed: 0.019,
+          radius: 28.8, // 24 * 1.20
+          rotSpeed: 0.016,
           tilt: 26.7,
           labelOffsetDir: 'down',
           texture: ProceduralTextures.createSaturnTexture(),
+          roughness: 0.66,
+          metalness: 0.02,
           hasRings: true
         },
         {
           id: 'uranus',
-          name: 'Uranus',
+          name: 'Resume',
+          labelHtml: 'Resume',
           x: 295,
-          radius: 16,
-          rotSpeed: 0.014,
+          radius: 19.2, // 16 * 1.20
+          rotSpeed: 0.012,
           tilt: 97.8,
           labelOffsetDir: 'up',
-          texture: ProceduralTextures.createUranusTexture()
+          texture: ProceduralTextures.createUranusTexture(),
+          roughness: 0.52,
+          metalness: 0.02,
+          atmosphereColor: 0x6ae2ff
         },
         {
           id: 'neptune',
-          name: 'Neptune',
+          name: 'Important Links',
+          labelHtml: 'Important Links',
           x: 405,
-          radius: 15,
-          rotSpeed: 0.013,
+          radius: 18.0, // 15 * 1.20
+          rotSpeed: 0.011,
           tilt: 28.3,
           labelOffsetDir: 'down',
-          texture: ProceduralTextures.createNeptuneTexture()
+          texture: ProceduralTextures.createNeptuneTexture(),
+          roughness: 0.48,
+          metalness: 0.02,
+          atmosphereColor: 0x4488ff
         }
       ];
 
@@ -3735,19 +4287,26 @@ Contact: ${email}`);
         group.userData = { id: spec.id, name: spec.name };
 
         // 1. Planetary Sphere Geometry & Material
-        const geo = new THREE.SphereGeometry(spec.radius, 48, 48);
+        const geo = new THREE.SphereGeometry(spec.radius, 64, 64);
         let mat;
 
         if (spec.id === 'sun') {
+          // Luminous incandescent star surface
           mat = new THREE.MeshBasicMaterial({
             map: spec.texture
           });
         } else {
-          mat = new THREE.MeshStandardMaterial({
+          // Realistic PBR Standard Material with bump relief & tuned micro-roughness
+          const matOpts = {
             map: spec.texture,
-            roughness: 0.75,
-            metalness: 0.12
-          });
+            roughness: spec.roughness !== undefined ? spec.roughness : 0.75,
+            metalness: spec.metalness !== undefined ? spec.metalness : 0.08
+          };
+          if (spec.bumpTexture) {
+            matOpts.bumpMap = spec.bumpTexture;
+            matOpts.bumpScale = spec.bumpScale || 0.12;
+          }
+          mat = new THREE.MeshStandardMaterial(matOpts);
         }
 
         const sphereMesh = new THREE.Mesh(geo, mat);
@@ -3760,31 +4319,82 @@ Contact: ${email}`);
 
         // 2. Extra Atmospheric Glow for Sun
         if (spec.id === 'sun') {
-          const coronaGeo = new THREE.SphereGeometry(spec.radius * 1.18, 32, 32);
-          const coronaMat = new THREE.MeshBasicMaterial({
-            color: 0xffaa00,
+          // Layer 1: Inner incandescent chromospheric flare halo
+          const corona1Geo = new THREE.SphereGeometry(spec.radius * 1.08, 48, 48);
+          const corona1Mat = new THREE.MeshBasicMaterial({
+            color: 0xffbe3b,
             transparent: true,
-            opacity: 0.35,
+            opacity: 0.38,
+            blending: THREE.AdditiveBlending,
             side: THREE.BackSide
           });
-          const coronaMesh = new THREE.Mesh(coronaGeo, coronaMat);
-          group.add(coronaMesh);
+          const corona1Mesh = new THREE.Mesh(corona1Geo, corona1Mat);
+          group.add(corona1Mesh);
+          group.userData.corona1Mesh = corona1Mesh;
 
-          const haloGeo = new THREE.SphereGeometry(spec.radius * 1.35, 32, 32);
-          const haloMat = new THREE.MeshBasicMaterial({
-            color: 0xff4400,
+          // Layer 2: Mid coronal prominence envelope
+          const corona2Geo = new THREE.SphereGeometry(spec.radius * 1.24, 48, 48);
+          const corona2Mat = new THREE.MeshBasicMaterial({
+            color: 0xff6b18,
             transparent: true,
-            opacity: 0.15,
+            opacity: 0.22,
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide
+          });
+          const corona2Mesh = new THREE.Mesh(corona2Geo, corona2Mat);
+          group.add(corona2Mesh);
+          group.userData.corona2Mesh = corona2Mesh;
+
+          // Layer 3: Outer diffuse cosmic solar wind radiance
+          const haloGeo = new THREE.SphereGeometry(spec.radius * 1.56, 32, 32);
+          const haloMat = new THREE.MeshBasicMaterial({
+            color: 0xff3b05,
+            transparent: true,
+            opacity: 0.12,
+            blending: THREE.AdditiveBlending,
             side: THREE.BackSide
           });
           const haloMesh = new THREE.Mesh(haloGeo, haloMat);
           group.add(haloMesh);
+          group.userData.haloMesh = haloMesh;
         } else {
           // Draw the elliptical orbit track passing through this planet and wrapping around the Sun
           this.createOrbitLine(spec);
         }
 
-        // 3. Saturn Rings
+        // 3. Atmospheric Rayleigh Rim Glow Shells (Earth, Venus, Mars, Uranus, Neptune)
+        if (spec.atmosphereColor) {
+          const atmoGeo = new THREE.SphereGeometry(spec.radius * 1.035, 48, 48);
+          const atmoMat = new THREE.MeshBasicMaterial({
+            color: spec.atmosphereColor,
+            transparent: true,
+            opacity: spec.id === 'earth' ? 0.22 : 0.16,
+            side: THREE.BackSide,
+            blending: THREE.AdditiveBlending
+          });
+          const atmoMesh = new THREE.Mesh(atmoGeo, atmoMat);
+          group.add(atmoMesh);
+        }
+
+        // 4. Earth Dual-Sphere Swirling Cloud Layer
+        if (spec.id === 'earth' && spec.cloudTexture) {
+          const cloudGeo = new THREE.SphereGeometry(spec.radius * 1.018, 54, 54);
+          const cloudMat = new THREE.MeshStandardMaterial({
+            map: spec.cloudTexture,
+            transparent: true,
+            opacity: 0.72,
+            roughness: 0.95,
+            metalness: 0.0
+          });
+          const cloudMesh = new THREE.Mesh(cloudGeo, cloudMat);
+          if (spec.tilt) {
+            cloudMesh.rotation.z = THREE.MathUtils.degToRad(spec.tilt);
+          }
+          group.add(cloudMesh);
+          group.userData.cloudMesh = cloudMesh;
+        }
+
+        // 5. Saturn Photorealistic Rings
         if (spec.hasRings) {
           const ringGeo = new THREE.RingGeometry(spec.radius * 1.3, spec.radius * 2.35, 64);
           ringGeo.rotateX(Math.PI / 2);
@@ -3806,15 +4416,18 @@ Contact: ${email}`);
           group.add(ringMesh);
         }
 
-        // 4. Earth Moon
+        // 6. Earth Cratered Moon
         if (spec.hasMoon) {
-          const moonGeo = new THREE.SphereGeometry(2.8, 24, 24);
+          const moonGeo = new THREE.SphereGeometry(3.6, 32, 32);
           const moonMat = new THREE.MeshStandardMaterial({
-            map: ProceduralTextures.createMercuryTexture(),
-            roughness: 0.9
+            map: ProceduralTextures.createMoonTexture(),
+            bumpMap: ProceduralTextures.createMercuryBump(),
+            bumpScale: 0.10,
+            roughness: 0.92,
+            metalness: 0.03
           });
           const moonMesh = new THREE.Mesh(moonGeo, moonMat);
-          moonMesh.position.set(spec.radius + 14, 2, 0);
+          moonMesh.position.set(spec.radius + 18, 2, 0);
           group.add(moonMesh);
           group.userData.moonMesh = moonMesh;
         }
@@ -3865,22 +4478,38 @@ Contact: ${email}`);
     }
 
     buildDomLabels() {
-      // Floating billboard tags matching the user's diagram labels ("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Sun")
+      // Floating billboard tags with connector dots and lines placed safely outside each planetary body
       const labelLayer = document.getElementById('solarLabelsLayer');
       if (!labelLayer) return;
+      labelLayer.innerHTML = '';
 
       this.planetSpecs.forEach(spec => {
         const tag = document.createElement('div');
-        tag.className = 'planet-hud-tag';
+        const isDown = spec.labelOffsetDir === 'down';
+        tag.className = `planet-hud-tag ${isDown ? 'label-down' : 'label-up'}`;
         tag.id = `tag-${spec.id}`;
-        tag.innerHTML = `
-          <span class="hud-line"></span>
-          <span class="hud-name">${spec.name}</span>
-        `;
+
+        const textContent = spec.labelHtml || spec.name;
+
+        if (isDown) {
+          tag.innerHTML = `
+            <span class="hud-dot"></span>
+            <span class="hud-line"></span>
+            <span class="hud-name">${textContent}</span>
+          `;
+        } else {
+          tag.innerHTML = `
+            <span class="hud-name">${textContent}</span>
+            <span class="hud-line"></span>
+            <span class="hud-dot"></span>
+          `;
+        }
+
         tag.addEventListener('click', (e) => {
           e.stopPropagation();
           this.selectPlanet(spec.id);
         });
+
         labelLayer.appendChild(tag);
         this.labelElements[spec.id] = tag;
       });
@@ -3891,40 +4520,79 @@ Contact: ${email}`);
       const width = this.container.clientWidth;
       const height = this.container.clientHeight;
 
+      // Camera local up vector in world space for precise projected radial clearance
+      const camElements = this.camera.matrixWorld.elements;
+      const camUp = new THREE.Vector3(camElements[4], camElements[5], camElements[6]).normalize();
+
+      const planetPos = new THREE.Vector3();
       const tempVec = new THREE.Vector3();
+      const rimVec = new THREE.Vector3();
 
       this.planetSpecs.forEach(spec => {
         const item = this.planets[spec.id];
         const tag = this.labelElements[spec.id];
         if (!item || !tag) return;
 
-        // Position tag alternating above and below to match user reference diagram
-        item.group.getWorldPosition(tempVec);
-        if (spec.id === 'sun') {
-          tempVec.y += spec.radius * 0.22;
-          tempVec.x -= 15;
-          tag.classList.remove('label-down');
-        } else if (spec.labelOffsetDir === 'up') {
-          tempVec.y += spec.radius + 18;
-          tag.classList.remove('label-down');
-        } else {
-          tempVec.y -= (spec.radius + 18);
-          tag.classList.add('label-down');
-        }
+        item.group.getWorldPosition(planetPos);
 
-        tempVec.project(this.camera);
+        // Project center
+        tempVec.copy(planetPos).project(this.camera);
 
-        // Check if point is in front of camera
-        if (tempVec.z < 1) {
-          const x = (tempVec.x * 0.5 + 0.5) * width;
-          const y = (-(tempVec.y * 0.5) + 0.5) * height;
-
-          tag.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-          tag.style.display = 'flex';
-          tag.classList.toggle('is-selected', this.selectedBodyId === spec.id);
-        } else {
+        // Discard bodies positioned behind camera
+        if (tempVec.z >= 1) {
           tag.style.display = 'none';
+          return;
         }
+
+        const centerX = (tempVec.x * 0.5 + 0.5) * width;
+        const centerY = (-(tempVec.y * 0.5) + 0.5) * height;
+
+        // Accurate visual radii in 3D world units (scaled up 20% to match enlarged planet bodies):
+        // - Sun: 98 units covers the full enlarged radiant corona
+        // - Earth: 31 units encompasses the Moon's expanded orbit
+        // - Saturn: 70 units fully encompasses the enlarged wide 67.7 unit rings
+        // - Jupiter: 42 units fully encompasses its enlarged massive globe
+        let visualRadius = spec.radius;
+        if (spec.id === 'sun') {
+          visualRadius = 98;
+        } else if (spec.id === 'earth') {
+          visualRadius = 31;
+        } else if (spec.id === 'saturn') {
+          visualRadius = 70;
+        } else if (spec.id === 'jupiter') {
+          visualRadius = 42;
+        } else {
+          visualRadius = spec.radius * 1.25;
+        }
+
+        // Project boundary rim along camera UP axis to find exact screen pixel radius
+        rimVec.copy(planetPos).addScaledVector(camUp, visualRadius).project(this.camera);
+        const rimY = (-(rimVec.y * 0.5) + 0.5) * height;
+        const pixelRadius = Math.max(Math.abs(centerY - rimY), visualRadius * 0.45);
+
+        const isDown = spec.labelOffsetDir === 'down';
+        let anchorX = centerX;
+        let anchorY = 0;
+
+        if (spec.id === 'sun') {
+          // Sun is partially off-screen on the far left. Anchor comfortably in the lower void
+          anchorX = Math.max(centerX + 40, 80);
+          anchorY = centerY + pixelRadius + 14;
+          tag.style.transform = 'translate(-50%, 0)';
+        } else if (isDown) {
+          // Label is below planet: anchor dot sits cleanly below planet/ring rim, line and badge go down
+          anchorY = centerY + pixelRadius + 10;
+          tag.style.transform = 'translate(-50%, 0)';
+        } else {
+          // Label is above planet: anchor dot sits cleanly above planet rim, line and badge go up
+          anchorY = centerY - pixelRadius - 10;
+          tag.style.transform = 'translate(-50%, -100%)';
+        }
+
+        tag.style.left = `${anchorX}px`;
+        tag.style.top = `${anchorY}px`;
+        tag.style.display = 'flex';
+        tag.classList.toggle('is-selected', this.selectedBodyId === spec.id);
       });
     }
 
@@ -3984,6 +4652,57 @@ Contact: ${email}`);
           window.returnToCadetScreen();
         });
       }
+
+      // Mission Guide Modal Events
+      const btnMissionGuide = document.getElementById('btnMissionGuide');
+      const missionGuideModal = document.getElementById('missionGuideModal');
+      const btnCloseMissionGuide = document.getElementById('btnCloseMissionGuide');
+      const btnDismissGuide = document.getElementById('btnDismissGuide');
+      const missionGuideBackdrop = document.getElementById('missionGuideBackdrop');
+
+      if (btnMissionGuide) {
+        btnMissionGuide.addEventListener('click', () => {
+          this.toggleMissionGuideModal();
+        });
+      }
+
+      if (btnCloseMissionGuide) {
+        btnCloseMissionGuide.addEventListener('click', () => {
+          this.closeMissionGuideModal();
+        });
+      }
+
+      if (btnDismissGuide) {
+        btnDismissGuide.addEventListener('click', () => {
+          this.closeMissionGuideModal();
+        });
+      }
+
+      if (missionGuideBackdrop) {
+        missionGuideBackdrop.addEventListener('click', () => {
+          this.closeMissionGuideModal();
+        });
+      }
+
+      // Close Mission Guide on Escape key
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (missionGuideModal && missionGuideModal.classList.contains('is-open')) {
+            this.closeMissionGuideModal();
+          }
+        }
+      });
+
+      // Quick navigation click on any celestial destination in Mission Guide
+      document.querySelectorAll('.guide-item-card[data-guide-planet]').forEach(card => {
+        card.addEventListener('click', () => {
+          const planetId = card.getAttribute('data-guide-planet');
+          this.closeMissionGuideModal();
+          if (planetId) {
+            this.selectPlanet(planetId);
+          }
+        });
+      });
 
       // Planet Selector Bottom Dock
       const dockButtons = document.querySelectorAll('.planet-dock-item');
@@ -5339,10 +6058,56 @@ Contact: ${email}`);
       this.closeUranusResumeModal(false);
       this.closeSaturnCertificatesModal(false);
       this.closeNeptuneLinksModal(false);
+      this.closeMissionGuideModal();
       this.setMarsSceneBackground(false);
       this.cameraTargetPos.copy(this.diagramCameraPos);
       this.cameraTargetLook.copy(this.diagramCameraLook);
       this.isFocusingCamera = true;
+    }
+
+    openMissionGuideModal() {
+      const modal = document.getElementById('missionGuideModal');
+      const btn = document.getElementById('btnMissionGuide');
+      if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        if (typeof modal.showModal === 'function' && !modal.open) {
+          try { modal.showModal(); } catch (err) {}
+        }
+      }
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    closeMissionGuideModal() {
+      const modal = document.getElementById('missionGuideModal');
+      const btn = document.getElementById('btnMissionGuide');
+      if (modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        if (typeof modal.close === 'function' && modal.open) {
+          try { modal.close(); } catch (err) {}
+        }
+      }
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    toggleMissionGuideModal() {
+      const modal = document.getElementById('missionGuideModal');
+      if (modal && modal.classList.contains('is-open')) {
+        this.closeMissionGuideModal();
+      } else {
+        this.openMissionGuideModal();
+      }
     }
 
     render(time) {
@@ -5364,13 +6129,37 @@ Contact: ${email}`);
           // Planetary position stays fixed along parallel row
           item.group.position.set(spec.x, 0, 0);
 
-          // Moon continuous 3D orbit around Earth
+          // Realistic Sun corona pulsing & counter-rotation
+          if (spec.id === 'sun') {
+            if (item.group.userData.corona1Mesh) {
+              item.group.userData.corona1Mesh.rotation.y = -time * 0.00035;
+              const pulse1 = 1.0 + Math.sin(time * 0.0018) * 0.016;
+              item.group.userData.corona1Mesh.scale.set(pulse1, pulse1, pulse1);
+            }
+            if (item.group.userData.corona2Mesh) {
+              item.group.userData.corona2Mesh.rotation.y = time * 0.00022;
+              const pulse2 = 1.0 + Math.cos(time * 0.0014) * 0.022;
+              item.group.userData.corona2Mesh.scale.set(pulse2, pulse2, pulse2);
+            }
+            if (item.group.userData.haloMesh) {
+              const pulse3 = 1.0 + Math.sin(time * 0.001) * 0.028;
+              item.group.userData.haloMesh.scale.set(pulse3, pulse3, pulse3);
+            }
+          }
+
+          // Earth independent atmospheric cloud circulation
+          if (spec.id === 'earth' && item.group.userData.cloudMesh) {
+            item.group.userData.cloudMesh.rotation.y += (spec.rotSpeed * 1.32) * simMultiplier;
+          }
+
+          // Moon continuous 3D orbit around Earth with tidal synchronous rotation
           if (spec.hasMoon && item.group.userData.moonMesh) {
             const m = item.group.userData.moonMesh;
-            const moonSpeed = time * 0.0025 * simMultiplier;
-            m.position.x = Math.cos(moonSpeed) * (spec.radius + 14);
-            m.position.z = Math.sin(moonSpeed) * (spec.radius + 14);
-            m.rotation.y += 0.01;
+            const moonSpeed = time * 0.0022 * simMultiplier;
+            const moonDist = spec.radius + 18;
+            m.position.x = Math.cos(moonSpeed) * moonDist;
+            m.position.z = Math.sin(moonSpeed) * moonDist;
+            m.rotation.y += 0.008;
           }
         });
       }
@@ -5408,9 +6197,6 @@ Contact: ${email}`);
     if (!window.solarAppInstance) {
       window.solarAppInstance = new SolarSystemApp();
     }
-    // Start ambient space music
-    if (window.solarAppInstance && window.solarAppInstance.audio) {
-      window.solarAppInstance.audio.startAmbientSpace();
-    }
+    // Ambient space music disabled (click haptics & rocket launch sounds preserved)
   };
 })();

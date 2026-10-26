@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#02040d" />
-    <meta name="description" content="Lumora presents Cadet Skyranger — a cursor-led 3D character interaction and interactive 3D solar system." />
-    <title>Lumora — Cadet Skyranger &amp; Solar System</title>
+    <meta name="description" content="Cosmic Portfolio — Tanishka Sahu — 3D interactive portfolio and solar system." />
+    <title>COSMIC PORTFOLIO — Tanishka Sahu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;1,900&family=Space+Grotesk:wght@500;700&family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20261026_mission_guide" />
   </head>
   <body>
     <!-- Cadet Skyranger Stage -->
-    <main class="stage" id="stage" aria-label="Lumora Cadet Skyranger interactive hero">
+    <main class="stage" id="stage" aria-label="Cosmic Portfolio — Tanishka Sahu">
       <div class="frame" id="scene">
         <div class="plate" aria-hidden="true"></div>
         <div class="plate-shade" aria-hidden="true"></div>
@@ -30,26 +30,12 @@
           />
         </div>
 
-        <header class="topbar">
-          <a class="brand" href="/" aria-label="Lumora home">
-            <span class="brand-mark" aria-hidden="true"></span>
-            <span class="brand-name">Lumora</span>
-          </a>
-          <button class="menu-button" type="button" aria-label="Open menu">
-            <span></span><span></span><span></span>
-          </button>
-        </header>
-
         <section class="copy-block" aria-labelledby="hero-title">
-          <p class="eyebrow">CADET</p>
-          <h1 id="hero-title">SKYRANGER</h1>
-          <p class="subtitle">Past the Stars and Further</p>
+          <h1 id="hero-title">COSMIC PORTFOLIO</h1>
+          <p class="subtitle">~ Tanishka Sahu</p>
         </section>
 
-        <div class="captions" aria-hidden="true">
-          <span>3D Interaction</span>
-          <span>@studio.design</span>
-        </div>
+        <div class="captions" aria-hidden="true"></div>
 
         <button
           id="pushButton"
@@ -76,13 +62,7 @@
         <div class="hud-corner bottom-left"></div>
         <div class="hud-corner bottom-right"></div>
 
-        <div class="hud-status-badge">
-          <span class="hud-pulse-dot"></span>
-          <span>IGNITION SEQUENCE ACTIVE</span>
-        </div>
-        <h2 class="hud-destination">TRAJECTORY: SOLAR SYSTEM</h2>
-        <div class="hud-countdown" id="launchCountdown">WARP DRIVE ENGAGED</div>
-        <div class="hud-sub">PAST THE STARS AND FURTHER</div>
+        <h2 class="hud-destination">DISCOVER TANISHKA</h2>
       </div>
 
       <!-- Animated High-Tech Rocket -->
@@ -158,35 +138,26 @@
       <!-- Solar Topbar Navigation & Controls -->
       <header class="solar-topbar">
         <div class="solar-nav-left">
-          <button id="btnBackCockpit" class="solar-action-btn back-btn" type="button" aria-label="Return to Cadet Cockpit">
-            <span class="btn-icon">←</span>
-            <span class="btn-label">Cadet Cockpit</span>
-          </button>
           <div class="solar-title-group">
-            <span class="solar-system-badge">SOLAR EXPLORER</span>
-            <h2 class="solar-system-title">3D Solar System</h2>
+            <h2 class="solar-system-title">COSMIC PORTFOLIO</h2>
           </div>
         </div>
-
-        <div class="solar-nav-controls">
-          <button id="btnResetSolarView" class="solar-action-btn" type="button" title="Align to reference blueprint view">
-            <span class="btn-icon">⊙</span>
-            <span class="btn-label">Blueprint View</span>
-          </button>
-
-          <button id="btnToggleOrbit" class="solar-action-btn" type="button" aria-pressed="false" title="Pause / Resume orbital revolution">
-            <span class="btn-icon">⏯</span>
-            <span class="btn-label">Pause Orbits</span>
-          </button>
-
-          <button id="btnSolarSpeed" class="solar-action-btn" type="button" title="Toggle simulation orbit speed">
-            <span class="btn-icon">⚡</span>
-            <span class="btn-label">2.5x Speed</span>
-          </button>
-
-          <button id="btnSolarAudio" class="solar-action-btn" type="button" aria-pressed="false" title="Toggle cosmic ambient audio">
-            <span class="btn-icon">🔊</span>
-            <span class="btn-label">Sound: ON</span>
+        <div class="solar-nav-right">
+          <button
+            id="btnMissionGuide"
+            class="mission-guide-btn"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="missionGuideModal"
+            title="Open Mission Navigation Guide"
+          >
+            <span class="guide-beacon" aria-hidden="true"></span>
+            <svg class="guide-btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+            <span class="guide-btn-text">Mission Guide</span>
           </button>
         </div>
       </header>
@@ -231,40 +202,40 @@
         <div class="dock-inner">
           <button class="planet-dock-item" data-planet="sun" type="button">
             <span class="dock-dot sun"></span>
-            <span class="dock-text">Sun</span>
+            <span class="dock-text">Ask Nova AI</span>
           </button>
           <span class="dock-divider"></span>
           <button class="planet-dock-item" data-planet="mercury" type="button">
             <span class="dock-dot mercury"></span>
-            <span class="dock-text">Mercury</span>
+            <span class="dock-text">Cosmic ID</span>
           </button>
           <button class="planet-dock-item" data-planet="venus" type="button">
             <span class="dock-dot venus"></span>
-            <span class="dock-text">Venus</span>
+            <span class="dock-text">Meet Tanishka Sahu</span>
           </button>
           <button class="planet-dock-item" data-planet="earth" type="button">
             <span class="dock-dot earth"></span>
-            <span class="dock-text">Earth</span>
+            <span class="dock-text">Planet of Projects</span>
           </button>
           <button class="planet-dock-item" data-planet="mars" type="button">
             <span class="dock-dot mars"></span>
-            <span class="dock-text">Mars</span>
+            <span class="dock-text">Education</span>
           </button>
           <button class="planet-dock-item" data-planet="jupiter" data-size="lg" type="button">
             <span class="dock-dot jupiter"></span>
-            <span class="dock-text">Jupiter</span>
+            <span class="dock-text">Achievements belt</span>
           </button>
           <button class="planet-dock-item" data-planet="saturn" data-size="lg" type="button">
             <span class="dock-dot saturn"></span>
-            <span class="dock-text">Saturn</span>
+            <span class="dock-text">Certifications and Activities</span>
           </button>
           <button class="planet-dock-item" data-planet="uranus" type="button">
             <span class="dock-dot uranus"></span>
-            <span class="dock-text">Uranus</span>
+            <span class="dock-text">Resume</span>
           </button>
           <button class="planet-dock-item" data-planet="neptune" type="button">
             <span class="dock-dot neptune"></span>
-            <span class="dock-text">Neptune</span>
+            <span class="dock-text">Important Links</span>
           </button>
         </div>
       </nav>
@@ -338,7 +309,7 @@
         <!-- Interactive Quick Action Footer Bar -->
         <div class="mercury-card-actions">
           <a href="mailto:tanishkasahuwork191@gmail.com" class="card-action-btn email-btn" title="Send email">
-            <span class="btn-icon">✉</span>
+            <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
             <span>tanishkasahuwork191@gmail.com</span>
           </a>
         </div>
@@ -381,7 +352,7 @@
               <span>‹</span>
             </button>
             <span class="sheet-year">.2026</span>
-            <span class="sheet-role">Computer Science &amp; Engineering Student 💻</span>
+            <span class="sheet-role">Computer Science &amp; Engineering Student</span>
           </div>
 
           <!-- Hero Profile Section -->
@@ -389,7 +360,7 @@
             <!-- Left: About User & Skills -->
             <div class="hero-left-col">
               <div class="about-user-header">
-                <span class="about-bell-icon">🔔</span>
+                <span class="about-bell-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>
                 <h3 class="about-user-title">About<br>Me</h3>
               </div>
               <p class="about-user-bio">
@@ -430,7 +401,7 @@
             <!-- Right: Identity & Age Radial Stat -->
             <div class="hero-right-col">
               <div class="user-id-header">
-                <span class="user-icon">👤</span>
+                <span class="user-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                 <h2 class="user-fullname">Tanishka<br>Sahu</h2>
                 <span class="user-location">Chandigarh, India</span>
               </div>
@@ -555,7 +526,7 @@
               </div>
               <div class="software-badge-item" title="React.js">
                 <span class="badge-corner-cut"></span>
-                <span class="badge-code">⚛</span>
+                <span class="badge-code">React</span>
               </div>
               <div class="software-badge-item" title="MERN Stack">
                 <span class="badge-corner-cut"></span>
@@ -589,7 +560,7 @@
             <div class="bento-grid">
               <!-- LeetCode Card -->
               <div class="bento-card pinterest-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                <span class="pinterest-logo">⚡</span>
+                <span class="pinterest-logo" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
                 <h4 class="card-headline">Explore My<br>Problem Solving<br>on LeetCode</h4>
                 <a href="https://leetcode.com/u/tanishka_189/" target="_blank" rel="noopener noreferrer" class="bento-pill-btn white">
                   <span>leetcode/tanishka_189</span>
@@ -600,14 +571,14 @@
               <div class="bento-center-stack">
                 <!-- Email Pill -->
                 <a href="mailto:tanishkasahuwork191@gmail.com" class="bento-card email-pill-card" title="Send email">
-                  <span class="email-icon">✉</span>
+                  <span class="email-icon" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
                   <span class="email-address">tanishkasahuwork191@gmail.com</span>
                 </a>
 
                 <!-- GitHub Card -->
                 <div class="bento-card instagram-card" style="background: #111827; color: #ffffff;">
                   <div class="insta-left">
-                    <span class="insta-icon">🐙</span>
+                    <span class="insta-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></span>
                     <span class="insta-handle" style="color: #ffffff;">@TanishkaSahu191</span>
                     <a href="https://github.com/TanishkaSahu191" target="_blank" rel="noopener noreferrer" class="insta-follow-btn" style="background: #2563eb; color: #ffffff;">
                       <span>GitHub</span>
@@ -639,13 +610,13 @@
 
                 <!-- Location Card -->
                 <div class="bento-card twitter-card">
-                  <span class="x-logo">📍</span>
+                  <span class="x-logo" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
                   <span class="twitter-handle">Chandigarh, India</span>
                 </div>
 
                 <!-- Age / Status Card -->
                 <div class="bento-card behance-card">
-                  <span class="behance-logo">🎓</span>
+                  <span class="behance-logo" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
                   <div class="behance-info">
                     <span class="behance-name">B.Tech CSE</span>
                     <span class="behance-sub">VIT Bhopal University</span>
@@ -846,11 +817,11 @@
                   
                   <div class="project-links-row">
                     <a href="https://github.com/lumora/solar-system-3d" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
-                      <span class="btn-icon">📦</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
                       <span>Repository</span>
                     </a>
                     <a href="https://lumora-space.vercel.app" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
-                      <span class="btn-icon">🚀</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
                       <span>Live Demo ↗</span>
                     </a>
                   </div>
@@ -908,11 +879,11 @@
                   
                   <div class="project-links-row">
                     <a href="https://github.com/neuralcanvas/core-engine" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
-                      <span class="btn-icon">📦</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
                       <span>Repository</span>
                     </a>
                     <a href="https://neuralcanvas.ai" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
-                      <span class="btn-icon">🚀</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
                       <span>Live Demo ↗</span>
                     </a>
                   </div>
@@ -973,11 +944,11 @@
                   
                   <div class="project-links-row">
                     <a href="https://github.com/aerovision/mission-control" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
-                      <span class="btn-icon">📦</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
                       <span>Repository</span>
                     </a>
                     <a href="https://aerovision.telemetry.io" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
-                      <span class="btn-icon">🚀</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
                       <span>Live Demo ↗</span>
                     </a>
                   </div>
@@ -1035,11 +1006,11 @@
                   
                   <div class="project-links-row">
                     <a href="https://github.com/apexflow/dex-terminal" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
-                      <span class="btn-icon">📦</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
                       <span>Repository</span>
                     </a>
                     <a href="https://apexflow.finance" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
-                      <span class="btn-icon">🚀</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
                       <span>Live Demo ↗</span>
                     </a>
                   </div>
@@ -1100,11 +1071,11 @@
                   
                   <div class="project-links-row">
                     <a href="https://github.com/chronos/quantum-clock" target="_blank" rel="noopener" class="book-link-btn repo-btn" title="View Source Code on GitHub">
-                      <span class="btn-icon">📦</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
                       <span>Repository</span>
                     </a>
                     <a href="https://chronos-engine.dev" target="_blank" rel="noopener" class="book-link-btn live-btn" title="Launch Live Web App">
-                      <span class="btn-icon">🚀</span>
+                      <span class="btn-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
                       <span>Live Demo ↗</span>
                     </a>
                   </div>
@@ -1194,7 +1165,7 @@
         <button id="btnMarsMyEducation" class="mars-3d-btn" type="button" aria-expanded="false" aria-controls="marsEducationTimeline" title="Click to view education timeline">
           <div class="mars-3d-btn-top">
             <span class="mars-3d-btn-glow"></span>
-            <span class="mars-3d-btn-icon">🎓</span>
+            <span class="mars-3d-btn-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
             <span class="mars-3d-btn-text">EDUCATION</span>
             <span class="mars-3d-btn-sub">TIMELINE</span>
           </div>
@@ -1488,7 +1459,7 @@
       <nav class="jupiter-bottom-dock" aria-label="Roadmap Camera Views">
         <div class="roadmap-nav-pills">
           <button class="road-dock-btn is-active" id="btnRoadOverview" data-camera-view="overview" type="button">
-            <span class="dock-nav-icon">🛣️</span>
+            <span class="dock-nav-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19 8 5M20 19l-4-14M12 5v3M12 11v3M12 17v3"/></svg></span>
             <span>All Achievements</span>
           </button>
           <button class="road-dock-btn green-btn" data-camera-view="0" type="button">
@@ -1509,7 +1480,7 @@
           </button>
         </div>
         <div class="roadmap-hints">
-          <span>💡 Click &amp; drag with mouse to orbit 3D road in 360° • Scroll to zoom • Click milestones to inspect full details</span>
+          <span>Click &amp; drag with mouse to orbit 3D road in 360° • Scroll to zoom • Click milestones to inspect full details</span>
         </div>
       </nav>
 
@@ -1558,7 +1529,7 @@
         </div>
         <div class="uranus-topbar-controls">
           <button id="btnUranusPopResume" class="uranus-ctrl-pill resume-toggle-btn" type="button" title="Pop Out Resume Card">
-            <span class="btn-icon">📄</span>
+            <span class="btn-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
             <span class="pop-btn-text">Pop Out Resume</span>
           </button>
           <button id="btnCloseUranusModal" class="uranus-close-btn" type="button" aria-label="Close Uranus View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeUranusResumeModal(true);}">
@@ -1583,7 +1554,7 @@
             <div class="resume-header-actions">
               <span class="resume-status-badge">● Available for Roles</span>
               <button id="btnDockResume" class="resume-dock-btn" type="button" title="Dock resume back inside laptop screen">
-                <span>Dock to Screen ⤦</span>
+                <span>Dock to Screen</span>
               </button>
             </div>
           </div>
@@ -1624,11 +1595,11 @@
                 <h3 class="resume-sec-title">Contact &amp; Connect</h3>
                 <div class="resume-contact-links">
                   <a href="mailto:tanishkasahuwork191@gmail.com" class="resume-contact-chip">
-                    <span class="contact-icon">✉</span>
+                    <span class="contact-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
                     <span>tanishkasahuwork191@gmail.com</span>
                   </a>
                   <span class="resume-contact-chip">
-                    <span class="contact-icon">📍</span>
+                    <span class="contact-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
                     <span>VIT Vellore, India</span>
                   </span>
                 </div>
@@ -1671,13 +1642,14 @@
           <footer class="resume-card-footer">
             <div class="footer-links">
               <a href="mailto:tanishkasahuwork191@gmail.com" class="resume-action-btn primary" title="Send Email">
-                <span>✉ Get in Touch</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <span>Get in Touch</span>
               </a>
               <button id="btnReopenLaptopSequence" class="resume-action-btn" type="button" title="Replay 3D laptop opening animation">
                 <span>↺ Replay 3D Animation</span>
               </button>
             </div>
-            <span class="resume-hint">💡 Hover and move pointer for 3D card tilt • Click "Dock" to return to laptop screen</span>
+            <span class="resume-hint">Hover and move pointer for 3D card tilt • Click "Dock" to return to laptop screen</span>
           </footer>
         </article>
       </div>
@@ -1686,23 +1658,23 @@
       <nav class="uranus-bottom-dock" aria-label="Laptop Controls">
         <div class="uranus-dock-pills">
           <button class="uranus-dock-btn is-active" id="btnUranusViewFront" data-cam="front" type="button">
-            <span>💻 Front View</span>
+            <span>Front View</span>
           </button>
           <button class="uranus-dock-btn" id="btnUranusViewAngle" data-cam="angle" type="button">
-            <span>📐 Isometric 3D</span>
+            <span>Isometric 3D</span>
           </button>
           <button class="uranus-dock-btn" id="btnUranusViewKeyboard" data-cam="keyboard" type="button">
-            <span>⌨️ Keyboard Glow</span>
+            <span>Keyboard Glow</span>
           </button>
           <button class="uranus-dock-btn toggle-resume-btn" id="btnUranusToggleResumeDock" type="button">
-            <span>📄 Pop-Out Resume</span>
+            <span>Pop-Out Resume</span>
           </button>
           <button class="uranus-dock-btn" id="btnUranusReplayAnim" type="button">
             <span>↺ Replay Sequence</span>
           </button>
         </div>
         <div class="uranus-hints">
-          <span>💡 Click screen to pop out resume • Drag to orbit laptop in 3D • Scroll to zoom</span>
+          <span>Click screen to pop out resume • Drag to orbit laptop in 3D • Scroll to zoom</span>
         </div>
       </nav>
     </div>
@@ -1793,14 +1765,14 @@
             </div>
             <div class="card-glass-body">
               <div class="card-top-meta">
-                <span class="card-cat-badge gold">🏆 National Hackathon</span>
+                <span class="card-cat-badge gold">National Hackathon</span>
                 <span class="card-date-badge">2024</span>
               </div>
-              <div class="card-icon-emblem gold">🏆</div>
+              <div class="card-icon-emblem gold" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"/><path d="M6 4h12v5a6 6 0 0 1-12 0V4z"/></svg></div>
               <h3 class="card-title">Smart India Hackathon</h3>
               <p class="card-org">Ministry of Education &amp; AICTE</p>
               <div class="card-preview-strip">
-                <span class="seal-icon">🥇</span>
+                <span class="seal-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></span>
                 <span class="seal-text">Top Innovation Finalist</span>
               </div>
               <p class="card-summary">Engineered high-throughput spatial telemetry IoT command center with real-time WebGL visual mapping.</p>
@@ -1820,7 +1792,7 @@
                 <div class="expanded-footer">
                   <span class="credential-id">VERIFY: SIH-2024-NATL-891</span>
                   <button class="btn-return-card" type="button">
-                    <span>Return to Hanging ⤦</span>
+                    <span>Return to Hanging</span>
                   </button>
                 </div>
               </div>
@@ -1836,10 +1808,10 @@
             </div>
             <div class="card-glass-body">
               <div class="card-top-meta">
-                <span class="card-cat-badge cyan">💼 Industry Internship</span>
+                <span class="card-cat-badge cyan">Industry Internship</span>
                 <span class="card-date-badge">2024</span>
               </div>
-              <div class="card-icon-emblem cyan">⚡</div>
+              <div class="card-icon-emblem cyan" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
               <h3 class="card-title">3D WebGL Systems Intern</h3>
               <p class="card-org">Spatial Dynamics Systems</p>
               <div class="card-preview-strip">
@@ -1863,7 +1835,7 @@
                 <div class="expanded-footer">
                   <span class="credential-id">VERIFY: SDL-ENG-2024-041</span>
                   <button class="btn-return-card" type="button">
-                    <span>Return to Hanging ⤦</span>
+                    <span>Return to Hanging</span>
                   </button>
                 </div>
               </div>
@@ -1879,10 +1851,10 @@
             </div>
             <div class="card-glass-body">
               <div class="card-top-meta">
-                <span class="card-cat-badge purple">🎓 College Leadership</span>
+                <span class="card-cat-badge purple">College Leadership</span>
                 <span class="card-date-badge">2023 – 2025</span>
               </div>
-              <div class="card-icon-emblem purple">🏛️</div>
+              <div class="card-icon-emblem purple" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 7h18M4 7v14M8 7v14M12 7v14M16 7v14M20 7v14M12 3 2 7h20L12 3z"/></svg></div>
               <h3 class="card-title">Technical &amp; Graphics Lead</h3>
               <p class="card-org">Vellore Institute of Technology (VIT)</p>
               <div class="card-preview-strip">
@@ -1906,7 +1878,7 @@
                 <div class="expanded-footer">
                   <span class="credential-id">VERIFY: VIT-LEAD-2024-88</span>
                   <button class="btn-return-card" type="button">
-                    <span>Return to Hanging ⤦</span>
+                    <span>Return to Hanging</span>
                   </button>
                 </div>
               </div>
@@ -1922,14 +1894,14 @@
             </div>
             <div class="card-glass-body">
               <div class="card-top-meta">
-                <span class="card-cat-badge emerald">🎮 Global Competition</span>
+                <span class="card-cat-badge emerald">Global Competition</span>
                 <span class="card-date-badge">2023</span>
               </div>
-              <div class="card-icon-emblem emerald">🌌</div>
+              <div class="card-icon-emblem emerald" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
               <h3 class="card-title">Best Visuals &amp; Shaders</h3>
               <p class="card-org">Global Game Jam International</p>
               <div class="card-preview-strip">
-                <span class="seal-icon">✨</span>
+                <span class="seal-icon">✦</span>
                 <span class="seal-text">International Recognition</span>
               </div>
               <p class="card-summary">Won Best Visual Design for procedural cosmos simulations featuring real-time planetary volumetrics and shaders.</p>
@@ -1949,7 +1921,7 @@
                 <div class="expanded-footer">
                   <span class="credential-id">VERIFY: GGJ-VIS-2023-772</span>
                   <button class="btn-return-card" type="button">
-                    <span>Return to Hanging ⤦</span>
+                    <span>Return to Hanging</span>
                   </button>
                 </div>
               </div>
@@ -1965,14 +1937,14 @@
             </div>
             <div class="card-glass-body">
               <div class="card-top-meta">
-                <span class="card-cat-badge amber">☁️ Advanced Honors</span>
+                <span class="card-cat-badge amber">Advanced Honors</span>
                 <span class="card-date-badge">2024</span>
               </div>
-              <div class="card-icon-emblem amber">🏅</div>
+              <div class="card-icon-emblem amber" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
               <h3 class="card-title">Cloud Computing Honors</h3>
               <p class="card-org">NPTEL / IIT Faculty &amp; AWS</p>
               <div class="card-preview-strip">
-                <span class="seal-icon">🎖️</span>
+                <span class="seal-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></span>
                 <span class="seal-text">Top 2% National Elite Rank</span>
               </div>
               <p class="card-summary">Achieved top national percentile in scalable cloud architecture, distributed consensus, and microservices.</p>
@@ -1992,7 +1964,7 @@
                 <div class="expanded-footer">
                   <span class="credential-id">VERIFY: NPTEL-CS-2024-TOP2</span>
                   <button class="btn-return-card" type="button">
-                    <span>Return to Hanging ⤦</span>
+                    <span>Return to Hanging</span>
                   </button>
                 </div>
               </div>
@@ -2006,23 +1978,23 @@
       <nav class="saturn-bottom-dock" aria-label="Certificates Filter">
         <div class="saturn-dock-pills">
           <button class="saturn-dock-btn is-active" data-filter="all" type="button">
-            <span>🌟 All Honors (5)</span>
+            <span>All Honors (5)</span>
           </button>
           <button class="saturn-dock-btn" data-filter="hackathon" type="button">
-            <span>🏆 Hackathons</span>
+            <span>Hackathons</span>
           </button>
           <button class="saturn-dock-btn" data-filter="internship" type="button">
-            <span>💼 Internships</span>
+            <span>Internships</span>
           </button>
           <button class="saturn-dock-btn" data-filter="leadership" type="button">
-            <span>🎓 Leadership</span>
+            <span>Leadership</span>
           </button>
           <button class="saturn-dock-btn" data-filter="specialization" type="button">
-            <span>☁️ Certifications</span>
+            <span>Certifications</span>
           </button>
         </div>
         <div class="saturn-hints">
-          <span>💡 Click any hanging card to bring it forward in 3D • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
+          <span>Click any hanging card to bring it forward in 3D • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
         </div>
       </nav>
     </div>
@@ -2053,7 +2025,7 @@
       <header class="neptune-modal-topbar">
         <div class="neptune-tag-group">
           <span class="neptune-badge-dot"></span>
-          <span class="neptune-badge-text">NEPTUNE // 8TH ORBIT • SUBSPACE NEXUS &amp; COMMS DIRECTORY</span>
+          <span class="neptune-badge-text">NEPTUNE · CONTACT &amp; PROFILES</span>
         </div>
         <div class="neptune-topbar-controls">
           <button id="btnCloseNeptuneModal" class="neptune-close-btn" type="button" aria-label="Close Neptune View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeNeptuneLinksModal(true);}">
@@ -2069,10 +2041,9 @@
           <!-- Column 1: IMPORTANT LINKS (LeetCode, GitHub, LinkedIn, TUF) -->
           <section class="neptune-panel links-panel" aria-labelledby="secTitleImportantLinks">
             <div class="panel-header-strip">
-              <span class="panel-sec-icon">⚡</span>
+              <span class="panel-sec-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
               <div>
-                <h2 id="secTitleImportantLinks" class="panel-sec-title">Important Links &amp; Profiles</h2>
-                <p class="panel-sec-sub">Verified competitive programming, code repositories, and professional networks</p>
+                <h2 id="secTitleImportantLinks" class="panel-sec-title">Profiles &amp; Links</h2>
               </div>
             </div>
 
@@ -2082,7 +2053,6 @@
               <a href="https://leetcode.com/u/tanishka_189/" target="_blank" rel="noopener noreferrer" class="link-portal-card leetcode" id="linkCardLeetcode">
                 <div class="card-glow-bg"></div>
                 <div class="card-icon-box">
-                  <!-- LeetCode SVG Icon -->
                   <svg class="link-brand-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 4.796 3.75 6.002 6.002 0 0 0 2.502-.132l4.472-1.205a1.377 1.377 0 0 0 .972-1.68 1.376 1.376 0 0 0-1.68-.973l-4.47 1.204a3.25 3.25 0 0 1-1.355.072 3.201 3.201 0 0 1-2.589-2.042 3.036 3.036 0 0 1-.033-1.282 3.084 3.084 0 0 1 .684-1.233l3.858-4.133 5.4-5.787a1.376 1.376 0 0 0-.977-2.364l-.001-.002z" fill="#FFA116"/>
                     <path d="M9.833 13.917a1.376 1.376 0 0 0 0 2.75h7.334a1.376 1.376 0 0 0 0-2.75H9.833z" fill="#ffffff"/>
@@ -2090,16 +2060,8 @@
                   </svg>
                 </div>
                 <div class="card-meta">
-                  <div class="card-title-row">
-                    <h3 class="link-name">LeetCode</h3>
-                    <span class="link-badge orange">Algorithms &amp; DSA</span>
-                  </div>
-                  <p class="link-desc">Problem solving, algorithmic patterns, and competitive coding milestones.</p>
-                  <div class="link-stats-strip">
-                    <span class="stat-pill">500+ Solved</span>
-                    <span class="stat-pill">Data Structures</span>
-                    <span class="stat-pill">Contest Rank</span>
-                  </div>
+                  <h3 class="link-name">LeetCode</h3>
+                  <p class="link-desc">500+ Solved · Data Structures &amp; Algorithms</p>
                 </div>
                 <div class="card-arrow-action">
                   <span>Launch ↗</span>
@@ -2110,22 +2072,13 @@
               <a href="https://github.com/TanishkaSahu191" target="_blank" rel="noopener noreferrer" class="link-portal-card github" id="linkCardGithub">
                 <div class="card-glow-bg"></div>
                 <div class="card-icon-box">
-                  <!-- GitHub SVG Icon -->
                   <svg class="link-brand-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
                   </svg>
                 </div>
                 <div class="card-meta">
-                  <div class="card-title-row">
-                    <h3 class="link-name">GitHub</h3>
-                    <span class="link-badge cyan">Open Source &amp; 3D</span>
-                  </div>
-                  <p class="link-desc">WebGL Three.js simulations, full-stack architectures, shaders, and open projects.</p>
-                  <div class="link-stats-strip">
-                    <span class="stat-pill">TanishkaSahu191</span>
-                    <span class="stat-pill">Interactive 3D</span>
-                    <span class="stat-pill">WebGL Labs</span>
-                  </div>
+                  <h3 class="link-name">GitHub</h3>
+                  <p class="link-desc">WebGL 3D Simulations &amp; Full-Stack Projects</p>
                 </div>
                 <div class="card-arrow-action">
                   <span>Explore ↗</span>
@@ -2136,22 +2089,13 @@
               <a href="https://www.linkedin.com/in/tanishka-sahu-8a617a375/" target="_blank" rel="noopener noreferrer" class="link-portal-card linkedin" id="linkCardLinkedin">
                 <div class="card-glow-bg"></div>
                 <div class="card-icon-box">
-                  <!-- LinkedIn SVG Icon -->
                   <svg class="link-brand-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/>
                   </svg>
                 </div>
                 <div class="card-meta">
-                  <div class="card-title-row">
-                    <h3 class="link-name">LinkedIn</h3>
-                    <span class="link-badge blue">Professional Network</span>
-                  </div>
-                  <p class="link-desc">Professional journey, software engineering roles, hackathon updates &amp; recommendations.</p>
-                  <div class="link-stats-strip">
-                    <span class="stat-pill">Tanishka Sahu</span>
-                    <span class="stat-pill">VIT Vellore</span>
-                    <span class="stat-pill">Connect</span>
-                  </div>
+                  <h3 class="link-name">LinkedIn</h3>
+                  <p class="link-desc">Professional Experience &amp; Network</p>
                 </div>
                 <div class="card-arrow-action">
                   <span>Connect ↗</span>
@@ -2162,20 +2106,11 @@
               <a href="https://takeuforward.org/profile/codelearner1235i" target="_blank" rel="noopener noreferrer" class="link-portal-card tuf" id="linkCardTuf">
                 <div class="card-glow-bg"></div>
                 <div class="card-icon-box">
-                  <!-- TUF Brand Symbol / Sword -->
                   <span class="tuf-symbol-text">TUF</span>
                 </div>
                 <div class="card-meta">
-                  <div class="card-title-row">
-                    <h3 class="link-name">takeUforward (TUF)</h3>
-                    <span class="link-badge red">DSA Mastery</span>
-                  </div>
-                  <p class="link-desc">Striver's A2Z DSA sheet mastery, SDE sheets, and core computer science fundamentals.</p>
-                  <div class="link-stats-strip">
-                    <span class="stat-pill">Striver SDE Sheet</span>
-                    <span class="stat-pill">A2Z Tracker</span>
-                    <span class="stat-pill">Core CS</span>
-                  </div>
+                  <h3 class="link-name">takeUforward (TUF)</h3>
+                  <p class="link-desc">Striver's SDE Sheet &amp; DSA Roadmap</p>
                 </div>
                 <div class="card-arrow-action">
                   <span>Open TUF ↗</span>
@@ -2185,13 +2120,12 @@
             </div>
           </section>
 
-          <!-- Column 2: CONTACT ME & TRANSMISSION HUB -->
+          <!-- Column 2: CONTACT ME -->
           <section class="neptune-panel contact-panel" aria-labelledby="secTitleContactMe">
             <div class="panel-header-strip">
-              <span class="panel-sec-icon">📡</span>
+              <span class="panel-sec-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></span>
               <div>
                 <h2 id="secTitleContactMe" class="panel-sec-title">Contact Me</h2>
-                <p class="panel-sec-sub">Direct transmission beacon for software engineering &amp; 3D graphics opportunities</p>
               </div>
             </div>
 
@@ -2204,11 +2138,11 @@
                 </div>
                 <div class="beacon-profile-info">
                   <h3 class="beacon-name">Tanishka Sahu</h3>
-                  <p class="beacon-role">Creative 3D Developer &amp; Full-Stack Software Engineer</p>
-                  <p class="beacon-edu">Vellore Institute of Technology (VIT) • B.Tech CSE (2022–2026)</p>
+                  <p class="beacon-role">Full-Stack &amp; 3D Web Developer</p>
+                  <p class="beacon-edu">VIT Vellore · B.Tech CSE (2022–2026)</p>
                   <div class="beacon-status-pill">
                     <span class="status-pulse-dot"></span>
-                    <span>Available for Full-Time Roles &amp; Collaborations</span>
+                    <span>Available for Opportunities &amp; Collaborations</span>
                   </div>
                 </div>
               </div>
@@ -2216,87 +2150,253 @@
               <!-- Primary Email Display & One-Click Copy -->
               <div class="email-transmission-box">
                 <div class="email-box-label">
-                  <span>PRIMARY TRANSMISSION FREQUENCY // EMAIL ID</span>
-                  <span class="verified-tag">✓ Direct Channel</span>
+                  <span>EMAIL ADDRESS</span>
                 </div>
                 <div class="email-address-row">
-                  <span class="email-icon">✉</span>
+                  <span class="email-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
                   <code class="email-address-text" id="neptuneEmailAddress">tanishkasahuwork191@gmail.com</code>
                 </div>
                 <div class="email-action-row">
                   <button class="btn-email-action primary" id="btnCopyNeptuneEmail" type="button" title="Copy email address to clipboard">
-                    <span class="btn-icon">📋</span>
-                    <span class="btn-text" id="copyEmailBtnText">Copy Email Address</span>
+                    <span class="btn-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></span>
+                    <span class="btn-text" id="copyEmailBtnText">Copy Email</span>
                   </button>
                   <a href="mailto:tanishkasahuwork191@gmail.com?subject=Regarding%20Software%20Engineering%20Role%20/%20Collaboration" class="btn-email-action" title="Open in default mail client">
                     <span class="btn-icon">↗</span>
-                    <span>Send Email (Mailto)</span>
+                    <span>Send Email</span>
                   </a>
                 </div>
               </div>
 
-              <!-- Quick Transmission Note Composer -->
+              <!-- Quick Message Composer -->
               <form class="quick-transmit-form" id="neptuneTransmitForm" onsubmit="event.preventDefault(); window.handleNeptuneMessageSend();">
-                <h4 class="form-title">⚡ Quick Transmission Note</h4>
+                <h4 class="form-title">Send a Message</h4>
                 <div class="form-inputs-grid">
                   <div class="form-field">
-                    <label for="neptuneSenderName">Your Name / Organization</label>
-                    <input type="text" id="neptuneSenderName" placeholder="e.g. Alex // Tech Lead" required />
+                    <label for="neptuneSenderName">Name</label>
+                    <input type="text" id="neptuneSenderName" placeholder="Your Name" required />
                   </div>
                   <div class="form-field">
-                    <label for="neptuneSenderContact">Your Contact Email</label>
-                    <input type="email" id="neptuneSenderContact" placeholder="you@company.com" required />
+                    <label for="neptuneSenderContact">Email</label>
+                    <input type="email" id="neptuneSenderContact" placeholder="Your Email" required />
                   </div>
                 </div>
                 <div class="form-field" style="margin-top: 10px;">
-                  <label for="neptuneSenderMessage">Message Note / Project Outline</label>
-                  <textarea id="neptuneSenderMessage" rows="2" placeholder="Hi Tanishka, we saw your Lumora 3D portfolio and would love to connect regarding..." required></textarea>
+                  <label for="neptuneSenderMessage">Message</label>
+                  <textarea id="neptuneSenderMessage" rows="2" placeholder="Your message here..." required></textarea>
                 </div>
                 <div class="form-submit-row">
                   <button class="btn-transmit-submit" id="btnTransmitMessage" type="submit">
-                    <span>Transmit Message to Tanishka 🚀</span>
+                    <span>Send Message</span>
                   </button>
                   <span class="transmit-status-msg" id="transmitStatusMsg"></span>
                 </div>
               </form>
 
-              <!-- Footer Coordinates & Location -->
-              <div class="beacon-coords-strip">
-                <span class="coord-item">📍 VIT Vellore, India</span>
-                <span class="coord-item">🌐 Timezone: IST (UTC +5:30)</span>
-                <span class="coord-item">⚡ Response: &lt; 24h</span>
-              </div>
             </div>
 
           </section>
 
         </div>
       </div>
-
-      <!-- Bottom Interactive Dock Footer -->
-      <nav class="neptune-bottom-dock" aria-label="Neptune Hub Navigation">
-        <div class="neptune-dock-pills">
-          <a href="https://leetcode.com/u/tanishka_189/" target="_blank" rel="noopener noreferrer" class="neptune-dock-link">
-            <span>LeetCode</span>
-          </a>
-          <a href="https://github.com/TanishkaSahu191" target="_blank" rel="noopener noreferrer" class="neptune-dock-link">
-            <span>GitHub</span>
-          </a>
-          <a href="https://www.linkedin.com/in/tanishka-sahu-8a617a375/" target="_blank" rel="noopener noreferrer" class="neptune-dock-link">
-            <span>LinkedIn</span>
-          </a>
-          <a href="https://takeuforward.org/profile/codelearner1235i" target="_blank" rel="noopener noreferrer" class="neptune-dock-link">
-            <span>TUF</span>
-          </a>
-          <a href="mailto:tanishkasahuwork191@gmail.com" class="neptune-dock-link highlight">
-            <span>✉ Email Me</span>
-          </a>
-        </div>
-        <div class="neptune-hints">
-          <span>💡 Click any portal link to open in new tab • Click "Copy Email Address" for one-touch clipboard copy</span>
-        </div>
-      </nav>
     </div>
+
+    <!-- Interactive Mission Guide Dialog Modal -->
+    <dialog id="missionGuideModal" class="mission-guide-modal" aria-labelledby="guideModalTitle" aria-modal="true">
+      <div class="mission-guide-backdrop" id="missionGuideBackdrop"></div>
+      <div class="mission-guide-card">
+        <!-- Guide Header -->
+        <header class="guide-header">
+          <div class="guide-header-meta">
+            <span class="guide-badge">
+              <span class="badge-pulsar"></span>
+              ORBITAL FLIGHT MANUAL // SYSTEM DIRECTORY
+            </span>
+            <h2 id="guideModalTitle" class="guide-title">Mission Navigation Guide</h2>
+          </div>
+          <button id="btnCloseMissionGuide" class="guide-close-btn" type="button" aria-label="Close Mission Guide" title="Close Guide [Esc]">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </header>
+
+        <!-- Primary Core Instruction Banner -->
+        <div class="guide-instruction-banner">
+          <div class="instruction-icon-col">
+            <div class="instruction-orb-glow">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#68b9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                <path d="M2 12h20"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="instruction-text-col">
+            <p class="instruction-main">Click on any planet to explore its universe.</p>
+            <p class="instruction-sub">Each celestial body represents a unique sector of Tanishka's portfolio. Select any planet in 3D space or choose an entry below to warp directly to it.</p>
+          </div>
+        </div>
+
+        <!-- 9 Celestial Destinations Directory -->
+        <div class="guide-destinations-grid">
+          <!-- 1. Sun -->
+          <button class="guide-item-card" data-guide-planet="sun" type="button">
+            <div class="guide-item-icon sun-icon">
+              <span class="item-orb sun-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Sun</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Ask Nova AI</span>
+              </div>
+              <p class="guide-item-desc">Interact with Nova AI, the cosmic intelligence assistant trained to answer questions regarding Tanishka's background, technical capabilities, and experience.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 2. Mercury -->
+          <button class="guide-item-card" data-guide-planet="mercury" type="button">
+            <div class="guide-item-icon mercury-icon">
+              <span class="item-orb mercury-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Mercury</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Cosmic ID</span>
+              </div>
+              <p class="guide-item-desc">View Tanishka's official Cadet Identification card featuring verified credentials, core developer tech stack, and specialty badges.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 3. Venus -->
+          <button class="guide-item-card" data-guide-planet="venus" type="button">
+            <div class="guide-item-icon venus-icon">
+              <span class="item-orb venus-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Venus</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Meet Tanishka Sahu</span>
+              </div>
+              <p class="guide-item-desc">Discover Tanishka's personal journey, design philosophy, engineering mindset, passions, and creative problem-solving approach.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 4. Earth -->
+          <button class="guide-item-card" data-guide-planet="earth" type="button">
+            <div class="guide-item-icon earth-icon">
+              <span class="item-orb earth-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Earth</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Planet of Projects</span>
+              </div>
+              <p class="guide-item-desc">Explore an interactive 3D Project Book showcasing flagship engineering builds, live prototypes, UI/UX systems, and technical case studies.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 5. Mars -->
+          <button class="guide-item-card" data-guide-planet="mars" type="button">
+            <div class="guide-item-icon mars-icon">
+              <span class="item-orb mars-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Mars</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Education</span>
+              </div>
+              <p class="guide-item-desc">Uncover academic milestones, university engineering foundation, specialized coursework, and technical training archives.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 6. Jupiter -->
+          <button class="guide-item-card" data-guide-planet="jupiter" type="button">
+            <div class="guide-item-icon jupiter-icon">
+              <span class="item-orb jupiter-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Jupiter</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Achievements</span>
+              </div>
+              <p class="guide-item-desc">Tour the Achievements belt highlighting competitive hackathon victories, academic honors, scholarships, and leadership accomplishments.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 7. Saturn -->
+          <button class="guide-item-card" data-guide-planet="saturn" type="button">
+            <div class="guide-item-icon saturn-icon">
+              <span class="item-orb saturn-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Saturn</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Certifications and Activities</span>
+              </div>
+              <p class="guide-item-desc">Interact with the physics-driven glass card gallery displaying verified industry certifications, extracurricular initiatives, and clubs.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 8. Uranus -->
+          <button class="guide-item-card" data-guide-planet="uranus" type="button">
+            <div class="guide-item-icon uranus-icon">
+              <span class="item-orb uranus-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Uranus</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Resume</span>
+              </div>
+              <p class="guide-item-desc">Inspect an interactive 3D laptop terminal displaying Tanishka's curriculum vitae, professional roles, skills matrix, and PDF resume download.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <!-- 9. Neptune -->
+          <button class="guide-item-card" data-guide-planet="neptune" type="button">
+            <div class="guide-item-icon neptune-icon">
+              <span class="item-orb neptune-orb"></span>
+            </div>
+            <div class="guide-item-content">
+              <div class="guide-item-header">
+                <span class="guide-item-body">Neptune</span>
+                <span class="guide-item-dash">—</span>
+                <span class="guide-item-name">Important Links</span>
+              </div>
+              <p class="guide-item-desc">Access the communications nexus with direct channels to GitHub, LinkedIn, Email, portfolio portals, and send an instant message.</p>
+            </div>
+            <span class="guide-item-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <!-- Guide Footer -->
+        <footer class="guide-footer">
+          <span class="guide-shortcut-hint">
+            <kbd>Esc</kbd> or click outside to dismiss
+          </span>
+          <button id="btnDismissGuide" class="guide-explore-btn" type="button">
+            <span>Explore Solar System</span>
+          </button>
+        </footer>
+      </div>
+    </dialog>
 
     <!-- Glassmorphic Interactive Planet Dossier Dialog Modal -->
     <dialog id="planetModal" class="planet-modal" aria-labelledby="modalPlanetName" aria-modal="true">
@@ -2412,14 +2512,11 @@
       </div>
     </dialog>
 
-    <!-- Custom Cursor Ring & Dot -->
-    <div class="pointer-dot" id="pointerDot" aria-hidden="true"></div>
-    <div class="pointer-ring" id="pointerRing" aria-hidden="true"></div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="./solar-system.js"></script>
-    <script src="./script.js" defer></script>
+    <script src="./solar-system.js?v=20261026_mission_guide"></script>
+    <script src="./script.js?v=20261026_mission_guide" defer></script>
   </body>
 </html>

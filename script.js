@@ -31,17 +31,15 @@
     const entranceTimeline = [
       [document.querySelector('.plate'), [{ opacity: 0, transform: 'scale(1.025)' }, { opacity: 1, transform: 'scale(1)' }], 0, 900],
       [document.querySelector('.plate-shade'), [{ opacity: 0 }, { opacity: 1 }], 100, 1100],
-      [document.querySelector('.brand'), [{ opacity: 0, transform: 'translateY(-18px)' }, { opacity: 1, transform: 'translateY(0)' }], 120, 800],
-      [document.querySelector('.menu-button'), [{ opacity: 0, transform: 'translateY(-18px)' }, { opacity: 1, transform: 'translateY(0)' }], 190, 800],
-      [document.querySelector('.eyebrow'), [{ opacity: 0, transform: 'translateY(8px)', letterSpacing: '.9em' }, { opacity: 1, transform: 'translateY(0)', letterSpacing: '.46em' }], 300, 900],
-      [document.querySelector('.copy-block h1'), [{ opacity: 0, filter: 'blur(14px)', transform: 'translateY(20px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }], 430, 1000],
-      [document.querySelector('.subtitle'), [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], 760, 700],
-      [document.querySelector('.captions'), [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], 980, 700],
-      [pushButton, [{ opacity: 0, transform: 'scale(.55)' }, { opacity: 1, transform: 'scale(1)' }], 1180, 600]
+      [document.querySelector('.copy-block h1'), [{ opacity: 0, filter: 'blur(14px)', transform: 'translateY(20px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }], 300, 1000],
+      [document.querySelector('.subtitle'), [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], 600, 700],
+      [document.querySelector('.captions'), [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], 800, 700],
+      [pushButton, [{ opacity: 0, transform: 'scale(.55)' }, { opacity: 1, transform: 'scale(1)' }], 1000, 600]
     ];
 
     if (!reducedMotion && typeof Element.prototype.animate === 'function') {
       entranceTimeline.forEach(([element, keyframes, delay, duration]) => {
+        if (!element) return;
         element.animate(keyframes, {
           duration,
           delay,
@@ -76,6 +74,8 @@
 
   function attachClip(src) {
     clip.src = src;
+    clip.muted = true;
+    clip.volume = 0;
     clip.addEventListener('loadedmetadata', () => {
       duration = Number.isFinite(clip.duration) && clip.duration > 0 ? clip.duration : duration;
       targetTime = duration * .5;
@@ -119,7 +119,7 @@
       }
     }
 
-    if (finePointer) {
+    if (finePointer && dot && ring) {
       ringX += (lastPointerX - ringX) * .55;
       ringY += (pointerY - ringY) * .55;
       dot.style.transform = `translate3d(${lastPointerX}px, ${pointerY}px, 0)`;
@@ -156,15 +156,7 @@
       window.solarAppInstance.audio.playRocketLaunch();
     }
 
-    // Countdown / status milestones
-    if (countdownEl) countdownEl.textContent = 'WARP DRIVE ENGAGED';
-
     setTimeout(() => {
-      if (countdownEl) countdownEl.textContent = 'MAIN BOOSTER FULL THRUST';
-    }, 700);
-
-    setTimeout(() => {
-      if (countdownEl) countdownEl.textContent = 'TRANSLUNAR INJECTION';
       if (window.solarAppInstance && window.solarAppInstance.audio) {
         window.solarAppInstance.audio.playWarpSound();
       }
@@ -245,15 +237,7 @@
   };
 
   if (finePointer && !reducedMotion) {
-    stage.classList.add('cursor-managed');
-    document.body.classList.add('is-pointer');
     window.addEventListener('pointermove', (event) => updatePointer(event.clientX, event.clientY), { passive: true });
-    window.addEventListener('pointerleave', () => document.body.classList.remove('is-pointer'));
-    window.addEventListener('pointerenter', () => document.body.classList.add('is-pointer'));
-    [pushButton, document.querySelector('.menu-button'), document.querySelector('.brand')].forEach((element) => {
-      element.addEventListener('pointerenter', () => document.body.classList.add('is-hovering'));
-      element.addEventListener('pointerleave', () => document.body.classList.remove('is-hovering'));
-    });
   }
 
   pushButton.addEventListener('click', launchToSolarSystem);
