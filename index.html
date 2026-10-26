@@ -51,87 +51,110 @@
       </div>
     </main>
 
-    <!-- Rocket Launch Transition Overlay -->
-    <div id="rocketTransition" class="rocket-transition" aria-hidden="true">
-      <div class="rocket-warp-bg"></div>
-      <div class="warp-speed-lines"></div>
-
-      <div class="launch-hud">
-        <div class="hud-corner top-left"></div>
-        <div class="hud-corner top-right"></div>
-        <div class="hud-corner bottom-left"></div>
-        <div class="hud-corner bottom-right"></div>
-
-        <h2 class="hud-destination">DISCOVER TANISHKA</h2>
+    <!-- Realistic NASA Space Shuttle Discovery Cinematic Launch Modal -->
+    <div id="shuttleLaunchModal" class="shuttle-launch-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="NASA Space Shuttle Ascent Simulation">
+      <!-- 3D WebGL Canvas Layer -->
+      <div class="shuttle-canvas-container">
+        <canvas id="shuttleCanvas"></canvas>
       </div>
 
-      <!-- Animated High-Tech Rocket -->
-      <div class="rocket-craft" id="rocketCraft">
-        <svg class="rocket-svg" viewBox="0 0 160 380" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Rocket Exhaust Flame & Plasma Plume -->
-          <defs>
-            <linearGradient id="rocketBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffffff" />
-              <stop offset="45%" stop-color="#e0e8f5" />
-              <stop offset="100%" stop-color="#8ba3c7" />
-            </linearGradient>
-            <linearGradient id="rocketFinGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#ff3b30" />
-              <stop offset="100%" stop-color="#b0160e" />
-            </linearGradient>
-            <linearGradient id="plumeGrad" x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" stop-color="#ffffff" />
-              <stop offset="20%" stop-color="#ffe600" />
-              <stop offset="60%" stop-color="#ff4500" />
-              <stop offset="100%" stop-color="rgba(255, 30, 0, 0)" />
-            </linearGradient>
-            <filter id="thrusterGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="12" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
+      <!-- Vignette and cinematic atmospheric overlay -->
+      <div class="shuttle-cinematic-overlay" aria-hidden="true"></div>
 
-          <!-- Thruster Plume -->
-          <g class="thruster-fire" filter="url(#thrusterGlow)">
-            <polygon points="62,260 98,260 80,375" fill="url(#plumeGrad)" />
-            <polygon points="68,260 92,260 80,340" fill="#ffffff" opacity="0.9" />
-          </g>
+      <!-- Topbar Header (matching website glassmorphic theme) -->
+      <header class="shuttle-modal-topbar">
+        <div class="shuttle-tag-group">
+          <span class="shuttle-live-indicator"></span>
+          <span class="shuttle-tag-text">NASA // STS-121 SPACE SHUTTLE ASCENT</span>
+          <span id="shuttleMissionBadge" class="mission-status-pill standby">STANDBY</span>
+        </div>
 
-          <!-- Left & Right Booster Wings -->
-          <path d="M 50 170 L 15 250 L 50 240 Z" fill="url(#rocketFinGrad)" />
-          <path d="M 110 170 L 145 250 L 110 240 Z" fill="url(#rocketFinGrad)" />
+        <div class="shuttle-topbar-actions">
+          <!-- Camera angle toggles -->
+          <div class="shuttle-cam-switch" role="group" aria-label="Camera Angle">
+            <button id="btnCamCinematic" class="shuttle-cam-btn is-active" type="button" title="Cinematic Tracking Camera">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 7l-7 5 7 5V7z" />
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+              </svg>
+              <span>Cinematic</span>
+            </button>
+            <button id="btnCamOrbit" class="shuttle-cam-btn" type="button" title="Interactive 3D Orbit Camera (Drag to rotate)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M2 12h20" />
+              </svg>
+              <span>3D Orbit</span>
+            </button>
+          </div>
 
-          <!-- Fuselage Core -->
-          <path d="M 80 20 Q 52 80 50 245 L 110 245 Q 108 80 80 20 Z" fill="url(#rocketBodyGrad)" stroke="#1a2538" stroke-width="2" />
+          <!-- Replay Button -->
+          <button id="btnReplayShuttleLaunch" class="shuttle-action-pill" type="button" title="Replay Ascent Sequence">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 4v6h6" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+            </svg>
+            <span>Replay</span>
+          </button>
 
-          <!-- Center Fin / Dorsal Spine -->
-          <polygon points="76,60 84,60 82,240 78,240" fill="#32496d" />
+          <!-- Enter Orbit / Close Button -->
+          <button id="btnCloseShuttleModal" class="shuttle-close-btn" type="button" aria-label="Enter Solar System" title="Enter Solar System">
+            <span class="close-label">Enter Orbit</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        </div>
+      </header>
 
-          <!-- Cockpit Bubble Window -->
-          <circle cx="80" cy="90" r="14" fill="#0b1b36" stroke="#4da3ff" stroke-width="2.5" />
-          <circle cx="76" cy="86" r="4.5" fill="#ffffff" opacity="0.8" />
+      <!-- Flight Telemetry HUD Overlay (Glassmorphic) -->
+      <div class="shuttle-hud-overlay">
+        <!-- Target Reticle & Crosshairs -->
+        <div class="hud-target-reticle" aria-hidden="true">
+          <div class="reticle-corner tl"></div>
+          <div class="reticle-corner tr"></div>
+          <div class="reticle-corner bl"></div>
+          <div class="reticle-corner br"></div>
+          <div class="reticle-center"></div>
+        </div>
 
-          <!-- Cadet Skyranger Decal / Stripe -->
-          <rect x="58" y="140" width="44" height="6" fill="#ff3b30" />
-          <rect x="62" y="152" width="36" height="3" fill="#ffcc00" />
+        <!-- Telemetry Data Cards (Bottom HUD) -->
+        <div class="shuttle-telemetry-panel">
+          <div class="shuttle-telemetry-header">
+            <span class="telemetry-title">FLIGHT DYNAMICS TELEMETRY</span>
+            <span class="telemetry-vehicle">DISCOVERY / OV-103</span>
+          </div>
 
-          <!-- Engine Nozzle -->
-          <polygon points="60,245 100,245 92,265 68,265" fill="#1b2432" stroke="#485973" stroke-width="2" />
-        </svg>
-
-        <!-- Dynamic Particle Sparks -->
-        <div class="thruster-sparks">
-          <span class="spark s1"></span>
-          <span class="spark s2"></span>
-          <span class="spark s3"></span>
-          <span class="spark s4"></span>
-          <span class="spark s5"></span>
+          <div class="shuttle-hud-grid">
+            <div class="shuttle-hud-card">
+              <span class="hud-label">ALTITUDE</span>
+              <span id="hudShuttleAlt" class="hud-val">0.0 km</span>
+            </div>
+            <div class="shuttle-hud-card">
+              <span class="hud-label">VELOCITY</span>
+              <span id="hudShuttleVel" class="hud-val">0 m/s</span>
+            </div>
+            <div class="shuttle-hud-card">
+              <span class="hud-label">SPEED</span>
+              <span id="hudShuttleMach" class="hud-val">M 0.0</span>
+            </div>
+            <div class="shuttle-hud-card">
+              <span class="hud-label">ACCELERATION</span>
+              <span id="hudShuttleG" class="hud-val">1.0 G</span>
+            </div>
+            <div class="shuttle-hud-card full-span">
+              <span class="hud-label">MISSION EVENT</span>
+              <span id="hudShuttleStatus" class="hud-val status-val">T-00:03 MAIN ENGINE IGNITION</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Hidden fallback for legacy scripts -->
+    <div id="rocketTransition" class="rocket-transition" aria-hidden="true" style="display:none;"></div>
 
     <!-- 3D Interactive Solar System Section -->
     <section id="solarSystemSection" class="solar-system-section" aria-label="3D Solar System Exploration">
@@ -143,6 +166,21 @@
           </div>
         </div>
         <div class="solar-nav-right">
+          <button
+            id="btnSolarShuttleLaunch"
+            class="mission-guide-btn"
+            type="button"
+            title="Launch NASA Space Shuttle Simulation"
+            style="margin-right: 8px;"
+          >
+            <svg class="guide-btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+            </svg>
+            <span class="guide-btn-text">STS Launch</span>
+          </button>
           <button
             id="btnMissionGuide"
             class="mission-guide-btn"
@@ -2516,6 +2554,7 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="./shuttle-launch.js?v=20261026_shuttle"></script>
     <script src="./solar-system.js?v=20261026_mission_guide"></script>
     <script src="./script.js?v=20261026_mission_guide" defer></script>
   </body>

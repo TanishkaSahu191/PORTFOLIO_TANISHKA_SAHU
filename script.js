@@ -143,56 +143,56 @@
       window.solarAppInstance.audio.playVisorLock();
     }
 
-    // 2. Start rocket sequence
-    document.body.classList.add('in-launch');
-    const transition = document.getElementById('rocketTransition');
-    const countdownEl = document.getElementById('launchCountdown');
-
-    if (transition) {
-      transition.classList.add('is-active');
-    }
-
-    if (window.solarAppInstance && window.solarAppInstance.audio) {
-      window.solarAppInstance.audio.playRocketLaunch();
-    }
-
+    // 2. Launch Cinematic NASA Space Shuttle Discovery
     setTimeout(() => {
-      if (window.solarAppInstance && window.solarAppInstance.audio) {
-        window.solarAppInstance.audio.playWarpSound();
-      }
-    }, 1400);
-
-    // Flash and reveal solar system
-    setTimeout(() => {
-      let flash = document.querySelector('.solar-flash');
-      if (!flash) {
-        flash = document.createElement('div');
-        flash.className = 'solar-flash';
-        document.body.appendChild(flash);
-      }
-      flash.classList.add('is-flashing');
-
-      setTimeout(() => {
-        document.body.classList.remove('in-launch');
-        document.body.classList.add('solar-active');
-        if (transition) transition.classList.remove('is-active');
-
-        // Trigger resize and reset view
-        if (window.solarAppInstance) {
-          window.solarAppInstance.onResize();
-          window.solarAppInstance.resetToDiagramView();
-        }
-
-        const cosmicVid = document.getElementById('solarCosmicBgVideo');
-        if (cosmicVid) {
-          cosmicVid.play().catch(() => { });
+      if (window.spaceShuttleInstance) {
+        document.body.classList.add('in-launch');
+        window.spaceShuttleInstance.openModal();
+      } else {
+        // Fallback sequence
+        document.body.classList.add('in-launch');
+        if (window.solarAppInstance && window.solarAppInstance.audio) {
+          window.solarAppInstance.audio.playRocketLaunch();
         }
 
         setTimeout(() => {
-          flash.classList.remove('is-flashing');
-        }, 250);
-      }, 400);
-    }, 2000);
+          let flash = document.querySelector('.solar-flash');
+          if (!flash) {
+            flash = document.createElement('div');
+            flash.className = 'solar-flash';
+            document.body.appendChild(flash);
+          }
+          flash.classList.add('is-flashing');
+
+          setTimeout(() => {
+            document.body.classList.remove('in-launch');
+            document.body.classList.add('solar-active');
+
+            if (window.solarAppInstance) {
+              window.solarAppInstance.onResize();
+              window.solarAppInstance.resetToDiagramView();
+            }
+
+            const cosmicVid = document.getElementById('solarCosmicBgVideo');
+            if (cosmicVid) cosmicVid.play().catch(() => { });
+
+            setTimeout(() => {
+              flash.classList.remove('is-flashing');
+            }, 250);
+          }, 400);
+        }, 1500);
+      }
+    }, 450);
+  }
+
+  // Bind STS Launch button on solar topbar
+  const btnSolarShuttle = document.getElementById('btnSolarShuttleLaunch');
+  if (btnSolarShuttle) {
+    btnSolarShuttle.addEventListener('click', () => {
+      if (window.spaceShuttleInstance) {
+        window.spaceShuttleInstance.openModal();
+      }
+    });
   }
 
   window.returnToCadetScreen = () => {
