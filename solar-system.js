@@ -656,75 +656,159 @@
       const img = ctx.createImageData(canvas.width, canvas.height);
       const data = img.data;
 
-      // Photosphere convective granulation & turbulent incandescent plasma
+      // 1. Photosphere convective granulation & turbulent incandescent plasma
       for (let y = 0; y < canvas.height; y++) {
         const ny = y / canvas.height;
         const poleDim = Math.sin(ny * Math.PI);
-        const poleFactor = 0.75 + 0.25 * Math.pow(poleDim, 0.4);
+        const poleFactor = 0.82 + 0.18 * Math.pow(poleDim, 0.4);
 
         for (let x = 0; x < canvas.width; x++) {
           const nx = x / canvas.width;
           const idx = (y * canvas.width + x) * 4;
 
-          const nFine = _noise.fbm(nx * 48, ny * 24, 3, 0.55);
-          const nCoarse = _noise.fbm(nx * 8 + 12, ny * 6, 2, 0.5);
-          const val = nFine * 0.7 + nCoarse * 0.3;
+          // Domain-warped magnetic plasma flows
+          const warpX = (_noise.noise(nx * 14 + 1.2, ny * 8) - 0.5) * 0.12;
+          const warpY = (_noise.noise(nx * 14 + 20, ny * 8 + 35) - 0.5) * 0.12;
 
+          const nBase = _noise.fbm((nx + warpX) * 16, (ny + warpY) * 10, 3, 0.52);
+          const nGran = _noise.fbm(nx * 68, ny * 34, 3, 0.55);
+          const nFine = _noise.fbm(nx * 140, ny * 70, 2, 0.45);
+
+          const val = nBase * 0.55 + nGran * 0.32 + nFine * 0.13;
+
+          // Authentic astronomical color gradient inspired directly by reference image
           let r, g, b;
-          if (val < 0.45) {
-            const t = val / 0.45;
-            r = Math.floor(190 + 65 * t);
-            g = Math.floor(45 + 105 * t);
-            b = Math.floor(5 + 10 * t);
-          } else if (val < 0.8) {
-            const t = (val - 0.45) / 0.35;
+          if (val < 0.38) {
+            // Cooler magnetic boundary crevices: deep fiery crimson / red-orange
+            const t = val / 0.38;
+            r = Math.floor(180 + 55 * t);
+            g = Math.floor(38 + 52 * t);
+            b = Math.floor(2 + 8 * t);
+          } else if (val < 0.70) {
+            // Mid-chromosphere turbulent plasma: vibrant solar orange
+            const t = (val - 0.38) / 0.32;
+            r = Math.floor(235 + 20 * t);
+            g = Math.floor(90 + 75 * t);
+            b = Math.floor(10 + 15 * t);
+          } else if (val < 0.88) {
+            // Hot convection cell summits: luminous golden yellow
+            const t = (val - 0.70) / 0.18;
             r = 255;
-            g = Math.floor(150 + 85 * t);
-            b = Math.floor(15 + 110 * t);
+            g = Math.floor(165 + 70 * t);
+            b = Math.floor(25 + 45 * t);
           } else {
-            const t = (val - 0.8) / 0.2;
+            // Solar flare & plage summits: incandescent white-yellow
+            const t = (val - 0.88) / 0.12;
             r = 255;
             g = Math.floor(235 + 20 * t);
-            b = Math.floor(125 + 130 * t);
+            b = Math.floor(70 + 165 * t);
           }
 
-          data[idx] = Math.floor(r * poleFactor);
-          data[idx + 1] = Math.floor(g * poleFactor);
-          data[idx + 2] = Math.floor(b * poleFactor);
+          data[idx] = Math.min(255, Math.floor(r * poleFactor));
+          data[idx + 1] = Math.min(255, Math.floor(g * poleFactor));
+          data[idx + 2] = Math.min(255, Math.floor(b * poleFactor));
           data[idx + 3] = 255;
         }
       }
       ctx.putImageData(img, 0, 0);
 
-      // Realistic, fibrous active sunspot groups (dark umbra, magnetic penumbra)
+      // 2. Active Magnetic Plage & Solar Flare Clusters (Matching Reference Photo)
+      const plageClusters = [
+        // Major active region on the right hemisphere (~3:30 to 4:30 o'clock)
+        { cx: 740, cy: 260, r: 85, intensity: 1.0 },
+        { cx: 775, cy: 285, r: 55, intensity: 0.9 },
+        { cx: 710, cy: 235, r: 60, intensity: 0.85 },
+        // Secondary active region on upper left (~10 o'clock)
+        { cx: 280, cy: 165, r: 75, intensity: 0.95 },
+        { cx: 320, cy: 190, r: 48, intensity: 0.8 },
+        // Equatorial active magnetic plage zones
+        { cx: 480, cy: 270, r: 50, intensity: 0.75 },
+        { cx: 890, cy: 300, r: 45, intensity: 0.7 },
+        { cx: 130, cy: 240, r: 40, intensity: 0.65 }
+      ];
+
+      plageClusters.forEach(p => {
+        // Multi-layered incandescent flare core
+        const gCore = ctx.createRadialGradient(p.cx, p.cy, 0, p.cx, p.cy, p.r);
+        gCore.addColorStop(0, `rgba(255, 255, 240, ${0.92 * p.intensity})`);
+        gCore.addColorStop(0.25, `rgba(255, 225, 110, ${0.82 * p.intensity})`);
+        gCore.addColorStop(0.60, `rgba(255, 140, 20, ${0.48 * p.intensity})`);
+        gCore.addColorStop(1, 'rgba(235, 70, 0, 0)');
+        ctx.fillStyle = gCore;
+        ctx.beginPath();
+        ctx.arc(p.cx, p.cy, p.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Braided magnetic loops & coronal loop arcs
+        ctx.strokeStyle = `rgba(255, 250, 220, ${0.75 * p.intensity})`;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.arc(p.cx - 6, p.cy + 4, p.r * 0.42, 0.2, Math.PI * 1.1);
+        ctx.stroke();
+
+        ctx.strokeStyle = `rgba(255, 215, 80, ${0.65 * p.intensity})`;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(p.cx + 12, p.cy - 6, p.r * 0.55, -0.4, Math.PI * 0.8);
+        ctx.stroke();
+      });
+
+      // 3. Dark Serpentine Prominence Filaments (Suspended Cool Plasma)
+      const filaments = [
+        { points: [[660, 290], [690, 310], [730, 305], [765, 330], [800, 320]], w: 4.5, a: 0.72 },
+        { points: [[240, 140], [270, 155], [310, 150], [340, 175]], w: 3.8, a: 0.68 },
+        { points: [[450, 290], [490, 315], [535, 305]], w: 3.2, a: 0.62 }
+      ];
+
+      filaments.forEach(f => {
+        ctx.strokeStyle = `rgba(90, 16, 2, ${f.a})`;
+        ctx.lineWidth = f.w;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(f.points[0][0], f.points[0][1]);
+        for (let i = 1; i < f.points.length; i++) {
+          const prev = f.points[i - 1];
+          const curr = f.points[i];
+          const mx = (prev[0] + curr[0]) / 2;
+          const my = (prev[1] + curr[1]) / 2;
+          ctx.quadraticCurveTo(prev[0], prev[1], mx, my);
+        }
+        ctx.stroke();
+      });
+
+      // 4. Realistic Sunspots (Dark Umbra with Magnetic Penumbra)
       const sunspots = [
-        { cx: 320, cy: 220, rx: 14, ry: 9, angle: 0.15 },
-        { cx: 345, cy: 228, rx: 8, ry: 6, angle: -0.1 },
-        { cx: 680, cy: 290, rx: 18, ry: 11, angle: -0.2 },
-        { cx: 710, cy: 298, rx: 10, ry: 7, angle: 0.1 },
-        { cx: 735, cy: 292, rx: 6, ry: 5, angle: 0 }
+        { cx: 725, cy: 265, rx: 11, ry: 7, angle: 0.2 },
+        { cx: 748, cy: 272, rx: 7, ry: 5, angle: -0.1 },
+        { cx: 295, cy: 175, rx: 13, ry: 8, angle: -0.25 },
+        { cx: 318, cy: 182, rx: 8, ry: 5, angle: 0.15 },
+        { cx: 505, cy: 280, rx: 9, ry: 6, angle: 0.05 }
       ];
 
       sunspots.forEach(sp => {
-        const penGrad = ctx.createRadialGradient(sp.cx, sp.cy, sp.rx * 0.3, sp.cx, sp.cy, sp.rx);
-        penGrad.addColorStop(0, 'rgba(110, 32, 2, 0.95)');
-        penGrad.addColorStop(0.65, 'rgba(180, 70, 8, 0.75)');
-        penGrad.addColorStop(1, 'rgba(255, 160, 20, 0)');
+        // Penumbra (fibrous magnetic halo)
+        const penGrad = ctx.createRadialGradient(sp.cx, sp.cy, sp.rx * 0.25, sp.cx, sp.cy, sp.rx);
+        penGrad.addColorStop(0, 'rgba(95, 22, 2, 0.95)');
+        penGrad.addColorStop(0.65, 'rgba(165, 55, 5, 0.75)');
+        penGrad.addColorStop(1, 'rgba(255, 140, 15, 0)');
         ctx.fillStyle = penGrad;
         ctx.beginPath();
         ctx.ellipse(sp.cx, sp.cy, sp.rx, sp.ry, sp.angle, 0, Math.PI * 2);
         ctx.fill();
 
-        const umbraGrad = ctx.createRadialGradient(sp.cx, sp.cy, 0, sp.cx, sp.cy, sp.rx * 0.45);
-        umbraGrad.addColorStop(0, 'rgba(18, 4, 1, 0.98)');
-        umbraGrad.addColorStop(1, 'rgba(45, 10, 2, 0.92)');
+        // Umbra (dark, intense magnetic core)
+        const umbraGrad = ctx.createRadialGradient(sp.cx, sp.cy, 0, sp.cx, sp.cy, sp.rx * 0.42);
+        umbraGrad.addColorStop(0, 'rgba(14, 2, 0, 0.98)');
+        umbraGrad.addColorStop(1, 'rgba(38, 7, 1, 0.92)');
         ctx.fillStyle = umbraGrad;
         ctx.beginPath();
-        ctx.ellipse(sp.cx, sp.cy, sp.rx * 0.48, sp.ry * 0.48, sp.angle, 0, Math.PI * 2);
+        ctx.ellipse(sp.cx, sp.cy, sp.rx * 0.45, sp.ry * 0.45, sp.angle, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(255, 250, 210, 0.45)';
-        ctx.lineWidth = 1.8;
+        // Surrounding bright magnetic faculae ring
+        ctx.strokeStyle = 'rgba(255, 245, 190, 0.45)';
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.ellipse(sp.cx, sp.cy, sp.rx * 1.35, sp.ry * 1.35, sp.angle, 0, Math.PI * 2);
         ctx.stroke();
@@ -4291,9 +4375,114 @@ Contact: ${email}`);
         let mat;
 
         if (spec.id === 'sun') {
-          // Luminous incandescent star surface
-          mat = new THREE.MeshBasicMaterial({
-            map: spec.texture
+          // Realistic Animated Solar Plasma Shader with Eddington Limb Darkening
+          mat = new THREE.ShaderMaterial({
+            uniforms: {
+              uTime: { value: 0 },
+              uBaseTexture: { value: spec.texture },
+              uGranularity: { value: 48.0 },
+              uFlowSpeed: { value: 0.032 }
+            },
+            vertexShader: `
+              varying vec2 vUv;
+              varying vec3 vNormal;
+              varying vec3 vPosition;
+              varying vec3 vViewDir;
+
+              void main() {
+                vUv = uv;
+                vNormal = normalize(normalMatrix * normal);
+                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                vPosition = position;
+                vViewDir = normalize(-mvPosition.xyz);
+                gl_Position = projectionMatrix * mvPosition;
+              }
+            `,
+            fragmentShader: `
+              uniform float uTime;
+              uniform sampler2D uBaseTexture;
+              uniform float uGranularity;
+              uniform float uFlowSpeed;
+
+              varying vec2 vUv;
+              varying vec3 vNormal;
+              varying vec3 vPosition;
+              varying vec3 vViewDir;
+
+              vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+              vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+              vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
+
+              float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy));
+                vec2 x0 = v - i + dot(i, C.xx);
+                vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+                m = m * m;
+                m = m * m;
+                vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                vec3 h = abs(x) - 0.5;
+                vec3 ox = floor(x + 0.5);
+                vec3 a0 = x - ox;
+                m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+                vec3 g;
+                g.x = a0.x * x0.x + h.x * x0.y;
+                g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                return 130.0 * dot(m, g);
+              }
+
+              void main() {
+                float t1 = uTime * uFlowSpeed;
+                float t2 = uTime * (uFlowSpeed * 0.72);
+
+                // 1. Organic domain-warped UV turbulence across solar surface
+                vec2 warpUV1 = vec2(
+                  snoise(vUv * 14.0 + vec2(t1, -t1 * 0.55)),
+                  snoise(vUv * 14.0 + vec2(-t1 * 0.65, t1 * 0.8))
+                ) * 0.0032;
+
+                vec2 warpUV2 = vec2(
+                  snoise(vUv * 28.0 + vec2(-t2 * 0.75, t2 * 0.45)),
+                  snoise(vUv * 28.0 + vec2(t2 * 0.5, -t2 * 0.65))
+                ) * 0.0018;
+
+                vec2 sampleUV = vUv + warpUV1 + warpUV2;
+                vec4 texColor = texture2D(uBaseTexture, sampleUV);
+
+                // 2. Convection granulation boiling shimmer
+                float granNoise = snoise(vUv * uGranularity + vec2(t1 * 0.35, t2 * 0.25));
+                float granFactor = granNoise * 0.055;
+
+                // 3. Astrophysical Eddington Solar Limb Darkening
+                float mu = clamp(dot(vNormal, vViewDir), 0.0, 1.0);
+                float limb = pow(mu, 0.58);
+
+                // Realistic astronomical color grading inspired by reference photo
+                vec3 fieryLimb = vec3(0.72, 0.14, 0.015);  // Deep carmine red edge
+                vec3 modulatedColor = texColor.rgb + granFactor;
+
+                // Modulate edges into deep fiery red-orange without obscuring surface details
+                modulatedColor = mix(modulatedColor * fieryLimb * 1.38, modulatedColor, limb);
+
+                // 4. Subtle flare breathing in active regions
+                float lum = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
+                if (lum > 0.76) {
+                  float pulse = 1.0 + sin(uTime * 1.1 + vPosition.x * 0.06) * 0.07;
+                  modulatedColor += (texColor.rgb - 0.76) * 0.55 * pulse;
+                }
+
+                // 5. Chromospheric fringe right at the limb
+                float rim = pow(1.0 - mu, 4.2) * 0.32;
+                modulatedColor += fieryLimb * rim;
+
+                gl_FragColor = vec4(modulatedColor, 1.0);
+              }
+            `
           });
         } else {
           // Realistic PBR Standard Material with bump relief & tuned micro-roughness
@@ -4317,14 +4506,14 @@ Contact: ${email}`);
         group.add(sphereMesh);
         this.interactiveMeshes.push(sphereMesh);
 
-        // 2. Extra Atmospheric Glow for Sun
+        // 2. Extra Atmospheric Glow for Sun (Natural, subtle, non-washing corona)
         if (spec.id === 'sun') {
-          // Layer 1: Inner incandescent chromospheric flare halo
-          const corona1Geo = new THREE.SphereGeometry(spec.radius * 1.08, 48, 48);
+          // Layer 1: Chromosphere & Solar Limb Prominences
+          const corona1Geo = new THREE.SphereGeometry(spec.radius * 1.025, 48, 48);
           const corona1Mat = new THREE.MeshBasicMaterial({
-            color: 0xffbe3b,
+            color: 0xff3e02,
             transparent: true,
-            opacity: 0.38,
+            opacity: 0.32,
             blending: THREE.AdditiveBlending,
             side: THREE.BackSide
           });
@@ -4332,12 +4521,12 @@ Contact: ${email}`);
           group.add(corona1Mesh);
           group.userData.corona1Mesh = corona1Mesh;
 
-          // Layer 2: Mid coronal prominence envelope
-          const corona2Geo = new THREE.SphereGeometry(spec.radius * 1.24, 48, 48);
+          // Layer 2: Mid Coronal Prominence Envelope
+          const corona2Geo = new THREE.SphereGeometry(spec.radius * 1.14, 48, 48);
           const corona2Mat = new THREE.MeshBasicMaterial({
-            color: 0xff6b18,
+            color: 0xe64200,
             transparent: true,
-            opacity: 0.22,
+            opacity: 0.18,
             blending: THREE.AdditiveBlending,
             side: THREE.BackSide
           });
@@ -4345,12 +4534,12 @@ Contact: ${email}`);
           group.add(corona2Mesh);
           group.userData.corona2Mesh = corona2Mesh;
 
-          // Layer 3: Outer diffuse cosmic solar wind radiance
-          const haloGeo = new THREE.SphereGeometry(spec.radius * 1.56, 32, 32);
+          // Layer 3: Outer Diffuse Warm Solar Wind Radiance
+          const haloGeo = new THREE.SphereGeometry(spec.radius * 1.35, 32, 32);
           const haloMat = new THREE.MeshBasicMaterial({
-            color: 0xff3b05,
+            color: 0xb32800,
             transparent: true,
-            opacity: 0.12,
+            opacity: 0.08,
             blending: THREE.AdditiveBlending,
             side: THREE.BackSide
           });
@@ -6129,20 +6318,23 @@ Contact: ${email}`);
           // Planetary position stays fixed along parallel row
           item.group.position.set(spec.x, 0, 0);
 
-          // Realistic Sun corona pulsing & counter-rotation
+          // Realistic Sun plasma animation & natural corona pulsing
           if (spec.id === 'sun') {
+            if (item.sphereMesh.material && item.sphereMesh.material.uniforms && item.sphereMesh.material.uniforms.uTime) {
+              item.sphereMesh.material.uniforms.uTime.value = time * simMultiplier;
+            }
             if (item.group.userData.corona1Mesh) {
-              item.group.userData.corona1Mesh.rotation.y = -time * 0.00035;
-              const pulse1 = 1.0 + Math.sin(time * 0.0018) * 0.016;
+              item.group.userData.corona1Mesh.rotation.y = -time * 0.00032;
+              const pulse1 = 1.0 + Math.sin(time * 0.0016) * 0.010;
               item.group.userData.corona1Mesh.scale.set(pulse1, pulse1, pulse1);
             }
             if (item.group.userData.corona2Mesh) {
-              item.group.userData.corona2Mesh.rotation.y = time * 0.00022;
-              const pulse2 = 1.0 + Math.cos(time * 0.0014) * 0.022;
+              item.group.userData.corona2Mesh.rotation.y = time * 0.00020;
+              const pulse2 = 1.0 + Math.cos(time * 0.0012) * 0.014;
               item.group.userData.corona2Mesh.scale.set(pulse2, pulse2, pulse2);
             }
             if (item.group.userData.haloMesh) {
-              const pulse3 = 1.0 + Math.sin(time * 0.001) * 0.028;
+              const pulse3 = 1.0 + Math.sin(time * 0.0008) * 0.018;
               item.group.userData.haloMesh.scale.set(pulse3, pulse3, pulse3);
             }
           }
