@@ -208,6 +208,9 @@
       if (window.solarAppInstance.audio) {
         window.solarAppInstance.audio.playWarpSound();
       }
+      if (typeof window.solarAppInstance.closeNovaModal === 'function') {
+        window.solarAppInstance.closeNovaModal(false);
+      }
       if (typeof window.solarAppInstance.closeMarsModal === 'function') {
         window.solarAppInstance.closeMarsModal(false);
       }

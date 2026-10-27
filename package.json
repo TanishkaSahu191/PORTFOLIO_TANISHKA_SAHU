@@ -1,0 +1,20 @@
+{
+  "name": "lumora-portfolio",
+  "version": "1.0.0",
+  "description": "Cosmic 3D Portfolio of Tanishka Sahu with Gemini-powered Ask Nova AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "threejs",
+    "gemini",
+    "ai",
+    "webgl",
+    "space"
+  ],
+  "author": "Tanishka Sahu",
+  "license": "ISC"
+}

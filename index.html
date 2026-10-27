@@ -241,6 +241,131 @@
       </nav>
     </section>
 
+    <!-- Sol // Ask Nova AI Cosmic Assistant Modal -->
+    <div id="novaAiModal" class="nova-ai-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ask Nova AI Cosmic Intelligence Assistant">
+      <div class="nova-ambient-glow"></div>
+      
+      <!-- Top Action Bar -->
+      <div class="nova-modal-topbar">
+        <div class="nova-tag-group">
+          <span class="nova-badge-dot"></span>
+          <span class="nova-badge-text">SOL // EPICENTER • COSMIC INTELLIGENCE</span>
+        </div>
+        
+        <div class="nova-topbar-actions">
+          <div id="novaStatusBadge" class="nova-status-pill online">
+            <span class="status-indicator-dot"></span>
+            <span class="status-indicator-label">Nova Active</span>
+          </div>
+          <button id="btnNovaReset" class="nova-pill-btn" type="button" title="Reset conversation" aria-label="Reset conversation">
+            <svg class="nova-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            <span>Reset</span>
+          </button>
+          <button id="btnNovaClose" class="nova-close-btn" type="button" aria-label="Close Nova AI Window">✕</button>
+        </div>
+      </div>
+
+      <!-- Main Chat Body -->
+      <div class="nova-chat-container">
+        <!-- Scrollable Messages Area -->
+        <div id="novaChatMessages" class="nova-chat-messages" role="log" aria-live="polite">
+          
+          <!-- Welcome Hero Card -->
+          <div class="nova-welcome-card" id="novaWelcomeCard">
+            <div class="nova-welcome-header">
+              <div class="nova-avatar-ring">
+                <div class="nova-avatar-core"></div>
+              </div>
+              <div class="nova-welcome-meta">
+                <h2 class="nova-welcome-title">Ask Nova AI</h2>
+                <p class="nova-welcome-subtitle">Cosmic intelligence engine grounded in Tanishka Sahu's verified portfolio, skills, and projects.</p>
+              </div>
+            </div>
+
+            <!-- Setup Notice (conditionally shown if API key missing) -->
+            <div id="novaSetupNotice" class="nova-setup-notice" style="display: none;">
+              <div class="setup-notice-header">
+                <span class="setup-notice-tag">SETUP REQUIRED</span>
+                <h4>Gemini API Key Needed</h4>
+              </div>
+              <p>To enable live conversations, add your Google Gemini API key to the project environment:</p>
+              <div class="setup-code-box">
+                <code>GEMINI_API_KEY=your_gemini_api_key</code>
+              </div>
+              <p class="setup-hint">Obtain a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio ↗</a>, paste it into <code>.env</code> in the project directory, and restart the server.</p>
+            </div>
+
+            <!-- Suggested Exploration Chips -->
+            <div class="nova-suggestions-wrapper">
+              <span class="suggestions-label">SUGGESTED INQUIRIES</span>
+              <div class="nova-suggestions-grid">
+                <button class="nova-chip-btn" type="button" data-prompt="Explore my projects">
+                  <span class="chip-text">Explore my projects</span>
+                  <span class="chip-arrow">→</span>
+                </button>
+                <button class="nova-chip-btn" type="button" data-prompt="What are my technical skills?">
+                  <span class="chip-text">What are my technical skills?</span>
+                  <span class="chip-arrow">→</span>
+                </button>
+                <button class="nova-chip-btn" type="button" data-prompt="Tell me about Tanishka's background and education">
+                  <span class="chip-text">Tell me about her background</span>
+                  <span class="chip-arrow">→</span>
+                </button>
+                <button class="nova-chip-btn" type="button" data-prompt="What achievements and certifications does she have?">
+                  <span class="chip-text">Achievements and awards</span>
+                  <span class="chip-arrow">→</span>
+                </button>
+                <button class="nova-chip-btn" type="button" data-prompt="How can I contact Tanishka or view her profiles?">
+                  <span class="chip-text">Contact &amp; social profiles</span>
+                  <span class="chip-arrow">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic conversation bubbles will appear here -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="novaTypingIndicator" class="nova-typing-indicator" style="display: none;" aria-hidden="true">
+          <div class="typing-dot-cluster">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+          <span class="typing-text">Nova is formulating response...</span>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form id="novaChatForm" class="nova-chat-input-bar">
+          <div class="input-shell">
+            <input 
+              id="novaChatInput" 
+              type="text" 
+              class="nova-input-field" 
+              placeholder="Ask anything about Tanishka's work, projects, or background..." 
+              autocomplete="off" 
+              maxlength="1000"
+              aria-label="Ask Nova AI a question"
+            />
+            <button id="novaSendBtn" class="nova-send-button" type="submit" aria-label="Send Message" title="Send (Enter)">
+              <svg class="send-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="input-meta-bar">
+            <span class="meta-left">Grounded in verified portfolio archives</span>
+            <span class="meta-right">Google Gemini API</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Mercury Hanging ID Card Pop-out Modal with 3D Video Background -->
     <div id="mercuryIdModal" class="mercury-id-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mercury Explorer ID Card">
       <!-- 3D Video Background -->
@@ -2517,6 +2642,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="./solar-system.js?v=20261027_solar_surface"></script>
+    <script src="./nova-chat.js"></script>
     <script src="./script.js?v=20261026_mission_guide" defer></script>
   </body>
 </html>

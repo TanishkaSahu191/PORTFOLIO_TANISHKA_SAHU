@@ -5457,6 +5457,51 @@ Contact: ${email}`);
       }
     }
 
+    openNovaModal() {
+      const pModal = document.getElementById('planetModal');
+      if (pModal && pModal.open) {
+        pModal.classList.remove('is-open');
+        pModal.close();
+      }
+      this.closeMercuryIdCard(false);
+      this.closeVenusAboutModal(false);
+      this.closeEarthBookModal(false);
+      this.closeMarsModal(false);
+      this.closeJupiterRoadmapModal(false);
+      this.closeUranusResumeModal(false);
+      this.closeSaturnCertificatesModal(false);
+      this.closeNeptuneLinksModal(false);
+      this.setMarsSceneBackground(false);
+
+      if (typeof window.openNovaAI === 'function') {
+        window.openNovaAI();
+      } else {
+        const modal = document.getElementById('novaAiModal');
+        if (modal) {
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+        }
+      }
+      this.audio.playSelectBlip();
+    }
+
+    closeNovaModal(shouldResetCamera = true) {
+      if (typeof window.closeNovaAI === 'function') {
+        window.closeNovaAI(shouldResetCamera);
+      } else {
+        const modal = document.getElementById('novaAiModal');
+        if (modal) {
+          modal.classList.remove('is-open');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+        if (shouldResetCamera) {
+          this.selectedBodyId = null;
+          document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
+          this.resetToDiagramView();
+        }
+      }
+    }
+
     openMercuryIdCard() {
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
@@ -5464,6 +5509,7 @@ Contact: ${email}`);
         pModal.classList.remove('is-open');
         pModal.close();
       }
+      this.closeNovaModal(false);
       this.closeVenusAboutModal(false);
       this.closeEarthBookModal(false);
       this.closeMarsModal(false);
@@ -6123,6 +6169,12 @@ Contact: ${email}`);
         b.classList.toggle('is-active', b.getAttribute('data-planet') === planetId);
       });
 
+      // Special Ask Nova AI Cosmic Assistant for Sun!
+      if (planetId === 'sun') {
+        this.openNovaModal();
+        return;
+      }
+
       // Special Hanging ID Card for Mercury!
       if (planetId === 'mercury') {
         this.openMercuryIdCard();
@@ -6290,6 +6342,7 @@ Contact: ${email}`);
         modal.classList.remove('is-open');
         if (modal.open) modal.close();
       }
+      this.closeNovaModal(false);
       this.closeMercuryIdCard(false);
       this.closeVenusAboutModal(false);
       this.closeEarthBookModal(false);
@@ -6304,6 +6357,7 @@ Contact: ${email}`);
     }
 
     resetToDiagramView() {
+      this.closeNovaModal(false);
       this.closeMercuryIdCard(false);
       this.closeVenusAboutModal(false);
       this.closeEarthBookModal(false);
