@@ -2437,6 +2437,11 @@
       this.camTargetLook = new THREE.Vector3(0, 1.8, 0);
       this.isLerpingCamera = false;
 
+      // Theme state: defaults to Light Mode as requested
+      this.isLightMode = true;
+      this.screenTexture = null;
+      this.floatingCardTexture = null;
+
       this.initScene();
       this.buildLaptop();
       this.bindInteractions();
@@ -2518,11 +2523,11 @@
       this.laptopRoot.rotation.y = this.currentRotY;
       this.scene.add(this.laptopRoot);
 
-      // Sleek Anodized Aluminum / Titanium Material (Space Gray)
+      // Sleek Anodized Aluminum / Titanium Material (Space Black / Deep Matte Obsidian)
       const chassisMaterial = new THREE.MeshStandardMaterial({
-        color: 0x181c25,
-        metalness: 0.85,
-        roughness: 0.28
+        color: 0x090b10,
+        metalness: 0.90,
+        roughness: 0.20
       });
 
       // =====================================================================
@@ -2536,7 +2541,7 @@
 
       // Bottom rubber feet
       const footGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.08, 16);
-      const footMat = new THREE.MeshBasicMaterial({ color: 0x080a0f });
+      const footMat = new THREE.MeshBasicMaterial({ color: 0x020305 });
       [
         [-5.8, -4.0], [5.8, -4.0],
         [-5.8, 4.0], [5.8, 4.0]
@@ -2548,7 +2553,7 @@
 
       // Front thumb opening notch
       const notchGeo = new THREE.BoxGeometry(2.4, 0.16, 0.2);
-      const notchMat = new THREE.MeshStandardMaterial({ color: 0x0b0d12, roughness: 0.4 });
+      const notchMat = new THREE.MeshStandardMaterial({ color: 0x040508, roughness: 0.5 });
       const notch = new THREE.Mesh(notchGeo, notchMat);
       notch.position.set(0, 0.38, 4.65);
       this.laptopRoot.add(notch);
@@ -2559,9 +2564,9 @@
       const trackpadGeo = new THREE.PlaneGeometry(4.8, 3.2);
       trackpadGeo.rotateX(-Math.PI / 2);
       const trackpadMat = new THREE.MeshStandardMaterial({
-        color: 0x242a38,
-        metalness: 0.5,
-        roughness: 0.22
+        color: 0x0d1017,
+        metalness: 0.65,
+        roughness: 0.25
       });
       this.trackpadMesh = new THREE.Mesh(trackpadGeo, trackpadMat);
       this.trackpadMesh.position.set(0, 0.445, 2.3);
@@ -2576,9 +2581,9 @@
         new THREE.Vector3(-2.4, 0.446, 0.7)
       ]);
       const trackpadBorderMat = new THREE.LineBasicMaterial({
-        color: 0x3d475c,
+        color: 0x1e2636,
         transparent: true,
-        opacity: 0.65
+        opacity: 0.5
       });
       const trackpadBorder = new THREE.Line(trackpadBorderGeo, trackpadBorderMat);
       this.laptopRoot.add(trackpadBorder);
@@ -2589,9 +2594,9 @@
       // Recessed dark well
       const wellGeo = new THREE.BoxGeometry(11.6, 0.04, 4.8);
       const wellMat = new THREE.MeshStandardMaterial({
-        color: 0x0a0d13,
-        roughness: 0.6,
-        metalness: 0.4
+        color: 0x040508,
+        roughness: 0.7,
+        metalness: 0.3
       });
       const wellMesh = new THREE.Mesh(wellGeo, wellMat);
       wellMesh.position.set(0, 0.435, -1.8);
@@ -2628,9 +2633,9 @@
       const hingeGeo = new THREE.CylinderGeometry(0.24, 0.24, 11.4, 32);
       hingeGeo.rotateZ(Math.PI / 2);
       const hingeMat = new THREE.MeshStandardMaterial({
-        color: 0x0f131a,
-        metalness: 0.9,
-        roughness: 0.2
+        color: 0x06080c,
+        metalness: 0.95,
+        roughness: 0.16
       });
       const hingeMesh = new THREE.Mesh(hingeGeo, hingeMat);
       hingeMesh.position.set(0, 0, 0);
@@ -2654,10 +2659,10 @@
       logoMesh.position.set(0, 0.325, 4.7);
       this.lidGroup.add(logoMesh);
 
-      // Inner screen bezel
+      // Inner screen bezel (Onyx black border framing screen)
       const bezelGeo = new THREE.PlaneGeometry(12.8, 8.8);
       bezelGeo.rotateX(Math.PI / 2); // Faces downwards (-Y) inside lid
-      const bezelMat = new THREE.MeshBasicMaterial({ color: 0x05070a });
+      const bezelMat = new THREE.MeshBasicMaterial({ color: 0x020305 });
       const bezelMesh = new THREE.Mesh(bezelGeo, bezelMat);
       bezelMesh.position.set(0, -0.005, 4.7);
       this.lidGroup.add(bezelMesh);
@@ -2673,17 +2678,16 @@
       // =====================================================================
       // 5. HIGH-RESOLUTION DISPLAY (Developer IDE & Resume Screen)
       // =====================================================================
-      const screenTexture = this.createScreenTexture();
+      this.screenTexture = this.createScreenTexture(this.isLightMode);
       const screenGeo = new THREE.PlaneGeometry(12.2, 7.8);
       screenGeo.rotateX(Math.PI / 2); // Faces downwards towards keyboard when closed, faces viewer when open!
 
       const screenMat = new THREE.MeshStandardMaterial({
-        map: screenTexture,
-        emissiveMap: screenTexture,
+        map: this.screenTexture,
+        roughness: 0.24,
+        metalness: 0.0,
         emissive: 0xffffff,
-        emissiveIntensity: 0.95,
-        roughness: 0.18,
-        metalness: 0.1
+        emissiveIntensity: 0.10
       });
 
       this.screenMesh = new THREE.Mesh(screenGeo, screenMat);
@@ -2697,14 +2701,11 @@
       const cardGeo = new THREE.PlaneGeometry(8.6, 5.6);
       cardGeo.rotateX(Math.PI / 2);
 
-      const cardTexture = this.createFloatingCardTexture();
+      this.floatingCardTexture = this.createFloatingCardTexture(this.isLightMode);
       const cardMat = new THREE.MeshStandardMaterial({
-        map: cardTexture,
-        emissiveMap: cardTexture,
-        emissive: 0xffffff,
-        emissiveIntensity: 0.9,
+        map: this.floatingCardTexture,
         transparent: true,
-        opacity: 0.96,
+        opacity: 0.98,
         roughness: 0.2,
         side: THREE.DoubleSide
       });
@@ -2723,12 +2724,12 @@
       canvas.height = 920;
       const ctx = canvas.getContext('2d');
 
-      // 1. Dark matte chassis background
-      ctx.fillStyle = '#10141d';
+      // 1. Dark matte chassis background (Deep Space Black)
+      ctx.fillStyle = '#080b10';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 2. Speaker grilles on left and right flanks
-      ctx.fillStyle = '#080a0f';
+      ctx.fillStyle = '#040508';
       const drawSpeakerGrille = (startX, endX) => {
         for (let x = startX; x < endX; x += 10) {
           for (let y = 80; y < 840; y += 10) {
@@ -2748,7 +2749,7 @@
       const wellH = canvas.height - 60;
       const r = 24;
 
-      ctx.fillStyle = '#080a10';
+      ctx.fillStyle = '#040508';
       ctx.beginPath();
       ctx.roundRect(wellX, wellY, wellW, wellH, r);
       ctx.fill();
@@ -2832,14 +2833,14 @@
           ctx.fillStyle = glowGrad;
           ctx.fillRect(curX - 8, keyY - 8, keyW + 16, rowH + 16);
 
-          // 2. KEYCAP BODY
-          ctx.fillStyle = '#181b24';
+          // 2. KEYCAP BODY (Deep Obsidian Matte)
+          ctx.fillStyle = '#10131b';
           ctx.beginPath();
           ctx.roundRect(curX, keyY, keyW, rowH, kRadius);
           ctx.fill();
 
           // Subtle top bevel highlight
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
           ctx.lineWidth = 1.2;
           ctx.stroke();
 
@@ -2882,7 +2883,7 @@
         poolGrad.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
         poolGrad.addColorStop(0.35, 'rgba(215, 248, 255, 0.55)');
         poolGrad.addColorStop(0.7, 'rgba(139, 229, 229, 0.22)');
-        poolGrad.addColorStop(1, 'rgba(16, 20, 29, 0)');
+        poolGrad.addColorStop(1, 'rgba(8, 11, 16, 0)');
         ctx.fillStyle = poolGrad;
         ctx.fillRect(spacebarCenterX - 260, spacebarBottomY, 520, 110);
       }
@@ -2893,195 +2894,452 @@
       return texture;
     }
 
-    createScreenTexture() {
+    createScreenTexture(isLightMode = this.isLightMode) {
       const canvas = document.createElement('canvas');
       canvas.width = 2048;
       canvas.height = 1310;
       const ctx = canvas.getContext('2d');
 
-      // 1. Dark IDE Canvas Background
-      ctx.fillStyle = '#080c14';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (isLightMode) {
+        // ==========================================
+        // LIGHT MODE THEME (Crisp Retina Developer IDE)
+        // ==========================================
+        
+        // 1. Editor Canvas Background (Pure crisp white)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. macOS Top Window Bar
-      ctx.fillStyle = '#0f1422';
-      ctx.fillRect(0, 0, canvas.width, 68);
+        // 2. macOS Top Window Bar (Clean metallic aluminum silver)
+        ctx.fillStyle = '#f1f5f9';
+        ctx.fillRect(0, 0, canvas.width, 68);
 
-      // Window Control Pills
-      const pills = ['#ff5f56', '#ffbd2e', '#27c93f'];
-      pills.forEach((c, idx) => {
+        // Bottom border for window bar
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.arc(42 + idx * 28, 34, 9, 0, Math.PI * 2);
-        ctx.fillStyle = c;
-        ctx.fill();
-      });
+        ctx.moveTo(0, 68);
+        ctx.lineTo(canvas.width, 68);
+        ctx.stroke();
 
-      // Window Title & Breadcrumb
-      ctx.font = '600 20px "Space Grotesk", sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.textAlign = 'center';
-      ctx.fillText('lumora // workspace // TanishkaSahu_Resume.ts — Orbit Studio', canvas.width / 2, 42);
-
-      // 3. Left Sidebar (Project Files & Dossier)
-      const sidebarW = 420;
-      ctx.fillStyle = '#0b0f19';
-      ctx.fillRect(0, 68, sidebarW, canvas.height - 68);
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(sidebarW, 68);
-      ctx.lineTo(sidebarW, canvas.height);
-      ctx.stroke();
-
-      // Sidebar Header: Candidate Avatar & Status
-      ctx.fillStyle = '#141d2e';
-      ctx.beginPath();
-      ctx.roundRect(28, 96, sidebarW - 56, 120, 16);
-      ctx.fill();
-
-      // Avatar Circle "TS"
-      const avatarGrad = ctx.createLinearGradient(48, 116, 108, 176);
-      avatarGrad.addColorStop(0, '#8be5e5');
-      avatarGrad.addColorStop(1, '#0ea5e9');
-      ctx.fillStyle = avatarGrad;
-      ctx.beginPath();
-      ctx.arc(80, 156, 32, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#030712';
-      ctx.font = '800 24px "Space Grotesk", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('TS', 80, 164);
-
-      // Candidate Text
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 20px "Space Grotesk", sans-serif';
-      ctx.fillText('Tanishka Sahu', 126, 142);
-
-      ctx.fillStyle = '#8be5e5';
-      ctx.font = '600 14px "Space Grotesk", sans-serif';
-      ctx.fillText('VIT Bhopal • CGPA 9.52', 126, 166);
-
-      ctx.fillStyle = '#86efac';
-      ctx.font = '700 12px "Space Grotesk", sans-serif';
-      ctx.fillText('● OPEN TO ROLES', 126, 188);
-
-      // File Tree Items in Sidebar
-      const treeItems = [
-        { icon: '•', label: 'Tanishka_Sahu_Resume.pdf', active: true },
-        { icon: 'TS', label: 'ParkShark_3D_Twin.tsx' },
-        { icon: 'JS', label: 'PiggyPocket_Budget.js' },
-        { icon: 'GL', label: 'Lumora_Space_Engine.webgl' },
-        { icon: 'ED', label: 'VIT_Academic_9.52.ts' },
-        { icon: '@', label: 'Contact_7717603726.json' }
-      ];
-
-      treeItems.forEach((item, idx) => {
-        const itemY = 246 + idx * 56;
-        if (item.active) {
-          ctx.fillStyle = 'rgba(139, 229, 229, 0.16)';
+        // macOS Window Control Traffic Light Buttons
+        const pills = [
+          { col: '#ff5f56', border: '#e0443e' },
+          { col: '#ffbd2e', border: '#dea123' },
+          { col: '#27c93f', border: '#1aab29' }
+        ];
+        pills.forEach((p, idx) => {
           ctx.beginPath();
-          ctx.roundRect(28, itemY - 6, sidebarW - 56, 44, 10);
+          ctx.arc(42 + idx * 28, 34, 9, 0, Math.PI * 2);
+          ctx.fillStyle = p.col;
           ctx.fill();
-          ctx.fillStyle = '#8be5e5';
-        } else {
-          ctx.fillStyle = '#94a3b8';
-        }
-        ctx.font = '600 17px "Space Grotesk", sans-serif';
-        ctx.fillText(`${item.icon}   ${item.label}`, 42, itemY + 22);
-      });
-
-      // 4. Main Code Editor Area
-      const editorX = sidebarW + 40;
-      let editorY = 120;
-
-      // Tab Bar
-      ctx.fillStyle = '#101626';
-      ctx.beginPath();
-      ctx.roundRect(editorX, 82, 360, 44, 8);
-      ctx.fill();
-      ctx.fillStyle = '#8be5e5';
-      ctx.font = '600 17px "Space Grotesk", sans-serif';
-      ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 24, 110);
-
-      editorY = 160;
-
-      // Syntax-highlighted resume code matching verified resume PDF
-      const codeLines = [
-        { num: '01', tokens: [{ text: 'import ', col: '#ff7b72' }, { text: '{ React, ThreeFiber, Firebase, NodeEngine } ', col: '#79c0ff' }, { text: 'from ', col: '#ff7b72' }, { text: "'@tanishka/portfolio';", col: '#a5d6ff' }] },
-        { num: '02', tokens: [{ text: '// Official Profile: Tanishka Sahu (VIT Bhopal University)', col: '#8b949e' }] },
-        { num: '03', tokens: [{ text: 'export const ', col: '#ff7b72' }, { text: 'TanishkaSahuResume ', col: '#d2a8ff' }, { text: '= {', col: '#c9d1d9' }] },
-        { num: '04', tokens: [{ text: '  name: ', col: '#79c0ff' }, { text: '"Tanishka Sahu"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '05', tokens: [{ text: '  headline: ', col: '#79c0ff' }, { text: '"Second Year Passionate Learner in Computer Science"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '06', tokens: [{ text: '  institution: ', col: '#79c0ff' }, { text: '"Vellore Institute of Technology, Bhopal"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '07', tokens: [{ text: '  degree: ', col: '#79c0ff' }, { text: '"B.Tech Computer Science & Engineering (2025–2029)"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '08', tokens: [{ text: '  cgpa: ', col: '#79c0ff' }, { text: '9.52', col: '#7ee787' }, { text: ', // Academic Standing', col: '#8b949e' }] },
-        { num: '09', tokens: [{ text: '  coreStack: [', col: '#79c0ff' }] },
-        { num: '10', tokens: [{ text: '    "React", "Three.js", "TypeScript", "Python", "C++", "Node.js",', col: '#a5d6ff' }] },
-        { num: '11', tokens: [{ text: '    "Firebase", "Tailwind CSS", "DSA", "SQL", "Cloud Functions"', col: '#a5d6ff' }] },
-        { num: '12', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
-        { num: '13', tokens: [{ text: '  contact: ', col: '#79c0ff' }, { text: '{ email: "tanishkasahuwork191@gmail.com", phone: "+91 7717603726" }', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '14', tokens: [{ text: '  verifiedProjects: [', col: '#79c0ff' }] },
-        { num: '15', tokens: [{ text: '    "ParkShark: Smart Bicycle Parking & 3D Campus Explorer",', col: '#7ee787' }] },
-        { num: '16', tokens: [{ text: '    "PiggyPocket: Student Budget Management with 59 Tests",', col: '#7ee787' }] },
-        { num: '17', tokens: [{ text: '    "Lumora: Cosmic 3D Space Portfolio & AI Assistant"', col: '#7ee787' }] },
-        { num: '18', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
-        { num: '19', tokens: [{ text: '  resumePdf: ', col: '#79c0ff' }, { text: '"tanishka-sahu-resume.pdf"', col: '#79c0ff' }, { text: ' // Verified Official PDF', col: '#8b949e' }] },
-        { num: '20', tokens: [{ text: '};', col: '#c9d1d9' }] }
-      ];
-
-      codeLines.forEach(line => {
-        editorY += 36;
-        // Line number
-        ctx.fillStyle = '#4b5563';
-        ctx.font = '500 17px "Space Grotesk", monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText(line.num, editorX + 24, editorY);
-
-        // Code tokens
-        let tokenX = editorX + 50;
-        ctx.textAlign = 'left';
-        ctx.font = '500 19px "Space Grotesk", monospace';
-        line.tokens.forEach(tok => {
-          ctx.fillStyle = tok.col;
-          ctx.fillText(tok.text, tokenX, editorY);
-          tokenX += ctx.measureText(tok.text).width;
+          ctx.strokeStyle = p.border;
+          ctx.lineWidth = 1;
+          ctx.stroke();
         });
-      });
 
-      // 5. High-Impact Floating Interactive Banner at Bottom of Screen
-      const bannerX = editorX + 40;
-      const bannerY = canvas.height - 180;
-      const bannerW = canvas.width - editorX - 120;
-      const bannerH = 110;
+        // Window Title & Breadcrumb
+        ctx.font = '600 20px "Space Grotesk", sans-serif';
+        ctx.fillStyle = '#334155';
+        ctx.textAlign = 'center';
+        ctx.fillText('lumora // workspace // TanishkaSahu_Resume.ts — Orbit Studio (Light Mode)', canvas.width / 2, 42);
 
-      // Glowing banner border & gradient
-      ctx.fillStyle = 'rgba(14, 25, 42, 0.88)';
-      ctx.beginPath();
-      ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 20);
-      ctx.fill();
+        // Right side badge on title bar: "☀️ LIGHT MODE ACTIVE"
+        ctx.fillStyle = '#e2e8f0';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width - 240, 16, 210, 36, 18);
+        ctx.fill();
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '700 13px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('☀️ LIGHT MODE ACTIVE', canvas.width - 135, 39);
 
-      ctx.strokeStyle = '#8be5e5';
-      ctx.lineWidth = 3;
-      ctx.stroke();
+        // 3. Left Sidebar (Explorer & Candidate Profile)
+        const sidebarW = 420;
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 68, sidebarW, canvas.height - 68);
 
-      // Banner Icon
-      ctx.font = '40px "Space Grotesk", sans-serif';
-      ctx.fillStyle = '#8be5e5';
-      ctx.textAlign = 'center';
-      ctx.fillText('✦', bannerX + 55, bannerY + 68);
+        // Sidebar divider border
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(sidebarW, 68);
+        ctx.lineTo(sidebarW, canvas.height);
+        ctx.stroke();
 
-      // Banner Text
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('CLICK ANYWHERE ON SCREEN TO POP OUT FULL RESUME', bannerX + 105, bannerY + 50);
+        // Candidate Avatar & Status Card
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(28, 96, sidebarW - 56, 122, 16);
+        ctx.fill();
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
 
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '500 17px "Space Grotesk", sans-serif';
-      ctx.fillText('Smooth 3D kinematic card elevation • Tanishka Sahu (VIT CSE)', bannerX + 105, bannerY + 84);
+        // Avatar Circle "TS"
+        const avatarGrad = ctx.createLinearGradient(48, 116, 108, 176);
+        avatarGrad.addColorStop(0, '#0284c7');
+        avatarGrad.addColorStop(1, '#0ea5e9');
+        ctx.fillStyle = avatarGrad;
+        ctx.beginPath();
+        ctx.arc(80, 157, 32, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 24px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('TS', 80, 165);
+
+        // Candidate Text
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '700 20px "Space Grotesk", sans-serif';
+        ctx.fillText('Tanishka Sahu', 126, 142);
+
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '600 14px "Space Grotesk", sans-serif';
+        ctx.fillText('VIT Bhopal • CGPA 9.52', 126, 166);
+
+        // Green pill for status
+        ctx.fillStyle = '#dcfce7';
+        ctx.beginPath();
+        ctx.roundRect(126, 176, 134, 24, 6);
+        ctx.fill();
+        ctx.fillStyle = '#15803d';
+        ctx.font = '700 12px "Space Grotesk", sans-serif';
+        ctx.fillText('● OPEN TO ROLES', 134, 192);
+
+        // File Tree Items in Sidebar
+        const treeItems = [
+          { icon: '📄', label: 'Tanishka_Sahu_Resume.pdf', active: true },
+          { icon: '⚡', label: 'ParkShark_3D_Twin.tsx' },
+          { icon: '💰', label: 'PiggyPocket_Budget.js' },
+          { icon: '🌌', label: 'Lumora_Space_Engine.webgl' },
+          { icon: '🎓', label: 'VIT_Academic_9.52.ts' },
+          { icon: '📬', label: 'Contact_7717603726.json' }
+        ];
+
+        treeItems.forEach((item, idx) => {
+          const itemY = 250 + idx * 56;
+          if (item.active) {
+            ctx.fillStyle = '#e0f2fe';
+            ctx.beginPath();
+            ctx.roundRect(28, itemY - 6, sidebarW - 56, 44, 10);
+            ctx.fill();
+            ctx.strokeStyle = '#bae6fd';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.fillStyle = '#0369a1';
+            ctx.font = '700 17px "Space Grotesk", sans-serif';
+          } else {
+            ctx.fillStyle = '#475569';
+            ctx.font = '600 17px "Space Grotesk", sans-serif';
+          }
+          ctx.fillText(`${item.icon}   ${item.label}`, 42, itemY + 22);
+        });
+
+        // 4. Main Code Editor Area (Light Theme)
+        const editorX = sidebarW + 40;
+        
+        // Tab Bar
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(sidebarW, 68, canvas.width - sidebarW, 56);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(sidebarW, 124);
+        ctx.lineTo(canvas.width, 124);
+        ctx.stroke();
+
+        // Active Tab
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(editorX - 10, 78, 360, 46, 8);
+        ctx.fill();
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        // Blue top indicator
+        ctx.fillStyle = '#0284c7';
+        ctx.fillRect(editorX - 10, 78, 360, 3);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '700 16.5px "Space Grotesk", sans-serif';
+        ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 16, 107);
+
+        let editorY = 160;
+
+        // Syntax-highlighted resume code (GitHub Light Theme syntax)
+        const codeLines = [
+          { num: '01', tokens: [{ text: 'import ', col: '#cf222e' }, { text: '{ React, ThreeFiber, Firebase, NodeEngine } ', col: '#0550ae' }, { text: 'from ', col: '#cf222e' }, { text: "'@tanishka/portfolio';", col: '#0a3069' }] },
+          { num: '02', tokens: [{ text: '// Official Profile: Tanishka Sahu (VIT Bhopal University)', col: '#6e7781' }] },
+          { num: '03', tokens: [{ text: 'export const ', col: '#cf222e' }, { text: 'TanishkaSahuResume ', col: '#8250df' }, { text: '= {', col: '#24292f' }] },
+          { num: '04', tokens: [{ text: '  name: ', col: '#0550ae' }, { text: '"Tanishka Sahu"', col: '#0a3069' }, { text: ',', col: '#24292f' }] },
+          { num: '05', tokens: [{ text: '  headline: ', col: '#0550ae' }, { text: '"Second Year Passionate Learner in Computer Science"', col: '#0a3069' }, { text: ',', col: '#24292f' }] },
+          { num: '06', tokens: [{ text: '  institution: ', col: '#0550ae' }, { text: '"Vellore Institute of Technology, Bhopal"', col: '#0a3069' }, { text: ',', col: '#24292f' }] },
+          { num: '07', tokens: [{ text: '  degree: ', col: '#0550ae' }, { text: '"B.Tech Computer Science & Engineering (2025–2029)"', col: '#0a3069' }, { text: ',', col: '#24292f' }] },
+          { num: '08', tokens: [{ text: '  cgpa: ', col: '#0550ae' }, { text: '9.52', col: '#116329' }, { text: ', // Academic Standing', col: '#6e7781' }] },
+          { num: '09', tokens: [{ text: '  coreStack: [', col: '#0550ae' }] },
+          { num: '10', tokens: [{ text: '    "React", "Three.js", "TypeScript", "Python", "C++", "Node.js",', col: '#0a3069' }] },
+          { num: '11', tokens: [{ text: '    "Firebase", "Tailwind CSS", "DSA", "SQL", "Cloud Functions"', col: '#0a3069' }] },
+          { num: '12', tokens: [{ text: '  ],', col: '#24292f' }] },
+          { num: '13', tokens: [{ text: '  contact: ', col: '#0550ae' }, { text: '{ email: "tanishkasahuwork191@gmail.com", phone: "+91 7717603726" }', col: '#0a3069' }, { text: ',', col: '#24292f' }] },
+          { num: '14', tokens: [{ text: '  verifiedProjects: [', col: '#0550ae' }] },
+          { num: '15', tokens: [{ text: '    "ParkShark: Smart Bicycle Parking & 3D Campus Explorer",', col: '#116329' }] },
+          { num: '16', tokens: [{ text: '    "PiggyPocket: Student Budget Management with 59 Tests",', col: '#116329' }] },
+          { num: '17', tokens: [{ text: '    "Lumora: Cosmic 3D Space Portfolio & AI Assistant"', col: '#116329' }] },
+          { num: '18', tokens: [{ text: '  ],', col: '#24292f' }] },
+          { num: '19', tokens: [{ text: '  resumePdf: ', col: '#0550ae' }, { text: '"tanishka-sahu-resume.pdf"', col: '#0550ae' }, { text: ' // Verified Official PDF', col: '#6e7781' }] },
+          { num: '20', tokens: [{ text: '};', col: '#24292f' }] }
+        ];
+
+        codeLines.forEach(line => {
+          editorY += 36;
+          // Line number
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '500 17px "Space Grotesk", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(line.num, editorX + 24, editorY);
+
+          // Code tokens
+          let tokenX = editorX + 50;
+          ctx.textAlign = 'left';
+          ctx.font = '600 19px "Space Grotesk", monospace';
+          line.tokens.forEach(tok => {
+            ctx.fillStyle = tok.col;
+            ctx.fillText(tok.text, tokenX, editorY);
+            tokenX += ctx.measureText(tok.text).width;
+          });
+        });
+
+        // 5. High-Impact Floating Interactive Banner at Bottom of Screen (Light mode)
+        const bannerX = editorX + 40;
+        const bannerY = canvas.height - 180;
+        const bannerW = canvas.width - editorX - 120;
+        const bannerH = 110;
+
+        ctx.fillStyle = 'rgba(240, 249, 255, 0.98)';
+        ctx.beginPath();
+        ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 20);
+        ctx.fill();
+
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Banner Icon
+        ctx.font = '38px "Space Grotesk", sans-serif';
+        ctx.fillStyle = '#0284c7';
+        ctx.textAlign = 'center';
+        ctx.fillText('✦', bannerX + 55, bannerY + 68);
+
+        // Banner Text
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '800 24px "Space Grotesk", sans-serif';
+        ctx.fillText('CLICK ANYWHERE ON SCREEN TO POP OUT FULL RESUME', bannerX + 105, bannerY + 50);
+
+        ctx.fillStyle = '#475569';
+        ctx.font = '600 17px "Space Grotesk", sans-serif';
+        ctx.fillText('Smooth 3D kinematic card elevation • Tanishka Sahu (VIT CSE)', bannerX + 105, bannerY + 84);
+
+      } else {
+        // ==========================================
+        // DARK MODE THEME (Dark Space Canvas)
+        // ==========================================
+
+        // 1. Dark IDE Canvas Background
+        ctx.fillStyle = '#080c14';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. macOS Top Window Bar
+        ctx.fillStyle = '#0f1422';
+        ctx.fillRect(0, 0, canvas.width, 68);
+
+        // Window Control Pills
+        const pills = ['#ff5f56', '#ffbd2e', '#27c93f'];
+        pills.forEach((c, idx) => {
+          ctx.beginPath();
+          ctx.arc(42 + idx * 28, 34, 9, 0, Math.PI * 2);
+          ctx.fillStyle = c;
+          ctx.fill();
+        });
+
+        // Window Title & Breadcrumb
+        ctx.font = '600 20px "Space Grotesk", sans-serif';
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = 'center';
+        ctx.fillText('lumora // workspace // TanishkaSahu_Resume.ts — Orbit Studio (Dark Mode)', canvas.width / 2, 42);
+
+        // Right side badge on title bar: "🌙 DARK MODE ACTIVE"
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width - 240, 16, 210, 36, 18);
+        ctx.fill();
+        ctx.fillStyle = '#8be5e5';
+        ctx.font = '700 13px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🌙 DARK MODE ACTIVE', canvas.width - 135, 39);
+
+        // 3. Left Sidebar (Project Files & Dossier)
+        const sidebarW = 420;
+        ctx.fillStyle = '#0b0f19';
+        ctx.fillRect(0, 68, sidebarW, canvas.height - 68);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(sidebarW, 68);
+        ctx.lineTo(sidebarW, canvas.height);
+        ctx.stroke();
+
+        // Sidebar Header: Candidate Avatar & Status
+        ctx.fillStyle = '#141d2e';
+        ctx.beginPath();
+        ctx.roundRect(28, 96, sidebarW - 56, 120, 16);
+        ctx.fill();
+
+        // Avatar Circle "TS"
+        const avatarGrad = ctx.createLinearGradient(48, 116, 108, 176);
+        avatarGrad.addColorStop(0, '#8be5e5');
+        avatarGrad.addColorStop(1, '#0ea5e9');
+        ctx.fillStyle = avatarGrad;
+        ctx.beginPath();
+        ctx.arc(80, 156, 32, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#030712';
+        ctx.font = '800 24px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('TS', 80, 164);
+
+        // Candidate Text
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 20px "Space Grotesk", sans-serif';
+        ctx.fillText('Tanishka Sahu', 126, 142);
+
+        ctx.fillStyle = '#8be5e5';
+        ctx.font = '600 14px "Space Grotesk", sans-serif';
+        ctx.fillText('VIT Bhopal • CGPA 9.52', 126, 166);
+
+        ctx.fillStyle = '#86efac';
+        ctx.font = '700 12px "Space Grotesk", sans-serif';
+        ctx.fillText('● OPEN TO ROLES', 126, 188);
+
+        // File Tree Items in Sidebar
+        const treeItems = [
+          { icon: '•', label: 'Tanishka_Sahu_Resume.pdf', active: true },
+          { icon: 'TS', label: 'ParkShark_3D_Twin.tsx' },
+          { icon: 'JS', label: 'PiggyPocket_Budget.js' },
+          { icon: 'GL', label: 'Lumora_Space_Engine.webgl' },
+          { icon: 'ED', label: 'VIT_Academic_9.52.ts' },
+          { icon: '@', label: 'Contact_7717603726.json' }
+        ];
+
+        treeItems.forEach((item, idx) => {
+          const itemY = 246 + idx * 56;
+          if (item.active) {
+            ctx.fillStyle = 'rgba(139, 229, 229, 0.16)';
+            ctx.beginPath();
+            ctx.roundRect(28, itemY - 6, sidebarW - 56, 44, 10);
+            ctx.fill();
+            ctx.fillStyle = '#8be5e5';
+          } else {
+            ctx.fillStyle = '#94a3b8';
+          }
+          ctx.font = '600 17px "Space Grotesk", sans-serif';
+          ctx.fillText(`${item.icon}   ${item.label}`, 42, itemY + 22);
+        });
+
+        // 4. Main Code Editor Area
+        const editorX = sidebarW + 40;
+        let editorY = 120;
+
+        // Tab Bar
+        ctx.fillStyle = '#101626';
+        ctx.beginPath();
+        ctx.roundRect(editorX, 82, 360, 44, 8);
+        ctx.fill();
+        ctx.fillStyle = '#8be5e5';
+        ctx.font = '600 17px "Space Grotesk", sans-serif';
+        ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 24, 110);
+
+        editorY = 160;
+
+        // Syntax-highlighted resume code matching verified resume PDF
+        const codeLines = [
+          { num: '01', tokens: [{ text: 'import ', col: '#ff7b72' }, { text: '{ React, ThreeFiber, Firebase, NodeEngine } ', col: '#79c0ff' }, { text: 'from ', col: '#ff7b72' }, { text: "'@tanishka/portfolio';", col: '#a5d6ff' }] },
+          { num: '02', tokens: [{ text: '// Official Profile: Tanishka Sahu (VIT Bhopal University)', col: '#8b949e' }] },
+          { num: '03', tokens: [{ text: 'export const ', col: '#ff7b72' }, { text: 'TanishkaSahuResume ', col: '#d2a8ff' }, { text: '= {', col: '#c9d1d9' }] },
+          { num: '04', tokens: [{ text: '  name: ', col: '#79c0ff' }, { text: '"Tanishka Sahu"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+          { num: '05', tokens: [{ text: '  headline: ', col: '#79c0ff' }, { text: '"Second Year Passionate Learner in Computer Science"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+          { num: '06', tokens: [{ text: '  institution: ', col: '#79c0ff' }, { text: '"Vellore Institute of Technology, Bhopal"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+          { num: '07', tokens: [{ text: '  degree: ', col: '#79c0ff' }, { text: '"B.Tech Computer Science & Engineering (2025–2029)"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+          { num: '08', tokens: [{ text: '  cgpa: ', col: '#79c0ff' }, { text: '9.52', col: '#7ee787' }, { text: ', // Academic Standing', col: '#8b949e' }] },
+          { num: '09', tokens: [{ text: '  coreStack: [', col: '#79c0ff' }] },
+          { num: '10', tokens: [{ text: '    "React", "Three.js", "TypeScript", "Python", "C++", "Node.js",', col: '#a5d6ff' }] },
+          { num: '11', tokens: [{ text: '    "Firebase", "Tailwind CSS", "DSA", "SQL", "Cloud Functions"', col: '#a5d6ff' }] },
+          { num: '12', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
+          { num: '13', tokens: [{ text: '  contact: ', col: '#79c0ff' }, { text: '{ email: "tanishkasahuwork191@gmail.com", phone: "+91 7717603726" }', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+          { num: '14', tokens: [{ text: '  verifiedProjects: [', col: '#79c0ff' }] },
+          { num: '15', tokens: [{ text: '    "ParkShark: Smart Bicycle Parking & 3D Campus Explorer",', col: '#7ee787' }] },
+          { num: '16', tokens: [{ text: '    "PiggyPocket: Student Budget Management with 59 Tests",', col: '#7ee787' }] },
+          { num: '17', tokens: [{ text: '    "Lumora: Cosmic 3D Space Portfolio & AI Assistant"', col: '#7ee787' }] },
+          { num: '18', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
+          { num: '19', tokens: [{ text: '  resumePdf: ', col: '#79c0ff' }, { text: '"tanishka-sahu-resume.pdf"', col: '#79c0ff' }, { text: ' // Verified Official PDF', col: '#8b949e' }] },
+          { num: '20', tokens: [{ text: '};', col: '#c9d1d9' }] }
+        ];
+
+        codeLines.forEach(line => {
+          editorY += 36;
+          // Line number
+          ctx.fillStyle = '#4b5563';
+          ctx.font = '500 17px "Space Grotesk", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(line.num, editorX + 24, editorY);
+
+          // Code tokens
+          let tokenX = editorX + 50;
+          ctx.textAlign = 'left';
+          ctx.font = '500 19px "Space Grotesk", monospace';
+          line.tokens.forEach(tok => {
+            ctx.fillStyle = tok.col;
+            ctx.fillText(tok.text, tokenX, editorY);
+            tokenX += ctx.measureText(tok.text).width;
+          });
+        });
+
+        // 5. High-Impact Floating Interactive Banner at Bottom of Screen
+        const bannerX = editorX + 40;
+        const bannerY = canvas.height - 180;
+        const bannerW = canvas.width - editorX - 120;
+        const bannerH = 110;
+
+        ctx.fillStyle = 'rgba(14, 25, 42, 0.88)';
+        ctx.beginPath();
+        ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 20);
+        ctx.fill();
+
+        ctx.strokeStyle = '#8be5e5';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Banner Icon
+        ctx.font = '40px "Space Grotesk", sans-serif';
+        ctx.fillStyle = '#8be5e5';
+        ctx.textAlign = 'center';
+        ctx.fillText('✦', bannerX + 55, bannerY + 68);
+
+        // Banner Text
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('CLICK ANYWHERE ON SCREEN TO POP OUT FULL RESUME', bannerX + 105, bannerY + 50);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '500 17px "Space Grotesk", sans-serif';
+        ctx.fillText('Smooth 3D kinematic card elevation • Tanishka Sahu (VIT CSE)', bannerX + 105, bannerY + 84);
+      }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.generateMipmaps = true;
@@ -3089,114 +3347,240 @@
       return texture;
     }
 
-    createFloatingCardTexture() {
+    createFloatingCardTexture(isLightMode = this.isLightMode) {
       const canvas = document.createElement('canvas');
       canvas.width = 1400;
       canvas.height = 920;
       const ctx = canvas.getContext('2d');
 
-      // Glassmorphic Card Background
-      ctx.fillStyle = 'rgba(10, 18, 32, 0.94)';
-      ctx.beginPath();
-      ctx.roundRect(20, 20, canvas.width - 40, canvas.height - 40, 36);
-      ctx.fill();
-
-      // Glowing Cyan Border
-      ctx.strokeStyle = 'rgba(139, 229, 229, 0.85)';
-      ctx.lineWidth = 4;
-      ctx.stroke();
-
-      // Avatar
-      const grad = ctx.createLinearGradient(70, 70, 170, 170);
-      grad.addColorStop(0, '#8be5e5');
-      grad.addColorStop(1, '#0ea5e9');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.roundRect(70, 70, 100, 100, 24);
-      ctx.fill();
-
-      ctx.fillStyle = '#04101e';
-      ctx.font = '800 48px "Space Grotesk", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('TS', 120, 138);
-
-      // Name & Title
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '800 44px "Space Grotesk", sans-serif';
-      ctx.fillText('Tanishka Sahu', 200, 115);
-
-      ctx.fillStyle = '#8be5e5';
-      ctx.font = '600 22px "Space Grotesk", sans-serif';
-      ctx.fillText('Second Year Passate Learner in Computer Science', 200, 155);
-
-      // Section Dividers & Content
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 20px "Space Grotesk", sans-serif';
-      ctx.fillText('Vellore Institute of Technology, Bhopal • B.Tech CSE (2025–2029) • CGPA 9.52', 70, 225);
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(70, 250);
-      ctx.lineTo(canvas.width - 70, 250);
-      ctx.stroke();
-
-      // Highlights
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('TECHNICAL SKILLS & CORE STACK', 70, 295);
-
-      const skills = ['React', 'Three.js / R3F', 'TypeScript', 'Node.js', 'Firebase', 'Python', 'C++', 'DSA', 'SQL'];
-      let skX = 70;
-      skills.forEach(s => {
-        ctx.fillStyle = 'rgba(139, 229, 229, 0.15)';
-        const w = ctx.measureText(s).width + 30;
+      if (isLightMode) {
+        // Light Frosted Card Background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
         ctx.beginPath();
-        ctx.roundRect(skX, 315, w, 44, 12);
+        ctx.roundRect(20, 20, canvas.width - 40, canvas.height - 40, 36);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(139, 229, 229, 0.45)';
+
+        // Vibrant Blue Border
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Avatar
+        const grad = ctx.createLinearGradient(70, 70, 170, 170);
+        grad.addColorStop(0, '#0284c7');
+        grad.addColorStop(1, '#0ea5e9');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(70, 70, 100, 100, 24);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 48px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('TS', 120, 138);
+
+        // Name & Title
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '800 44px "Space Grotesk", sans-serif';
+        ctx.fillText('Tanishka Sahu', 200, 115);
+
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '600 22px "Space Grotesk", sans-serif';
+        ctx.fillText('Second Year Passionate Learner in Computer Science', 200, 155);
+
+        // Section Dividers & Content
+        ctx.fillStyle = '#475569';
+        ctx.font = '600 20px "Space Grotesk", sans-serif';
+        ctx.fillText('Vellore Institute of Technology, Bhopal • B.Tech CSE (2025–2029) • CGPA 9.52', 70, 225);
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(70, 250);
+        ctx.lineTo(canvas.width - 70, 250);
+        ctx.stroke();
+
+        // Highlights
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('TECHNICAL SKILLS & CORE STACK', 70, 295);
+
+        const skills = ['React', 'Three.js / R3F', 'TypeScript', 'Node.js', 'Firebase', 'Python', 'C++', 'DSA', 'SQL'];
+        let skillX = 70;
+        skills.forEach(s => {
+          ctx.font = '600 18px "Space Grotesk", sans-serif';
+          const w = ctx.measureText(s).width + 32;
+          ctx.fillStyle = '#f0f9ff';
+          ctx.beginPath();
+          ctx.roundRect(skillX, 320, w, 44, 12);
+          ctx.fill();
+          ctx.strokeStyle = '#bae6fd';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#0369a1';
+          ctx.fillText(s, skillX + 16, 348);
+          skillX += w + 14;
+        });
+
+        // Projects Preview
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('VERIFIED PROJECTS IN PRODUCTION', 70, 420);
+
+        const projects = [
+          { title: 'ParkShark: Smart Bicycle Parking & 3D Campus Twin', stack: 'React • Three.js • Firebase • 150 Slots • 84 Tests' },
+          { title: 'PiggyPocket: Student Budget Planner & Analytics', stack: 'React • 59 Jest Tests • CI/CD Automation' },
+          { title: 'Lumora: Cosmic 3D Space Portfolio & Orbital Engine', stack: 'Three.js • WebGL • Gemini AI Assistant' }
+        ];
+
+        projects.forEach((p, idx) => {
+          const py = 460 + idx * 80;
+          ctx.fillStyle = '#f8fafc';
+          ctx.beginPath();
+          ctx.roundRect(70, py, canvas.width - 140, 68, 16);
+          ctx.fill();
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#0f172a';
+          ctx.font = '700 20px "Space Grotesk", sans-serif';
+          ctx.fillText(p.title, 96, py + 32);
+
+          ctx.fillStyle = '#64748b';
+          ctx.font = '500 16px "Space Grotesk", sans-serif';
+          ctx.fillText(p.stack, 96, py + 56);
+        });
+
+        // Footer
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '700 18px "Space Grotesk", sans-serif';
+        ctx.fillText('📄 Tanishka_Sahu_Resume.pdf • Verified Official Academic Credential', 70, 740);
+
+        ctx.fillStyle = '#0284c7';
+        ctx.font = '600 17px "Space Grotesk", sans-serif';
+        ctx.fillText('✉️ tanishkasahuwork191@gmail.com  •  📞 +91 7717603726  •  🐙 github.com/TanishkaSahu191', 70, 775);
+
+        // Return prompt
+        ctx.fillStyle = '#f0fdf4';
+        ctx.beginPath();
+        ctx.roundRect(70, 815, canvas.width - 140, 56, 14);
+        ctx.fill();
+        ctx.strokeStyle = '#86efac';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#15803d';
+        ctx.font = '700 18px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('✔ CLICK RESUME OR USE "DOCK TO SCREEN" TO RETURN TO 3D LAPTOP', canvas.width / 2, 850);
+
+      } else {
+        // Glassmorphic Card Background (Dark)
+        ctx.fillStyle = 'rgba(10, 18, 32, 0.94)';
+        ctx.beginPath();
+        ctx.roundRect(20, 20, canvas.width - 40, canvas.height - 40, 36);
+        ctx.fill();
+
+        // Glowing Cyan Border
+        ctx.strokeStyle = 'rgba(139, 229, 229, 0.85)';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Avatar
+        const grad = ctx.createLinearGradient(70, 70, 170, 170);
+        grad.addColorStop(0, '#8be5e5');
+        grad.addColorStop(1, '#0ea5e9');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(70, 70, 100, 100, 24);
+        ctx.fill();
+
+        ctx.fillStyle = '#04101e';
+        ctx.font = '800 48px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('TS', 120, 138);
+
+        // Name & Title
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 44px "Space Grotesk", sans-serif';
+        ctx.fillText('Tanishka Sahu', 200, 115);
+
+        ctx.fillStyle = '#8be5e5';
+        ctx.font = '600 22px "Space Grotesk", sans-serif';
+        ctx.fillText('Second Year Passate Learner in Computer Science', 200, 155);
+
+        // Section Dividers & Content
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 20px "Space Grotesk", sans-serif';
+        ctx.fillText('Vellore Institute of Technology, Bhopal • B.Tech CSE (2025–2029) • CGPA 9.52', 70, 225);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(70, 250);
+        ctx.lineTo(canvas.width - 70, 250);
+        ctx.stroke();
+
+        // Highlights
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('TECHNICAL SKILLS & CORE STACK', 70, 295);
+
+        const skills = ['React', 'Three.js / R3F', 'TypeScript', 'Node.js', 'Firebase', 'Python', 'C++', 'DSA', 'SQL'];
+        let skX = 70;
+        skills.forEach(s => {
+          ctx.fillStyle = 'rgba(139, 229, 229, 0.15)';
+          const w = ctx.measureText(s).width + 30;
+          ctx.beginPath();
+          ctx.roundRect(skX, 315, w, 44, 12);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(139, 229, 229, 0.45)';
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '600 17px "Space Grotesk", sans-serif';
+          ctx.fillText(s, skX + 15, 343);
+          skX += w + 14;
+        });
+
+        // Projects
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('VERIFIED PROJECTS (from official resume)', 70, 415);
+
+        const projs = [
+          'ParkShark: Smart Bicycle Parking & 3D Campus Explorer (Three.js, React, Firebase, 150 Slots, 84 Tests)',
+          'Personal Portfolio: Responsive space-themed portfolio with interactive 3D solar system',
+          'PiggyPocket: Student Budget Management with Adaptive Daily Limit (Google OAuth, 59 Passing Tests)'
+        ];
+        projs.forEach((p, idx) => {
+          ctx.fillStyle = '#8be5e5';
+          ctx.fillText('✦', 70, 460 + idx * 46);
+          ctx.fillStyle = '#e2e8f0';
+          ctx.font = '500 20px "Space Grotesk", sans-serif';
+          ctx.fillText(p, 105, 460 + idx * 46);
+        });
+
+        // Contact Banner at bottom
+        ctx.fillStyle = 'rgba(14, 25, 42, 0.9)';
+        ctx.beginPath();
+        ctx.roundRect(70, 630, canvas.width - 140, 190, 24);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '600 17px "Space Grotesk", sans-serif';
-        ctx.fillText(s, skX + 15, 343);
-        skX += w + 14;
-      });
+        ctx.font = '700 24px "Space Grotesk", sans-serif';
+        ctx.fillText('Chandigarh, INDIA • Phone: +91 7717603726 • tanishkasahuwork191@gmail.com', 110, 690);
 
-      // Projects
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('VERIFIED PROJECTS (from official resume)', 70, 415);
-
-      const projs = [
-        'ParkShark: Smart Bicycle Parking & 3D Campus Explorer (Three.js, React, Firebase, 150 Slots, 84 Tests)',
-        'Personal Portfolio: Responsive space-themed portfolio with interactive 3D solar system',
-        'PiggyPocket: Student Budget Management with Adaptive Daily Limit (Google OAuth, 59 Passing Tests)'
-      ];
-      projs.forEach((p, idx) => {
-        ctx.fillStyle = '#8be5e5';
-        ctx.fillText('✦', 70, 460 + idx * 46);
-        ctx.fillStyle = '#e2e8f0';
-        ctx.font = '500 20px "Space Grotesk", sans-serif';
-        ctx.fillText(p, 105, 460 + idx * 46);
-      });
-
-      // Contact Banner at bottom
-      ctx.fillStyle = 'rgba(14, 25, 42, 0.9)';
-      ctx.beginPath();
-      ctx.roundRect(70, 630, canvas.width - 140, 190, 24);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
-      ctx.stroke();
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('Chandigarh, INDIA • Phone: +91 7717603726 • tanishkasahuwork191@gmail.com', 110, 690);
-
-      ctx.fillStyle = '#86efac';
-      ctx.font = '600 20px "Space Grotesk", sans-serif';
-      ctx.fillText('● Official Resume PDF: tanishka-sahu-resume.pdf • GitHub: @TanishkaSahu191', 110, 740);
+        ctx.fillStyle = '#86efac';
+        ctx.font = '600 20px "Space Grotesk", sans-serif';
+        ctx.fillText('● Official Resume PDF: tanishka-sahu-resume.pdf • GitHub: @TanishkaSahu191', 110, 740);
+      }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.generateMipmaps = true;
@@ -3330,6 +3714,55 @@
           overlayEl.style.setProperty('--tilt-x', '0px');
           overlayEl.style.setProperty('--tilt-y', '0px');
         });
+      }
+
+      // 7. Light / Dark Mode Screen Theme Toggles
+      const btnThemeDock = document.getElementById('btnUranusToggleTheme');
+      if (btnThemeDock) {
+        btnThemeDock.addEventListener('click', () => {
+          this.toggleTheme();
+        });
+      }
+
+      const btnThemeTop = document.getElementById('btnUranusToggleThemeTop');
+      if (btnThemeTop) {
+        btnThemeTop.addEventListener('click', () => {
+          this.toggleTheme();
+        });
+      }
+    }
+
+    toggleTheme() {
+      this.isLightMode = !this.isLightMode;
+      if (this.screenMesh && this.screenMesh.material) {
+        if (this.screenTexture) this.screenTexture.dispose();
+        this.screenTexture = this.createScreenTexture(this.isLightMode);
+        this.screenMesh.material.map = this.screenTexture;
+        this.screenMesh.material.emissiveIntensity = this.isLightMode ? 0.10 : 0.45;
+        this.screenMesh.material.needsUpdate = true;
+      }
+      if (this.floatingCardMesh && this.floatingCardMesh.material) {
+        if (this.floatingCardTexture) this.floatingCardTexture.dispose();
+        this.floatingCardTexture = this.createFloatingCardTexture(this.isLightMode);
+        this.floatingCardMesh.material.map = this.floatingCardTexture;
+        this.floatingCardMesh.material.needsUpdate = true;
+      }
+      const btnDock = document.getElementById('btnUranusToggleTheme');
+      if (btnDock) {
+        const textSpan = btnDock.querySelector('#uranusThemeBtnText');
+        if (textSpan) textSpan.textContent = this.isLightMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+        btnDock.classList.toggle('is-active', this.isLightMode);
+      }
+      const btnTop = document.getElementById('btnUranusToggleThemeTop');
+      if (btnTop) {
+        const textSpan = btnTop.querySelector('.theme-top-text');
+        const iconSpan = btnTop.querySelector('.btn-icon');
+        if (textSpan) textSpan.textContent = this.isLightMode ? 'Light Mode' : 'Dark Mode';
+        if (iconSpan) iconSpan.textContent = this.isLightMode ? '☀️' : '🌙';
+        btnTop.classList.toggle('is-light-active', this.isLightMode);
+      }
+      if (this.audio && typeof this.audio.playSelectBlip === 'function') {
+        try { this.audio.playSelectBlip(); } catch (err) {}
       }
     }
 
