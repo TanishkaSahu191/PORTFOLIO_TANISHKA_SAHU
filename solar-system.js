@@ -6107,12 +6107,12 @@ Contact: ${email}`);
         leaf.classList.remove('is-flipping-forward', 'is-flipping-backward');
         if (idx < this.currentBookLeaf) {
           leaf.classList.add('is-flipped');
-          leaf.style.zIndex = idx + 1;
+          leaf.style.zIndex = (idx + 1) * 10;
           leaf.style.setProperty('--z-stack', `${(idx + 1) * 2}px`);
-          leaf.style.transform = `rotateY(-180deg) translateZ(${(idx + 1) * 2}px)`;
+          leaf.style.transform = `rotateY(-180deg) translateZ(-${(idx + 1) * 2}px)`;
         } else {
           leaf.classList.remove('is-flipped');
-          leaf.style.zIndex = N - idx;
+          leaf.style.zIndex = (N - idx) * 10;
           leaf.style.setProperty('--z-stack', `${(N - idx) * 2}px`);
           leaf.style.transform = `rotateY(0deg) translateZ(${(N - idx) * 2}px)`;
         }
@@ -6126,11 +6126,11 @@ Contact: ${email}`);
 
       // Page Labels
       const labels = [
-        'Cover: Terra Archives',
+        'Cover: Software Projects & Engineering Archives',
         'Spread 1: ParkShark & PiggyPocket (P. 02–03)',
         'Spread 2: HackFest & Swasthyam (P. 04–05)',
         'Spread 3: Lumora & Back Cover (P. 06)',
-        'Epilogue: End of Volume I'
+        'Epilogue: End of Project Volume'
       ];
       const pageLabelEl = document.getElementById('bookPageLabel');
       if (pageLabelEl) {
