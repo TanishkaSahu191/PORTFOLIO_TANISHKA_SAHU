@@ -6680,7 +6680,7 @@
 
       // Page Labels
       const labels = [
-        'Cover: Software Projects & Engineering Archives',
+        'Cover: PROJECTS BOOKLET',
         'Spread 1: ParkShark & PiggyPocket (P. 02–03)',
         'Spread 2: HackFest & Swasthyam (P. 04–05)',
         'Spread 3: Lumora & Back Cover (P. 06)',
