@@ -1745,48 +1745,117 @@
       this.scene.add(rimLight);
     }
 
+    createStarTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.18, 'rgba(235, 245, 255, 0.9)');
+      grad.addColorStop(0.45, 'rgba(160, 205, 255, 0.3)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(canvas);
+    }
+
     buildAtmosphere() {
-      // 1. Stardust particle field drifting around the road
-      const count = 1200;
+      // 1. Realistic Pinpoint Celestial Starfield (replaces crude square blocks)
+      const starCount = 1800;
       const geo = new THREE.BufferGeometry();
-      const pos = new Float32Array(count * 3);
-      const col = new Float32Array(count * 3);
+      const pos = new Float32Array(starCount * 3);
+      const col = new Float32Array(starCount * 3);
 
-      for (let i = 0; i < count; i++) {
-        pos[i * 3 + 0] = (Math.random() - 0.5) * 220;
-        pos[i * 3 + 1] = Math.random() * 80 - 10;
-        pos[i * 3 + 2] = (Math.random() - 0.5) * 240 - 20;
+      const starPalette = [
+        new THREE.Color(0xffffff), // Pure white diamond
+        new THREE.Color(0xdbeafe), // Blue-white
+        new THREE.Color(0xfef3c7), // Warm golden
+        new THREE.Color(0xfde047), // Amber star
+        new THREE.Color(0x93c5fd)  // Deep cosmic azure
+      ];
 
-        const c = new THREE.Color().setHSL(0.58 + Math.random() * 0.15, 0.7, 0.65 + Math.random() * 0.3);
-        col[i * 3 + 0] = c.r;
-        col[i * 3 + 1] = c.g;
-        col[i * 3 + 2] = c.b;
+      for (let i = 0; i < starCount; i++) {
+        // Spherical distribution around scene for deep space realism
+        const radius = 110 + Math.random() * 260;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+
+        pos[i * 3 + 0] = radius * Math.sin(phi) * Math.cos(theta);
+        pos[i * 3 + 1] = Math.max(-10, radius * Math.sin(phi) * Math.sin(theta) + 20);
+        pos[i * 3 + 2] = radius * Math.cos(phi) - 30;
+
+        const c = starPalette[Math.floor(Math.random() * starPalette.length)];
+        const brightness = 0.55 + Math.random() * 0.45;
+        col[i * 3 + 0] = c.r * brightness;
+        col[i * 3 + 1] = c.g * brightness;
+        col[i * 3 + 2] = c.b * brightness;
       }
       geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
       geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
 
+      const starTex = this.createStarTexture();
       const mat = new THREE.PointsMaterial({
-        size: 1.8,
+        size: 1.5,
+        map: starTex,
         vertexColors: true,
         transparent: true,
-        opacity: 0.75,
-        depthWrite: false
+        opacity: 0.88,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        sizeAttenuation: true
       });
       this.stardustPoints = new THREE.Points(geo, mat);
       this.scene.add(this.stardustPoints);
 
-      // 2. Colossal distant Jupiter planet sphere on horizon
-      const jupGeo = new THREE.SphereGeometry(32, 48, 48);
+      // 2. Colossal Photorealistic Jupiter on the Horizon
+      const jupGeo = new THREE.SphereGeometry(34, 64, 64);
+      let jupTexture = null;
+      try {
+        if (typeof ProceduralTextures !== 'undefined' && ProceduralTextures.createJupiterTexture) {
+          jupTexture = ProceduralTextures.createJupiterTexture();
+        }
+      } catch (err) {
+        console.warn('Could not load procedural Jupiter texture:', err);
+      }
+
       const jupMat = new THREE.MeshStandardMaterial({
-        color: 0xd4a373,
-        roughness: 0.75,
-        metalness: 0.1,
-        emissive: 0x6e4518,
-        emissiveIntensity: 0.28
+        map: jupTexture || null,
+        color: jupTexture ? 0xffffff : 0xd4a373,
+        roughness: 0.58,
+        metalness: 0.05,
+        emissive: 0x4a2a12,
+        emissiveIntensity: 0.22
       });
       this.distantJupiter = new THREE.Mesh(jupGeo, jupMat);
-      this.distantJupiter.position.set(0, 14, -180);
+      this.distantJupiter.position.set(0, 16, -180);
+      this.distantJupiter.rotation.z = 0.05;
       this.scene.add(this.distantJupiter);
+
+      // Jupiter Atmospheric Fresnel Glow Rim
+      const haloGeo = new THREE.SphereGeometry(34.8, 48, 48);
+      const haloMat = new THREE.MeshBasicMaterial({
+        color: 0xf59e0b,
+        transparent: true,
+        opacity: 0.22,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide
+      });
+      this.jupiterHalo = new THREE.Mesh(haloGeo, haloMat);
+      this.distantJupiter.add(this.jupiterHalo);
+
+      // Jupiter Gossamer Cosmic Dust Ring
+      const ringGeo = new THREE.RingGeometry(42, 54, 80);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xd97706,
+        transparent: true,
+        opacity: 0.25,
+        side: THREE.DoubleSide
+      });
+      this.jupiterRing = new THREE.Mesh(ringGeo, ringMat);
+      this.jupiterRing.rotation.x = Math.PI * 0.44;
+      this.jupiterRing.rotation.y = Math.PI * 0.06;
+      this.distantJupiter.add(this.jupiterRing);
     }
 
     createRoadTexture() {
@@ -1796,35 +1865,63 @@
       canvas.height = 512;
       const ctx = canvas.getContext('2d');
 
-      // 1. Asphalt dark tarmac base
-      ctx.fillStyle = '#161922';
+      // 1. Asphalt dark tarmac base with realistic tire wear lanes
+      ctx.fillStyle = '#141720';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const laneGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      laneGradient.addColorStop(0, '#10131b');
+      laneGradient.addColorStop(0.15, '#161924');
+      laneGradient.addColorStop(0.28, '#0f1219'); // left tire groove
+      laneGradient.addColorStop(0.5, '#181b26');  // center crown
+      laneGradient.addColorStop(0.72, '#0f1219'); // right tire groove
+      laneGradient.addColorStop(0.85, '#161924');
+      laneGradient.addColorStop(1, '#10131b');
+      ctx.fillStyle = laneGradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 2. Procedural asphalt aggregate noise
       const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imgData.data;
       for (let i = 0; i < data.length; i += 4) {
-        const noise = (Math.random() - 0.5) * 18;
+        const noise = (Math.random() - 0.5) * 16;
         data[i] = Math.min(255, Math.max(0, data[i] + noise));
         data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
         data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
       }
       ctx.putImageData(imgData, 0, 0);
 
-      // 3. Crisp solid white curb edge stripes
-      ctx.fillStyle = '#ffffff';
+      // 3. Crisp solid white curb edge safety lines with subtle glow
+      ctx.fillStyle = '#f8fafc';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = 5;
+      // Left border line
+      ctx.fillRect(44, 0, 20, canvas.height);
+      // Right border line
+      ctx.fillRect(canvas.width - 64, 0, 20, canvas.height);
+
+      // 4. Embedded Cat's Eye Reflectors along the road shoulders
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = '#fbbf24';
+      const reflectorSpacing = 64;
+      for (let y = 16; y < canvas.height; y += reflectorSpacing) {
+        // Left road stud
+        ctx.beginPath();
+        ctx.arc(32, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        // Right road stud
+        ctx.beginPath();
+        ctx.arc(canvas.width - 32, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 5. Crisp dashed center divider line with luminous edge
       ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
       ctx.shadowBlur = 4;
-      // Left border line
-      ctx.fillRect(40, 0, 24, canvas.height);
-      // Right border line
-      ctx.fillRect(canvas.width - 64, 0, 24, canvas.height);
-
-      // 4. Crisp dashed center divider line (repeats vertically)
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#f8fafc';
-      const dashHeight = canvas.height * 0.48;
-      ctx.fillRect(canvas.width * 0.5 - 12, 0, 24, dashHeight);
+      ctx.fillStyle = '#ffffff';
+      const dashHeight = canvas.height * 0.46;
+      ctx.fillRect(canvas.width * 0.5 - 9, 0, 18, dashHeight);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.wrapS = THREE.ClampToEdgeWrapping;
@@ -1934,8 +2031,8 @@
 
       const roadMat = new THREE.MeshStandardMaterial({
         map: this.createRoadTexture(),
-        roughness: 0.85,
-        metalness: 0.12,
+        roughness: 0.52,
+        metalness: 0.22,
         side: THREE.DoubleSide
       });
 
@@ -1946,12 +2043,25 @@
       const leftRailCurve = new THREE.CatmullRomCurve3(leftRailPoints);
       const rightRailCurve = new THREE.CatmullRomCurve3(rightRailPoints);
 
-      const railGeoL = new THREE.TubeGeometry(leftRailCurve, 180, 0.07, 8, false);
-      const railGeoR = new THREE.TubeGeometry(rightRailCurve, 180, 0.07, 8, false);
-      const railMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const railGeoL = new THREE.TubeGeometry(leftRailCurve, 180, 0.08, 8, false);
+      const railGeoR = new THREE.TubeGeometry(rightRailCurve, 180, 0.08, 8, false);
+      const railMatL = new THREE.MeshStandardMaterial({
+        color: 0xdbeafe,
+        emissive: 0x60a5fa,
+        emissiveIntensity: 0.9,
+        roughness: 0.25,
+        metalness: 0.75
+      });
+      const railMatR = new THREE.MeshStandardMaterial({
+        color: 0xdbeafe,
+        emissive: 0x60a5fa,
+        emissiveIntensity: 0.9,
+        roughness: 0.25,
+        metalness: 0.75
+      });
 
-      this.scene.add(new THREE.Mesh(railGeoL, railMat));
-      this.scene.add(new THREE.Mesh(railGeoR, railMat));
+      this.scene.add(new THREE.Mesh(railGeoL, railMatL));
+      this.scene.add(new THREE.Mesh(railGeoR, railMatR));
     }
 
     buildMilestones3D() {
@@ -1964,30 +2074,39 @@
         padGroup.position.copy(roadP);
         padGroup.position.y += 0.04;
 
-        // Base metallic ring
+        // Base metallic ring with bevel
         const baseRing = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.85, 0.85, 0.08, 32),
-          new THREE.MeshStandardMaterial({ color: 0x1e2430, roughness: 0.4, metalness: 0.8 })
+          new THREE.CylinderGeometry(0.9, 1.05, 0.09, 32),
+          new THREE.MeshStandardMaterial({ color: 0x1e2638, roughness: 0.35, metalness: 0.85 })
         );
         padGroup.add(baseRing);
 
+        // Outer illuminated bezel ring
+        const outerBezel = new THREE.Mesh(
+          new THREE.TorusGeometry(0.85, 0.04, 8, 32),
+          new THREE.MeshStandardMaterial({ color: m.colorHex, emissive: m.colorHex, emissiveIntensity: 0.8 })
+        );
+        outerBezel.rotation.x = Math.PI * 0.5;
+        outerBezel.position.y = 0.05;
+        padGroup.add(outerBezel);
+
         // Colored core disk
         const coreDisk = new THREE.Mesh(
-          new THREE.CircleGeometry(0.65, 32),
+          new THREE.CircleGeometry(0.68, 32),
           new THREE.MeshBasicMaterial({ color: m.colorHex, side: THREE.DoubleSide })
         );
         coreDisk.rotation.x = -Math.PI * 0.5;
-        coreDisk.position.y = 0.05;
+        coreDisk.position.y = 0.055;
         padGroup.add(coreDisk);
 
-        // 3 Concentric Animated Radar Ripple Rings
+        // Concentric Animated Radar Ripple Rings
         const ripples = [];
         for (let r = 0; r < 2; r++) {
-          const ringGeo = new THREE.RingGeometry(0.65, 0.85, 32);
+          const ringGeo = new THREE.RingGeometry(0.68, 0.92, 32);
           const ringMat = new THREE.MeshBasicMaterial({
             color: m.colorHex,
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.65,
             side: THREE.DoubleSide
           });
           const rippleMesh = new THREE.Mesh(ringGeo, ringMat);
@@ -1998,6 +2117,20 @@
         }
         this.radarRipples.push(...ripples);
 
+        // Vertical Volumetric Light Column connecting road pad to floating beacon
+        const columnHeight = Math.max(1, floatP.y - roadP.y);
+        const colGeo = new THREE.CylinderGeometry(0.14, 0.28, columnHeight, 16, 1, true);
+        const colMat = new THREE.MeshBasicMaterial({
+          color: m.colorHex,
+          transparent: true,
+          opacity: 0.26,
+          blending: THREE.AdditiveBlending,
+          side: THREE.DoubleSide
+        });
+        const lightColumn = new THREE.Mesh(colGeo, colMat);
+        lightColumn.position.set(0, columnHeight * 0.5, 0);
+        padGroup.add(lightColumn);
+
         this.scene.add(padGroup);
         this.milestoneRoadPads.push(padGroup);
 
@@ -2005,40 +2138,48 @@
         const beaconGroup = new THREE.Group();
         beaconGroup.position.copy(floatP);
 
-        // Rotating faceted crystal
-        const gemGeo = new THREE.OctahedronGeometry(0.85, 0);
+        // Rotating faceted crystal core
+        const gemGeo = new THREE.IcosahedronGeometry(0.82, 0);
         const gemMat = new THREE.MeshStandardMaterial({
           color: m.colorHex,
           emissive: m.colorHex,
-          emissiveIntensity: 0.45,
-          roughness: 0.2,
-          metalness: 0.8
+          emissiveIntensity: 0.6,
+          roughness: 0.15,
+          metalness: 0.85
         });
         const gemMesh = new THREE.Mesh(gemGeo, gemMat);
         beaconGroup.add(gemMesh);
 
-        // Outer spinning orbital ring
+        // Outer spinning orbital gimbal ring
         const orbitRing = new THREE.Mesh(
-          new THREE.TorusGeometry(1.3, 0.04, 8, 32),
-          new THREE.MeshBasicMaterial({ color: m.colorHex, transparent: true, opacity: 0.65 })
+          new THREE.TorusGeometry(1.32, 0.045, 8, 32),
+          new THREE.MeshBasicMaterial({ color: m.colorHex, transparent: true, opacity: 0.75 })
         );
         orbitRing.rotation.x = Math.PI * 0.4;
         beaconGroup.add(orbitRing);
 
+        // Counter-rotating inner gimbal ring
+        const innerRing = new THREE.Mesh(
+          new THREE.TorusGeometry(1.05, 0.035, 8, 24),
+          new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.65 })
+        );
+        innerRing.rotation.y = Math.PI * 0.5;
+        beaconGroup.add(innerRing);
+
         // PointLight casting colored illumination on road
-        const pLight = new THREE.PointLight(m.colorHex, 2.2, 28);
+        const pLight = new THREE.PointLight(m.colorHex, 2.5, 32);
         pLight.position.set(0, 0, 0);
         beaconGroup.add(pLight);
 
         this.scene.add(beaconGroup);
-        this.milestoneBadges.push({ group: beaconGroup, gem: gemMesh, ring: orbitRing });
+        this.milestoneBadges.push({ group: beaconGroup, gem: gemMesh, ring: orbitRing, innerRing });
 
-        // 3. 3D Dashed Connector Line in Three.js space
+        // 3. 3D Connector Line in Three.js space
         const lineGeo = new THREE.BufferGeometry().setFromPoints([roadP, floatP]);
         const lineMat = new THREE.LineDashedMaterial({
           color: m.colorHex,
-          dashSize: 0.7,
-          gapSize: 0.45,
+          dashSize: 0.8,
+          gapSize: 0.4,
           linewidth: 2
         });
         const line = new THREE.Line(lineGeo, lineMat);
@@ -2331,20 +2472,24 @@
         r.mesh.material.opacity = (1.0 - progress) * 0.7;
       });
 
-      // 2. Milestone floating gems spin & bob
+      // 2. Milestone floating gems spin & dual gimbal rings
       this.milestoneBadges.forEach((b, i) => {
         b.gem.rotation.y = time * 0.9 + i;
         b.gem.rotation.x = Math.sin(time * 0.7 + i) * 0.15;
         b.ring.rotation.z = time * 0.6 + i;
+        if (b.innerRing) {
+          b.innerRing.rotation.x = -time * 0.75 + i;
+          b.innerRing.rotation.y = time * 0.4;
+        }
         b.group.position.y += Math.sin(time * 2.0 + i) * 0.003;
       });
 
-      // 3. Stardust gentle rotation
+      // 3. Stardust & Colossal Jupiter realistic rotation
       if (this.stardustPoints) {
-        this.stardustPoints.rotation.y = time * 0.015;
+        this.stardustPoints.rotation.y = time * 0.006;
       }
       if (this.distantJupiter) {
-        this.distantJupiter.rotation.y = time * 0.02;
+        this.distantJupiter.rotation.y += 0.0006;
       }
 
       // 4. Camera transition / Auto-tour
