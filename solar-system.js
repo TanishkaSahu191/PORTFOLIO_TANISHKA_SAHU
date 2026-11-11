@@ -4009,47 +4009,81 @@
         });
       }
 
-      // 2. Global window handler for quick transmission form
-      window.handleNeptuneMessageSend = () => {
+      // 2. Global window handler for quick transmission form (Real API dispatch + fallback)
+      window.handleNeptuneMessageSend = async () => {
         const nameEl = document.getElementById('neptuneSenderName');
         const emailEl = document.getElementById('neptuneSenderContact');
         const msgEl = document.getElementById('neptuneSenderMessage');
+        const btnSubmit = document.getElementById('btnTransmitMessage');
 
         const name = nameEl ? nameEl.value.trim() : '';
         const email = emailEl ? emailEl.value.trim() : '';
         const msg = msgEl ? msgEl.value.trim() : '';
 
-        if (!name || !email || !msg) return;
+        if (!name || !email || !msg) {
+          if (this.transmitStatus) {
+            this.transmitStatus.className = 'transmit-status-msg is-error';
+            this.transmitStatus.textContent = 'Please fill out all fields.';
+          }
+          return;
+        }
 
         if (this.audio) {
           try { this.audio.playScanTelemetry(); } catch (err) {}
         }
 
-        if (this.transmitStatus) {
-          this.transmitStatus.textContent = 'Transmitting to Tanishka...';
+        if (btnSubmit) {
+          btnSubmit.disabled = true;
+          btnSubmit.innerHTML = '<span>Transmitting...</span>';
         }
 
-        // Open mailto with pre-composed content
-        const subject = encodeURIComponent(`Transmission from ${name} [${email}]`);
-        const body = encodeURIComponent(`Hi Tanishka,
+        if (this.transmitStatus) {
+          this.transmitStatus.className = 'transmit-status-msg is-sending';
+          this.transmitStatus.textContent = 'Encrypting & transmitting message to Tanishka...';
+        }
 
-${msg}
+        try {
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message: msg })
+          });
 
----
-From: ${name}
-Contact: ${email}`);
-        const mailtoUrl = `mailto:tanishkasahuwork191@gmail.com?subject=${subject}&body=${body}`;
+          const data = await response.json();
 
-        setTimeout(() => {
-          window.location.href = mailtoUrl;
-          if (this.transmitStatus) {
-            this.transmitStatus.textContent = 'Transmission Dispatched!';
+          if (response.ok && data.success) {
+            if (this.audio) {
+              try { this.audio.playSelectBlip(); } catch (err) {}
+            }
+            if (this.transmitStatus) {
+              this.transmitStatus.className = 'transmit-status-msg';
+              this.transmitStatus.innerHTML = '✓ Transmission Delivered to Tanishka!';
+            }
+            if (this.transmitForm) {
+              this.transmitForm.reset();
+            }
             setTimeout(() => {
-              if (this.transmitStatus) this.transmitStatus.textContent = '';
-            }, 6000);
+              if (this.transmitStatus) {
+                this.transmitStatus.textContent = '';
+                this.transmitStatus.className = 'transmit-status-msg';
+              }
+            }, 8000);
+          } else {
+            throw new Error(data.error || 'Failed to dispatch transmission.');
           }
-          if (this.transmitForm) this.transmitForm.reset();
-        }, 500);
+        } catch (err) {
+          console.warn('[Transmission API Error]:', err.message);
+          // Graceful fallback option
+          if (this.transmitStatus) {
+            this.transmitStatus.className = 'transmit-status-msg is-error';
+            this.transmitStatus.innerHTML = `⚠️ ${err.message || 'Transmission failed.'} <a href="mailto:tanishkasahuwork191@gmail.com?subject=Regarding%20Portfolio&body=${encodeURIComponent(msg)}" style="color:#38bdf8;text-decoration:underline;margin-left:4px;">Send via Email App ↗</a>`;
+          }
+        } finally {
+          if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<span>Send Message</span>';
+          }
+        }
       };
 
       // 3. Audio blips on clicking links

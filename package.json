@@ -16,5 +16,8 @@
     "space"
   ],
   "author": "Tanishka Sahu",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nodemailer": "^10.5.0"
+  }
 }

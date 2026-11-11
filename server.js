@@ -16,6 +16,13 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
+let nodemailer = null;
+try {
+  nodemailer = require('nodemailer');
+} catch (e) {
+  // Nodemailer is optional; fallback to native Resend or local vault
+}
+
 const PORT = process.env.PORT || 3000;
 const ROOT_DIR = __dirname;
 const INDEX_HTML_PATH = path.join(ROOT_DIR, 'index.html');
@@ -70,6 +77,211 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf',
   '.otf': 'font/otf'
 };
+
+// =============================================================================
+// PERSISTENT CONTACT TRANSMISSION VAULT & LIVE EMAIL DISPATCHER
+// =============================================================================
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
+
+function getStoredMessages() {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(MESSAGES_FILE)) {
+      fs.writeFileSync(MESSAGES_FILE, '[]', 'utf8');
+      return [];
+    }
+    const data = fs.readFileSync(MESSAGES_FILE, 'utf8');
+    return JSON.parse(data) || [];
+  } catch (e) {
+    console.error('[Messages] Error reading messages:', e.message);
+    return [];
+  }
+}
+
+function saveMessage(entry) {
+  try {
+    const list = getStoredMessages();
+    list.unshift(entry);
+    if (list.length > 200) list.length = 200;
+    fs.writeFileSync(MESSAGES_FILE, JSON.stringify(list, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.error('[Messages] Error saving message:', e.message);
+    return false;
+  }
+}
+
+const contactRateLimitMap = new Map();
+function isContactRateLimited(ip) {
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000; // 10 minutes
+  const maxRequests = 5;
+
+  const record = contactRateLimitMap.get(ip) || { count: 0, resetAt: now + windowMs };
+  if (now > record.resetAt) {
+    record.count = 0;
+    record.resetAt = now + windowMs;
+  }
+  record.count += 1;
+  contactRateLimitMap.set(ip, record);
+  return record.count > maxRequests;
+}
+
+async function dispatchContactNotification(entry) {
+  const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || 'tanishkasahuwork191@gmail.com';
+  let dispatched = false;
+  let deliveryMethod = 'local_vault';
+  let deliveryError = null;
+
+  // 1. SMTP / Gmail via Nodemailer
+  const hasGmailApp = Boolean(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
+  const hasCustomSmtp = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+
+  if (nodemailer && (hasGmailApp || hasCustomSmtp)) {
+    try {
+      const transporter = nodemailer.createTransport(
+        hasGmailApp
+          ? {
+              service: 'gmail',
+              auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_APP_PASSWORD.replace(/\s+/g, '')
+              }
+            }
+          : {
+              host: process.env.SMTP_HOST,
+              port: parseInt(process.env.SMTP_PORT || '587', 10),
+              secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+              auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
+              }
+            }
+      );
+
+      const senderEmail = process.env.GMAIL_USER || process.env.SMTP_USER || receiverEmail;
+
+      const htmlBody = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #0c1222; color: #f8fafc; border-radius: 16px; border: 1px solid #1e293b; overflow: hidden;">
+          <div style="background: linear-gradient(135deg, #0d9488 0%, #0369a1 100%); padding: 24px; text-align: center;">
+            <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: 0.5px;">⚡ LUMORA // Subspace Transmission</h1>
+            <p style="margin: 6px 0 0; font-size: 13px; color: #e0f2fe;">New Portfolio Inquiry for Tanishka Sahu</p>
+          </div>
+          <div style="padding: 28px 24px;">
+            <div style="background: #1e293b; border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <tr>
+                  <td style="color: #94a3b8; padding: 6px 0; width: 80px;">From:</td>
+                  <td style="color: #ffffff; font-weight: 700; padding: 6px 0;">${entry.name}</td>
+                </tr>
+                <tr>
+                  <td style="color: #94a3b8; padding: 6px 0;">Email:</td>
+                  <td style="color: #38bdf8; font-weight: 600; padding: 6px 0;"><a href="mailto:${entry.email}" style="color: #38bdf8; text-decoration: none;">${entry.email}</a></td>
+                </tr>
+                <tr>
+                  <td style="color: #94a3b8; padding: 6px 0;">Date:</td>
+                  <td style="color: #cbd5e1; padding: 6px 0;">${new Date(entry.timestamp).toUTCString()}</td>
+                </tr>
+              </table>
+            </div>
+            <div style="margin-bottom: 24px;">
+              <h3 style="color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Message Content:</h3>
+              <div style="background: #090e17; border-left: 3px solid #2dd4bf; border-radius: 6px; padding: 16px; color: #e2e8f0; font-size: 14.5px; line-height: 1.6; white-space: pre-wrap;">${entry.message}</div>
+            </div>
+            <div style="text-align: center; margin-top: 28px;">
+              <a href="mailto:${entry.email}?subject=Re:%20Transmission%20via%20Lumora%20Portfolio" style="display: inline-block; background: #2dd4bf; color: #042f2e; font-weight: 800; font-size: 14px; text-decoration: none; padding: 12px 28px; border-radius: 999px; box-shadow: 0 4px 14px rgba(45, 212, 191, 0.4);">
+                Reply Directly to ${entry.name} ✉️
+              </a>
+            </div>
+          </div>
+          <div style="background: #080d1a; padding: 14px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #1e293b;">
+            Dispatched via Lumora Portfolio Transmission Engine // Neptune Subspace Nexus
+          </div>
+        </div>
+      `;
+
+      await transporter.sendMail({
+        from: `"Lumora Portfolio" <${senderEmail}>`,
+        to: receiverEmail,
+        replyTo: entry.email,
+        subject: `🚀 [Lumora Portfolio] Transmission from ${entry.name}`,
+        text: `From: ${entry.name} <${entry.email}>\nDate: ${entry.timestamp}\n\nMessage:\n${entry.message}`,
+        html: htmlBody
+      });
+
+      dispatched = true;
+      deliveryMethod = hasGmailApp ? 'gmail_smtp' : 'custom_smtp';
+    } catch (err) {
+      console.warn('[Dispatch] SMTP transmission failed:', err.message);
+      deliveryError = err.message;
+    }
+  }
+
+  // 2. Resend REST API (zero npm dependencies)
+  if (!dispatched && process.env.RESEND_API_KEY) {
+    try {
+      const resendRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+          to: receiverEmail,
+          reply_to: entry.email,
+          subject: `🚀 [Lumora Portfolio] Transmission from ${entry.name}`,
+          text: `From: ${entry.name} <${entry.email}>\nDate: ${entry.timestamp}\n\nMessage:\n${entry.message}`
+        })
+      });
+      if (resendRes.ok) {
+        dispatched = true;
+        deliveryMethod = 'resend_api';
+      }
+    } catch (err) {
+      console.warn('[Dispatch] Resend transmission failed:', err.message);
+      deliveryError = err.message;
+    }
+  }
+
+  // 3. Webhook (Discord / Slack)
+  if (process.env.CONTACT_WEBHOOK_URL) {
+    try {
+      await fetch(process.env.CONTACT_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `**🚀 [Lumora Portfolio] New Transmission Received!**\n**From:** ${entry.name} (${entry.email})\n**Time:** ${entry.timestamp}\n**Message:**\n${entry.message}`
+        })
+      });
+      if (!dispatched) {
+        dispatched = true;
+        deliveryMethod = 'webhook';
+      }
+    } catch (err) {
+      console.warn('[Dispatch] Webhook transmission failed:', err.message);
+    }
+  }
+
+  entry.delivered = dispatched;
+  entry.deliveryMethod = deliveryMethod;
+  if (deliveryError) entry.deliveryError = deliveryError;
+
+  // Pretty terminal banner
+  console.log('='.repeat(70));
+  console.log('🚀 [LUMORA TRANSMISSION RECEIVED]');
+  console.log(`From:    ${entry.name} <${entry.email}>`);
+  console.log(`Time:    ${entry.timestamp}`);
+  console.log(`Status:  ${dispatched ? `Forwarded via ${deliveryMethod} to ${receiverEmail}` : 'Safely Stored in data/messages.json'}`);
+  console.log(`Message: ${entry.message.replace(/\n/g, ' ').slice(0, 120)}${entry.message.length > 120 ? '...' : ''}`);
+  console.log('='.repeat(70));
+
+  saveMessage(entry);
+  return { dispatched, deliveryMethod };
+}
 
 // =============================================================================
 // DYNAMIC PORTFOLIO KNOWLEDGE BASE SYNCHRONIZER
@@ -586,6 +798,100 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // --- API: /api/contact (Neptune Subspace Message Transmission) ---
+  if (pathname === '/api/contact' && req.method === 'POST') {
+    if (isContactRateLimited(clientIp)) {
+      res.writeHead(429, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        error: 'Too many transmissions received from this link. Please wait a few minutes before transmitting again.'
+      }));
+      return;
+    }
+
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 32768) {
+        req.destroy();
+      }
+    });
+
+    req.on('end', async () => {
+      try {
+        let parsed;
+        try {
+          parsed = JSON.parse(body);
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid JSON payload in transmission request.' }));
+          return;
+        }
+
+        const name = typeof parsed.name === 'string' ? parsed.name.trim() : '';
+        const email = typeof parsed.email === 'string' ? parsed.email.trim() : '';
+        const message = typeof parsed.message === 'string' ? parsed.message.trim() : '';
+
+        // Strict input validation
+        if (!name || name.length < 2 || name.length > 100) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Please provide your name (2–100 characters).' }));
+          return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email) || email.length > 150) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Please enter a valid email address.' }));
+          return;
+        }
+
+        if (!message || message.length < 5 || message.length > 5000) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Message must be between 5 and 5,000 characters.' }));
+          return;
+        }
+
+        const entry = {
+          id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+          timestamp: new Date().toISOString(),
+          name,
+          email,
+          message,
+          ip: clientIp
+        };
+
+        const result = await dispatchContactNotification(entry);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: true,
+          id: entry.id,
+          delivered: result.dispatched,
+          deliveryMethod: result.deliveryMethod,
+          message: result.dispatched
+            ? 'Transmission delivered directly to Tanishka\'s inbox!'
+            : 'Transmission received and safely recorded in portfolio archives!'
+        }));
+      } catch (err) {
+        console.error('[Contact API Error]:', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Internal server error processing transmission.' }));
+      }
+    });
+    return;
+  }
+
+  // --- API: /api/contact/messages (View Stored Transmissions) ---
+  if (pathname === '/api/contact/messages' && req.method === 'GET') {
+    const list = getStoredMessages();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      count: list.length,
+      messages: list
+    }));
+    return;
+  }
+
   // --- Static Asset Serving ---
   let safePath = path.normalize(decodeURIComponent(pathname)).replace(/^(\.\.[\/\\])+/, '');
   if (safePath === '/' || safePath === '\\') {
@@ -655,4 +961,6 @@ server.listen(PORT, () => {
   console.log(`[Server] Knowledge dynamically synced with ${INDEX_HTML_PATH}`);
   const hasKey = Boolean(process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('your_api_key_here'));
   console.log(`[Server] Gemini API Status: ${hasKey ? 'Configured (Active)' : 'Unconfigured (Key required in .env)'}`);
+  const hasEmail = Boolean((process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) || (process.env.SMTP_HOST && process.env.SMTP_USER) || process.env.RESEND_API_KEY || process.env.CONTACT_WEBHOOK_URL);
+  console.log(`[Server] Contact Transmission Engine: ${hasEmail ? 'Live Forwarding Active' : 'Active (Local Vault: data/messages.json)'}`);
 });

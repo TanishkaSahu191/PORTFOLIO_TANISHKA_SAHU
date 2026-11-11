@@ -8487,10 +8487,26 @@ a.resume-contact-chip:hover {
               inset 3px 3px 6px rgba(4, 47, 46, 0.5);
 }
 
+.btn-transmit-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 .transmit-status-msg {
   font-size: 11.5px;
   font-weight: 700;
   color: #86efac;
+  transition: opacity 0.2s ease;
+}
+
+.transmit-status-msg.is-error {
+  color: #f87171;
+}
+
+.transmit-status-msg.is-sending {
+  color: #67e8f9;
 }
 
 /* Beacon Coordinates Strip */
