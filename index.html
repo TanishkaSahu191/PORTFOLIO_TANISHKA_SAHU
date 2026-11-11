@@ -2319,9 +2319,50 @@
           </button>
         </div>
         <div class="saturn-hints">
-          <span>Click any hanging card to bring it forward in 3D • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
+          <span>Click any hanging card to inspect in full-screen landscape • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
         </div>
       </nav>
+
+      <!-- Full Screen Scrollable Landscape Page for Certificate Inspection -->
+      <section id="saturnLandscapePage" class="saturn-landscape-page" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Certificate Landscape Inspector">
+        <!-- Landscape Overlay Backdrop -->
+        <div class="saturn-landscape-backdrop" id="saturnLandscapeBackdrop"></div>
+
+        <!-- Scrollable Landscape Viewport -->
+        <div class="saturn-landscape-scroller">
+          
+          <!-- Sticky / Top Navigation Bar -->
+          <div class="saturn-landscape-topbar">
+            <div class="saturn-landscape-header-left">
+              <span class="saturn-badge-dot"></span>
+              <span class="saturn-badge-text">SATURN // CREDENTIAL LANDSCAPE ARCHIVE</span>
+              <span id="saturnLandscapeCounter" class="saturn-landscape-counter">CARD 1 OF 5</span>
+            </div>
+
+            <div class="saturn-landscape-nav-controls">
+              <button id="btnSaturnLandscapePrev" class="saturn-nav-btn" type="button" aria-label="Previous Certificate" title="Previous Certificate (Left Arrow)">
+                <span>← Previous</span>
+              </button>
+              <button id="btnSaturnLandscapeNext" class="saturn-nav-btn" type="button" aria-label="Next Certificate" title="Next Certificate (Right Arrow)">
+                <span>Next →</span>
+              </button>
+              <button id="btnSaturnLandscapeReturn" class="saturn-return-btn" type="button" aria-label="Return to Hanging Vault" title="Return to Hanging Vault (Esc)">
+                <span class="return-icon">⤺</span>
+                <span>Return to Hanging</span>
+              </button>
+              <button id="btnSaturnLandscapeClose" class="saturn-close-btn" type="button" aria-label="Close Inspector" title="Close (Esc)">
+                <span aria-hidden="true">✕</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Landscape Content Grid -->
+          <div class="saturn-landscape-card" id="saturnLandscapeCard">
+            <!-- Dynamic Content Injected Here by JavaScript -->
+          </div>
+
+        </div>
+      </section>
     </div>
 
     <!-- Neptune Section: Subspace Nexus — Important Links & Contact Me -->

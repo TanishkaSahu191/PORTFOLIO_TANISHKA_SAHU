@@ -4040,6 +4040,132 @@
       this.startTime = 0;
       this.expandedCard = null;
       this.activeFilter = 'all';
+      this.currentLandscapeIndex = 0;
+      this.isLandscapeOpen = false;
+
+      // Structured Certificate Archive Data for Full-Screen Landscape Inspection
+      this.certData = [
+        {
+          id: 0,
+          cat: 'specialization',
+          catLabel: 'NPTEL • IIT Kanpur',
+          catClass: 'amber',
+          year: '2026',
+          title: 'Marketing Management - I',
+          org: 'IIT Kanpur • Swayam (Govt. of India)',
+          seal: 'Elite + Top 5% Topper (88%)',
+          sealIcon: '★',
+          summary: 'Ranked in Top 5% among 7,022 candidates with 25/25 in assignments.',
+          scopeHeading: 'Coursework & Specialization Scope',
+          scopeDesc: 'Rigorous 8-week specialization covering strategic marketing architecture, consumer behavior analytics, market segmentation, brand positioning, and channel dynamics with elite distinction.',
+          certImg: './cert-nptel-iitk.jpg',
+          certAlt: 'IIT Kanpur Marketing Management Certificate',
+          skills: ['Marketing Strategy', 'Consumer Analytics', 'Market Segmentation', 'Brand Positioning', 'Pricing Architecture'],
+          credentialId: 'VERIFY: NPTEL26MG152MANUAL0020124',
+          metrics: [
+            { label: 'Rank Standing', value: 'Top 5% Topper' },
+            { label: 'Candidate Pool', value: '7,022 Enrolled' },
+            { label: 'Assignments', value: '25 / 25 (100%)' },
+            { label: 'Proctored Exam', value: '63 / 75' }
+          ]
+        },
+        {
+          id: 1,
+          cat: 'hackathon',
+          catLabel: 'Johns Hopkins & VIT',
+          catClass: 'cyan',
+          year: '2026',
+          title: "Health Hackathon '26",
+          org: 'Johns Hopkins Whiting School & VIT Bhopal',
+          seal: 'Project: Swasthyam (Team 125)',
+          sealIcon: '✦',
+          summary: 'Healthcare innovation for maternal & pediatric triage monitoring.',
+          scopeHeading: 'Project & Technical Scope',
+          scopeDesc: 'Architected and presented "Swasthyam" — an AI-augmented healthcare ecosystem providing streamlined triage, maternal health monitoring, and digital medical logs under clinical evaluation.',
+          certImg: './cert-johnshopkins-health.jpg',
+          certAlt: 'Johns Hopkins Health Hackathon Certificate',
+          skills: ['Healthcare AI', 'Clinical Triage', 'React / Node.js', 'Rapid Prototyping', 'Team Collaboration'],
+          credentialId: 'VERIFY: JHU-VITB-HH26-125',
+          metrics: [
+            { label: 'Role', value: 'Lead Architect' },
+            { label: 'Platform', value: 'Swasthyam Health' },
+            { label: 'Team', value: 'Team 125' },
+            { label: 'Evaluation', value: 'Whiting School Jury' }
+          ]
+        },
+        {
+          id: 2,
+          cat: 'specialization',
+          catLabel: 'Game Engineering',
+          catClass: 'purple',
+          year: '2021',
+          title: 'Certified Game Developer',
+          org: 'WhiteHat Jr • Live Online Coding',
+          seal: 'Deep UI/UX & Game Physics',
+          sealIcon: '✦',
+          summary: 'Awarded for interactive game physics loops, canvas UI/UX, and algorithms.',
+          scopeHeading: 'Engineering & Game Architecture Scope',
+          scopeDesc: 'Engineered multiple interactive web games including Angry Birds-style projectile physics, Ping Pong collision loops, Soccer, and T-Rex infinite runners with Git-backed version control.',
+          certImg: './cert-whitehatjr.jpg',
+          certAlt: 'WhiteHat Jr Certified Game Developer Certificate',
+          skills: ['Game Physics', 'JavaScript Canvas', 'Collision Algorithms', 'Git & GitHub', 'Interactive UI/UX'],
+          credentialId: 'VERIFY: WHJ-CGD-2021-TS',
+          metrics: [
+            { label: 'Credential', value: 'Certified Game Dev' },
+            { label: 'Discipline', value: 'Physics & Collision' },
+            { label: 'Projects', value: '4 Complete Games' },
+            { label: 'Stack', value: 'HTML5 Canvas & JS' }
+          ]
+        },
+        {
+          id: 3,
+          cat: 'competition',
+          catLabel: 'State Championship',
+          catClass: 'emerald',
+          year: '2018–19',
+          title: 'State Winner — 1st Position',
+          org: 'SpellQuest India • Satluj Public School',
+          seal: 'First Position (Club V State)',
+          sealIcon: '★',
+          summary: 'Triumphant 1st position across state demonstrating linguistic excellence.',
+          scopeHeading: 'Championship & Linguistic Scope',
+          scopeDesc: 'Triumphed through school, district, and state competition tiers under ISO 9001:2015 & DAC accreditation, demonstrating etymology mastery, cognitive speed, and academic discipline.',
+          certImg: './cert-spellquest.jpg',
+          certAlt: 'SpellQuest India State Winner Certificate',
+          skills: ['Linguistics', 'Vocabulary Rigor', 'Etymology', 'Public Speaking', 'Competitive Poise'],
+          credentialId: 'VERIFY: SQ-2018-STATE-WINNER-V',
+          metrics: [
+            { label: 'Standing', value: '1st Position State' },
+            { label: 'Division', value: 'Club V State Final' },
+            { label: 'Accreditation', value: 'ISO 9001:2015 / DAC' },
+            { label: 'Scope', value: 'State Level Tier' }
+          ]
+        },
+        {
+          id: 4,
+          cat: 'competition',
+          catLabel: 'Algorithmic League',
+          catClass: 'gold',
+          year: '2025',
+          title: 'DSA League — 6th Position',
+          org: 'Competitive Programming Division',
+          seal: '6th Rank Solo Contender',
+          sealIcon: '✦',
+          summary: 'Ranked 6th solo contender across Graphs, Trees, and Dynamic Programming.',
+          scopeHeading: 'Algorithmic & Problem-Solving Scope',
+          scopeDesc: 'Competed solo solving complex data structures and algorithmic challenges under tight execution time limits, leveraging 500+ LeetCode problems experience in BFS/DFS, shortest path, and dynamic programming.',
+          certImg: './cert-dsa-league.svg',
+          certAlt: 'Collegiate DSA League 2025 Certificate',
+          skills: ['Graph Theory', 'Dynamic Programming', 'Trees & Heaps', 'Time Complexity', 'C++ / Java DSA'],
+          credentialId: 'VERIFY: DSA-LEAGUE-2025-RANK6',
+          metrics: [
+            { label: 'Standing', value: '6th Rank (Solo)' },
+            { label: 'Domains', value: 'Graphs, Trees, DP' },
+            { label: 'Preparation', value: '500+ Problems' },
+            { label: 'Format', value: 'High-Stakes Live Contest' }
+          ]
+        }
+      ];
 
       // Card Physics & Sway State
       this.cardPhysics = this.cards.map((card, i) => ({
@@ -4095,29 +4221,16 @@
     }
 
     bindInteractions() {
-      // 1. Click on card to expand forward or return
+      // 1. Click on any hanging card to open full screen scrollable landscape page
       this.cards.forEach((card, idx) => {
         card.addEventListener('click', (e) => {
-          // If clicked the return button
-          if (e.target.closest('.btn-return-card')) {
-            e.stopPropagation();
-            this.collapseCard();
-            return;
-          }
-
-          // If already expanded, clicking it again collapses it back to hanging
-          if (this.expandedCard === card) {
-            this.collapseCard();
-            return;
-          }
-
-          // If clicking a dimmed or standard card, expand it
-          this.expandCard(card);
+          e.stopPropagation();
+          this.openLandscapePage(idx);
         });
 
         // 2. Interactive pointer hover tilt (zero layout reflows)
         card.addEventListener('pointermove', (e) => {
-          if (this.expandedCard === card) return;
+          if (this.isLandscapeOpen) return;
           const w = card.offsetWidth || 250;
           const h = card.offsetHeight || 400;
           const dx = Math.max(-1, Math.min(1, (e.offsetX - w / 2) / (w / 2)));
@@ -4132,9 +4245,10 @@
         });
 
         card.addEventListener('pointerenter', () => {
+          if (this.isLandscapeOpen) return;
           const phys = this.cardPhysics[idx];
           if (phys) phys.isHovered = true;
-          if (this.audio && !this.expandedCard) {
+          if (this.audio) {
             try { this.audio.playSelectBlip(); } catch (err) {}
           }
         });
@@ -4149,16 +4263,7 @@
         });
       });
 
-      // 3. Stage click to collapse if clicking outside expanded card
-      if (this.stage) {
-        this.stage.addEventListener('click', (e) => {
-          if (this.expandedCard && !e.target.closest('.saturn-glass-card')) {
-            this.collapseCard();
-          }
-        });
-      }
-
-      // 4. Replay Drop Animation Button
+      // 3. Replay Drop Animation Button
       const btnReplay = document.getElementById('btnSaturnReplayDrop');
       if (btnReplay) {
         btnReplay.addEventListener('click', () => {
@@ -4166,7 +4271,7 @@
         });
       }
 
-      // 5. Category Filter Dock Buttons
+      // 4. Category Filter Dock Buttons
       const filterBtns = document.querySelectorAll('.saturn-dock-btn[data-filter]');
       filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -4176,6 +4281,209 @@
           this.setFilter(filter);
         });
       });
+
+      // 5. Full-Screen Landscape Page Controls
+      const btnLandscapeClose = document.getElementById('btnSaturnLandscapeClose');
+      if (btnLandscapeClose) {
+        btnLandscapeClose.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.closeLandscapePage();
+        });
+      }
+
+      const btnLandscapeReturn = document.getElementById('btnSaturnLandscapeReturn');
+      if (btnLandscapeReturn) {
+        btnLandscapeReturn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.closeLandscapePage();
+        });
+      }
+
+      const btnLandscapeBackdrop = document.getElementById('saturnLandscapeBackdrop');
+      if (btnLandscapeBackdrop) {
+        btnLandscapeBackdrop.addEventListener('click', () => {
+          this.closeLandscapePage();
+        });
+      }
+
+      const btnLandscapePrev = document.getElementById('btnSaturnLandscapePrev');
+      if (btnLandscapePrev) {
+        btnLandscapePrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.prevLandscapeCert();
+        });
+      }
+
+      const btnLandscapeNext = document.getElementById('btnSaturnLandscapeNext');
+      if (btnLandscapeNext) {
+        btnLandscapeNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.nextLandscapeCert();
+        });
+      }
+
+      // Keyboard navigation for landscape view
+      window.addEventListener('keydown', (e) => {
+        if (!this.isLandscapeOpen) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          this.closeLandscapePage();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.prevLandscapeCert();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.nextLandscapeCert();
+        }
+      });
+    }
+
+    openLandscapePage(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= this.certData.length) idx = this.certData.length - 1;
+      this.currentLandscapeIndex = idx;
+      this.isLandscapeOpen = true;
+
+      const page = document.getElementById('saturnLandscapePage');
+      if (page) {
+        this.renderLandscapePage(idx);
+        page.classList.add('is-open');
+        page.setAttribute('aria-hidden', 'false');
+        const scroller = page.querySelector('.saturn-landscape-scroller');
+        if (scroller) scroller.scrollTop = 0;
+      }
+
+      if (this.audio) {
+        try { this.audio.playCardClink(); } catch (err) {}
+      }
+    }
+
+    closeLandscapePage() {
+      this.isLandscapeOpen = false;
+      const page = document.getElementById('saturnLandscapePage');
+      if (page) {
+        page.classList.remove('is-open');
+        page.setAttribute('aria-hidden', 'true');
+      }
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    nextLandscapeCert() {
+      const nextIdx = (this.currentLandscapeIndex + 1) % this.certData.length;
+      this.openLandscapePage(nextIdx);
+    }
+
+    prevLandscapeCert() {
+      const prevIdx = (this.currentLandscapeIndex - 1 + this.certData.length) % this.certData.length;
+      this.openLandscapePage(prevIdx);
+    }
+
+    renderLandscapePage(idx) {
+      const cert = this.certData[idx];
+      if (!cert) return;
+
+      const counter = document.getElementById('saturnLandscapeCounter');
+      if (counter) {
+        counter.textContent = `CARD ${idx + 1} OF ${this.certData.length}`;
+      }
+
+      const cardContainer = document.getElementById('saturnLandscapeCard');
+      if (!cardContainer) return;
+
+      const metricsHtml = cert.metrics.map(m => `
+        <div class="landscape-metric-item">
+          <span class="landscape-metric-val">${m.value}</span>
+          <span class="landscape-metric-lbl">${m.label}</span>
+        </div>
+      `).join('');
+
+      const skillsHtml = cert.skills.map(s => `
+        <span class="landscape-skill-tag">${s}</span>
+      `).join('');
+
+      cardContainer.innerHTML = `
+        <div class="saturn-landscape-grid">
+          <!-- Left Column: Landscape Certificate Frame -->
+          <div class="saturn-landscape-left">
+            <div class="landscape-cert-frame">
+              <div class="cert-frame-header">
+                <div class="cert-status-pill">
+                  <span class="cert-status-dot"></span>
+                  <span class="cert-status-text">OFFICIAL CREDENTIAL VERIFIED</span>
+                </div>
+                <span class="cert-year-tag">${cert.year}</span>
+              </div>
+
+              <div class="cert-image-container">
+                <img src="${cert.certImg}" alt="${cert.certAlt}" class="landscape-cert-img" />
+                <a href="${cert.certImg}" target="_blank" rel="noopener noreferrer" class="landscape-zoom-btn" title="Open Full High-Res Credential">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  <span>Open Full Credential File</span>
+                </a>
+              </div>
+
+              <div class="cert-frame-footer">
+                <div class="cert-seal-pill">
+                  <span class="seal-icon">${cert.sealIcon}</span>
+                  <span class="seal-title">${cert.seal}</span>
+                </div>
+                <div class="cert-verify-id">${cert.credentialId}</div>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Strip -->
+            <div class="landscape-metrics-grid">
+              ${metricsHtml}
+            </div>
+          </div>
+
+          <!-- Right Column: Coursework, Scope, Competencies & Actions -->
+          <div class="saturn-landscape-right">
+            <div class="landscape-meta-badges">
+              <span class="landscape-cat-badge ${cert.catClass}">${cert.catLabel}</span>
+              <span class="landscape-date-badge">${cert.year}</span>
+            </div>
+
+            <h2 class="landscape-cert-title">${cert.title}</h2>
+            <p class="landscape-cert-org">${cert.org}</p>
+
+            <div class="landscape-summary-callout">
+              <p class="summary-text">${cert.summary}</p>
+            </div>
+
+            <div class="landscape-scope-section">
+              <h3 class="landscape-section-heading">${cert.scopeHeading}</h3>
+              <p class="landscape-section-desc">${cert.scopeDesc}</p>
+            </div>
+
+            <div class="landscape-skills-section">
+              <h3 class="landscape-section-heading">Verified Competencies &amp; Skills</h3>
+              <div class="landscape-skills-cloud">
+                ${skillsHtml}
+              </div>
+            </div>
+
+            <div class="landscape-bottom-actions">
+              <button id="btnLandscapeInnerReturn" class="landscape-btn-return" type="button">
+                <span>⤺ Return to Hanging Vault</span>
+              </button>
+              <a href="${cert.certImg}" target="_blank" rel="noopener noreferrer" class="landscape-btn-credential">
+                <span>Open Full Original File ↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const innerReturn = cardContainer.querySelector('#btnLandscapeInnerReturn');
+      if (innerReturn) {
+        innerReturn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.closeLandscapePage();
+        });
+      }
     }
 
     cacheLayout() {
@@ -4242,6 +4550,7 @@
         cancelAnimationFrame(this.animId);
         this.animId = null;
       }
+      this.closeLandscapePage();
       this.collapseCard(false);
     }
 
@@ -4305,6 +4614,11 @@
 
     tick(time) {
       if (!this.isRunning) return;
+
+      if (this.isLandscapeOpen) {
+        this.animId = requestAnimationFrame(this.tick.bind(this));
+        return;
+      }
 
       const elapsed = (time - this.startTime) * 0.001;
 
