@@ -3028,6 +3028,14 @@ body.solar-active .solar-system-section {
   color: #0f172a;
 }
 
+.inside-back-cover .base-heading {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #0f172a;
+}
+
 .base-desc {
   font-size: 13px;
   line-height: 1.6;
