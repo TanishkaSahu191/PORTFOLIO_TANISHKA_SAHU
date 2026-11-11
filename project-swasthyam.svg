@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <defs>
+    <linearGradient id="swBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06131c"/>
+      <stop offset="50%" stop-color="#0a2130"/>
+      <stop offset="100%" stop-color="#040e16"/>
+    </linearGradient>
+    <linearGradient id="swCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(16, 44, 62, 0.75)"/>
+      <stop offset="100%" stop-color="rgba(8, 26, 38, 0.88)"/>
+    </linearGradient>
+    <linearGradient id="tealRose" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#14b8a6"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <linearGradient id="coralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <filter id="swGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="750" fill="url(#swBg)"/>
+
+  <!-- Subtle Medical Crosses & Grid -->
+  <g opacity="0.08" stroke="#2dd4bf" stroke-width="1">
+    <path d="M0 75 H1200 M0 150 H1200 M0 225 H1200 M0 300 H1200 M0 375 H1200 M0 450 H1200 M0 525 H1200 M0 600 H1200 M0 675 H1200"/>
+    <path d="M100 0 V750 M200 0 V750 M300 0 V750 M400 0 V750 M500 0 V750 M600 0 V750 M700 0 V750 M800 0 V750 M900 0 V750 M1000 0 V750 M1100 0 V750"/>
+  </g>
+
+  <!-- Ambient Glow -->
+  <circle cx="150" cy="180" r="170" fill="#14b8a6" opacity="0.14" filter="url(#swGlow)"/>
+  <circle cx="1050" cy="220" r="200" fill="#f43f5e" opacity="0.12" filter="url(#swGlow)"/>
+
+  <!-- Navigation Bar -->
+  <rect x="50" y="35" width="1100" height="65" rx="14" fill="url(#swCard)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+  
+  <g transform="translate(80, 52)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="url(#tealRose)"/>
+    <path d="M17 8 V26 M8 17 H26" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <text x="46" y="24" font-family="'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="900" fill="#ffffff" letter-spacing="0.5">Swasthyam</text>
+    <text x="180" y="23" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#2dd4bf" letter-spacing="1">COMMUNITY HEALTH &amp; AI COMPANION</text>
+  </g>
+
+  <g transform="translate(800, 52)">
+    <rect x="0" y="4" width="180" height="26" rx="13" fill="rgba(20,184,166,0.15)" stroke="#14b8a6" stroke-width="1"/>
+    <circle cx="14" cy="17" r="4" fill="#2dd4bf"/>
+    <text x="26" y="21" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#2dd4bf">Johns Hopkins Hackathon</text>
+    
+    <rect x="195" y="4" width="100" height="26" rx="13" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text x="245" y="21" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#cbd5e1" text-anchor="middle">Hindi / English</text>
+  </g>
+
+  <!-- Left Main Card: Context-Aware AI Health Assistant -->
+  <g transform="translate(50, 125)">
+    <rect width="680" height="340" rx="18" fill="url(#swCard)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    
+    <text x="36" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#5eead4" letter-spacing="1.5">CONTEXT-AWARE RAG HEALTHBOT</text>
+    <text x="36" y="76" font-family="'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#ffffff">Maternal &amp; Child Care Intelligence</text>
+
+    <!-- Simulated AI Chat Dialog -->
+    <g transform="translate(36, 100)">
+      <!-- Mother's Question Bubble -->
+      <rect x="180" y="0" width="428" height="52" rx="12" fill="rgba(20,184,166,0.15)" stroke="#14b8a6" stroke-width="1"/>
+      <text x="200" y="24" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500" fill="#e6fffa">"What is the recommended vaccination schedule for my 6-month-old infant?"</text>
+      <text x="590" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" fill="#5eead4" text-anchor="end">10:42 AM • Verified Mother</text>
+
+      <!-- AI Companion Response Bubble -->
+      <rect x="0" y="70" width="530" height="100" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+      <circle cx="28" cy="98" r="14" fill="url(#tealRose)"/>
+      <text x="28" y="102" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">AI</text>
+      
+      <text x="52" y="96" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#2dd4bf">Swasthyam Carebot (RAG Medical Engine):</text>
+      <text x="52" y="120" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" fill="#cbd5e1">At 6 months, essential vaccines include OPV-3, Pentavalent-3, and Rotavirus Dose 3.</text>
+      <text x="52" y="142" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Your local clinic alert is scheduled for next Tuesday in Bhopal (Sol-III).</text>
+    </g>
+
+    <!-- Key Indicators Row -->
+    <g transform="translate(36, 280)">
+      <rect x="0" y="0" width="190" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="14" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Community Members</text>
+      <text x="14" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#2dd4bf">2,400+ Families</text>
+
+      <rect x="205" y="0" width="190" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="219" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Vaccines Tracked</text>
+      <text x="219" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#fb7185">98.4% On-Schedule</text>
+
+      <rect x="410" y="0" width="198" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="424" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">RAG Health Accuracy</text>
+      <text x="424" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#38bdf8">Verified Medical Corpus</text>
+    </g>
+  </g>
+
+  <!-- Right Card: Child Growth & Vaccine Tracker -->
+  <g transform="translate(755, 125)">
+    <rect width="395" height="340" rx="18" fill="url(#swCard)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    <text x="28" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1.5">GROWTH &amp; NUTRITION</text>
+    <text x="28" y="74" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" fill="#ffffff">Pediatric Timeline</text>
+
+    <!-- Vaccine Roadmap Items -->
+    <g transform="translate(28, 105)">
+      <circle cx="16" cy="18" r="8" fill="#14b8a6"/>
+      <path d="M16 26 V60" stroke="#14b8a6" stroke-width="2" stroke-dasharray="4"/>
+      <text x="36" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Birth to 6 Weeks: BCG, Hep B</text>
+      <text x="36" y="36" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#2dd4bf">Completed &amp; Recorded ✓</text>
+
+      <circle cx="16" cy="74" r="8" fill="#14b8a6"/>
+      <path d="M16 82 V116" stroke="#14b8a6" stroke-width="2" stroke-dasharray="4"/>
+      <text x="36" y="74" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#ffffff">10 Weeks: Pentavalent-2</text>
+      <text x="36" y="92" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#2dd4bf">Completed &amp; Recorded ✓</text>
+
+      <circle cx="16" cy="130" r="8" fill="#fb7185"/>
+      <text x="36" y="130" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#ffffff">14 Weeks: Pentavalent-3, IPV</text>
+      <text x="36" y="148" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#fb7185">Upcoming Appointment Due</text>
+    </g>
+
+    <g transform="translate(28, 280)">
+      <rect x="0" y="0" width="339" height="42" rx="10" fill="url(#tealRose)"/>
+      <text x="169" y="26" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">Bilingual Hindi / English UI ➔</text>
+    </g>
+  </g>
+
+  <!-- Bottom Community & Calculator Ribbon -->
+  <g transform="translate(50, 490)">
+    <rect width="1100" height="215" rx="18" fill="url(#swCard)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    
+    <text x="36" y="38" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#5eead4" letter-spacing="1.5">INTEGRATED MODULES &amp; COMMUNITY PLATFORM</text>
+
+    <g transform="translate(36, 60)">
+      <rect x="0" y="0" width="330" height="120" rx="12" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.2)"/>
+      <text x="20" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="800" fill="#2dd4bf">Community Discussion Forums</text>
+      <text x="20" y="56" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Real-time peer discussions, verified doctor responses, upvotes, and empathetic parenting advice.</text>
+      <text x="20" y="100" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#14b8a6">Moderated Medical Network</text>
+
+      <rect x="350" y="0" width="330" height="120" rx="12" fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.2)"/>
+      <text x="370" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="800" fill="#38bdf8">Pediatric Health Calculators</text>
+      <text x="370" y="56" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">WHO growth percentiles, BMI calculation, customized dietary recommendations, and hydration metrics.</text>
+      <text x="370" y="100" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#06b6d4">WHO Standards Compliant</text>
+
+      <rect x="700" y="0" width="364" height="120" rx="12" fill="rgba(251,113,133,0.08)" stroke="rgba(251,113,133,0.2)"/>
+      <text x="720" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="800" fill="#fb7185">Maternal Care &amp; Trimester Logs</text>
+      <text x="720" y="56" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Weekly fetal developmental updates, kick counters, nutritional checklists, and emergency SOS routing.</text>
+      <text x="720" y="100" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#f43f5e">Emergency Support Ready</text>
+    </g>
+  </g>
+</svg>

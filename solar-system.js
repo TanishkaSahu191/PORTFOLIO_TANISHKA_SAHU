@@ -6125,9 +6125,9 @@ Contact: ${email}`);
       // Page Labels
       const labels = [
         'Cover: Terra Archives',
-        'Spread 1: Lumora & NeuralCanvas (P. 02–03)',
-        'Spread 2: AeroVision & ApexFlow (P. 04–05)',
-        'Spread 3: Chronos & Back Cover (P. 06)',
+        'Spread 1: ParkShark & PiggyPocket (P. 02–03)',
+        'Spread 2: HackFest & Swasthyam (P. 04–05)',
+        'Spread 3: Lumora & Back Cover (P. 06)',
         'Epilogue: End of Volume I'
       ];
       const pageLabelEl = document.getElementById('bookPageLabel');

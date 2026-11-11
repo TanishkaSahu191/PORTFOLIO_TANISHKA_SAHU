@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a121e"/>
+      <stop offset="50%" stop-color="#0e1e30"/>
+      <stop offset="100%" stop-color="#070c14"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(26, 44, 68, 0.75)"/>
+      <stop offset="100%" stop-color="rgba(14, 25, 42, 0.85)"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="750" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.12" stroke="#38bdf8" stroke-width="1">
+    <path d="M0 75 H1200 M0 150 H1200 M0 225 H1200 M0 300 H1200 M0 375 H1200 M0 450 H1200 M0 525 H1200 M0 600 H1200 M0 675 H1200"/>
+    <path d="M100 0 V750 M200 0 V750 M300 0 V750 M400 0 V750 M500 0 V750 M600 0 V750 M700 0 V750 M800 0 V750 M900 0 V750 M1000 0 V750 M1100 0 V750"/>
+  </g>
+
+  <!-- Glowing Accent Orbs -->
+  <circle cx="1050" cy="120" r="160" fill="#10b981" opacity="0.15" filter="url(#glow)"/>
+  <circle cx="180" cy="620" r="180" fill="#6366f1" opacity="0.12" filter="url(#glow)"/>
+
+  <!-- Top App Navigation Bar -->
+  <rect x="50" y="35" width="1100" height="65" rx="14" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+  
+  <!-- Logo / Title -->
+  <g transform="translate(80, 52)">
+    <rect x="0" y="0" width="34" height="34" rx="8" fill="url(#goldGrad)"/>
+    <text x="17" y="24" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="bold" fill="#0b1320" text-anchor="middle">₱</text>
+    <text x="46" y="24" font-family="'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800" fill="#f8fafc" letter-spacing="0.5">PiggyPocket</text>
+    <text x="188" y="23" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#10b981" letter-spacing="1">STUDENT BUDGET ENGINE</text>
+  </g>
+
+  <!-- Nav status pills -->
+  <g transform="translate(860, 52)">
+    <rect x="0" y="4" width="125" height="26" rx="13" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1"/>
+    <circle cx="14" cy="17" r="4" fill="#10b981"/>
+    <text x="26" y="21" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#34d399">59 Tests Passing</text>
+    
+    <rect x="140" y="4" width="110" height="26" rx="13" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text x="195" y="21" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#cbd5e1" text-anchor="middle">Google OAuth</text>
+  </g>
+
+  <!-- Left Main Metric Card: Safe Daily Spending Limit -->
+  <g transform="translate(50, 125)">
+    <rect width="680" height="340" rx="18" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    <text x="36" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1.5">DYNAMIC FINANCIAL COMPUTE</text>
+    <text x="36" y="74" font-family="'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#ffffff">Safe Daily Spending Limit</text>
+    
+    <!-- Big Highlight Amount -->
+    <text x="36" y="150" font-family="'Segoe UI', Roboto, sans-serif" font-size="58" font-weight="900" fill="url(#emeraldGrad)">₹420<tspan font-size="26" font-weight="600" fill="#94a3b8"> / day</tspan></text>
+    <text x="36" y="182" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500" fill="#cbd5e1">Automatically recalculates with every expense to guarantee monthly runway.</text>
+
+    <!-- Progress Tracker -->
+    <text x="36" y="235" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#94a3b8">Monthly Discretionary Runway</text>
+    <text x="644" y="235" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#34d399" text-anchor="end">72% Safe</text>
+    <rect x="36" y="248" width="608" height="10" rx="5" fill="rgba(255,255,255,0.08)"/>
+    <rect x="36" y="248" width="438" height="10" rx="5" fill="url(#emeraldGrad)"/>
+
+    <!-- Mini stats row -->
+    <g transform="translate(36, 280)">
+      <rect x="0" y="0" width="190" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="14" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Reserve Target</text>
+      <text x="14" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#fbbf24">₹2,500 Locked</text>
+      
+      <rect x="205" y="0" width="190" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="219" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Days Remaining</text>
+      <text x="219" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#38bdf8">18 Days Left</text>
+      
+      <rect x="410" y="0" width="198" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+      <text x="424" y="18" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94a3b8">Daily Digest</text>
+      <text x="424" y="34" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#a78bfa">Cron 21:00 IST</text>
+    </g>
+  </g>
+
+  <!-- Right Card: Interactive Budget Simulator & Gauge -->
+  <g transform="translate(755, 125)">
+    <rect width="395" height="340" rx="18" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    <text x="28" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1.5">BUDGET SIMULATOR</text>
+    <text x="28" y="72" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" fill="#ffffff">Goal Acceleration</text>
+
+    <!-- Circular dial simulation -->
+    <circle cx="197" cy="180" r="75" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"/>
+    <circle cx="197" cy="180" r="75" fill="none" stroke="url(#goldGrad)" stroke-width="14" stroke-dasharray="471" stroke-dashoffset="140" stroke-linecap="round"/>
+    <text x="197" y="174" font-family="'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="900" fill="#ffffff" text-anchor="middle">+₹850</text>
+    <text x="197" y="196" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#fbbf24" text-anchor="middle">SAVED THIS MONTH</text>
+
+    <text x="197" y="295" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500" fill="#94a3b8" text-anchor="middle">Tactile Skeuomorphic Controls</text>
+  </g>
+
+  <!-- Bottom Analytics & Tech Stack Ribbon -->
+  <g transform="translate(50, 490)">
+    <rect width="1100" height="215" rx="18" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+    
+    <!-- Mini Expense Bars -->
+    <text x="36" y="38" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1.5">EXPENSE ROLLUP &amp; ANALYTICS</text>
+    
+    <g transform="translate(36, 65)">
+      <!-- Day 1 to 7 Bars -->
+      <rect x="0" y="45" width="48" height="65" rx="6" fill="#3b82f6"/>
+      <text x="24" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Mon</text>
+      
+      <rect x="68" y="20" width="48" height="90" rx="6" fill="#10b981"/>
+      <text x="92" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Tue</text>
+      
+      <rect x="136" y="55" width="48" height="55" rx="6" fill="#3b82f6"/>
+      <text x="160" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Wed</text>
+      
+      <rect x="204" y="30" width="48" height="80" rx="6" fill="#10b981"/>
+      <text x="228" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Thu</text>
+      
+      <rect x="272" y="10" width="48" height="100" rx="6" fill="#f59e0b"/>
+      <text x="296" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Fri</text>
+      
+      <rect x="340" y="38" width="48" height="72" rx="6" fill="#10b981"/>
+      <text x="364" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Sat</text>
+      
+      <rect x="408" y="60" width="48" height="50" rx="6" fill="#6366f1"/>
+      <text x="432" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Sun</text>
+    </g>
+
+    <!-- Architecture bullet points right side -->
+    <g transform="translate(560, 40)">
+      <text x="0" y="0" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1.5">CORE ARCHITECTURAL HIGHLIGHTS</text>
+      
+      <text x="0" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">✦ Pure Financial Math Engine (Vitest Covered)</text>
+      <text x="0" y="52" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Zero float precision drift with leap-year and mid-month paycheck anchoring.</text>
+
+      <text x="0" y="86" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">✦ Dual Storage Resilience</text>
+      <text x="0" y="106" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Offline-first local browser caching with atomic background synchronization to Node.js backend.</text>
+
+      <text x="0" y="140" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">✦ Automated Daily Digest Email Dispatcher</text>
+      <text x="0" y="160" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Nodemailer &amp; Resend cron-based transactional summaries notifying students before overspending.</text>
+    </g>
+  </g>
+</svg>

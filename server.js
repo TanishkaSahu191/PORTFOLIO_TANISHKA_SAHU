@@ -167,42 +167,40 @@ function syncPortfolioKnowledge() {
 - Tools & Platforms: Git, GitHub, Linux, Vite.
 
 ## 3. FEATURED PROJECTS (from Earth / Terra Archives)
-1. **Lumora: 3D Solar System Simulator**
-   - Domain: Spatial Web / Creative 3D
-   - Tech Stack: Three.js, WebGL, GLSL Shaders, Spatial Audio
-   - Description: Interactive WebGL 3D interplanetary journey with parallel planetary orbits, real-time axial spin, custom procedural surfaces, physics-derived celestial bodies, and dynamic astronaut dossier HUD overlays.
-   - Highlights: 60 FPS zero-stutter WebGL, 0ms texture latency, 9 active planetary engines.
-   - Links: Live in current application.
+1. **ParkShark: Smart Bicycle Management & 3D Campus Explorer**
+   - Domain: 3D Digital Twin, IoT & Campus Smart Infrastructure
+   - Tech Stack: Three.js, React 19, TypeScript, Firebase, Tailwind CSS v4
+   - Description: Intelligent IoT-ready bicycle parking platform and 3D digital twin campus navigation system for VIT Bhopal University. High-performance procedural rendering with 150 smart bicycle stands, WASD avatar collision physics, real-time 2D minimap HUD, smart QR-code locks, and SHA-256 anti-tamper security.
+   - Highlights: 150 slots rendered via single-draw-call InstancedMesh, 3D digital twin with WASD avatar & minimap, SHA-256 anti-tampering lock transactions.
+   - Links: https://github.com/TanishkaSahu191/ParkShark
 
-2. **NeuralCanvas: Infinite AI Studio**
-   - Domain: Creative AI / WebGPU
-   - Tech Stack: Next.js 15, WebGPU, WASM, Diffusion Flow
-   - Description: Infinite node-based generative artboard canvas executing local diffusion models via WebGPU compute shaders. Features real-time collaborative vectors, latent brush interpolation, and multi-resolution rendering pipelines.
-   - Highlights: 10x local GPU speedup, infinite artboard, 4K vector export.
+2. **PiggyPocket: Student Budget & Safe Daily Allowance Platform**
+   - Domain: Fintech & Automated Financial Analytics
+   - Tech Stack: React 18, Node.js, Express, Vite, JWT & Google OAuth, Vitest
+   - Description: Student pocket money and budget management platform with adaptive daily spending limits, Google OAuth authentication, and automated financial summaries via email. Features interactive budget simulation sliders, skeuomorphic tactile interface, and 59 automated test suites.
+   - Highlights: 59 automated tests passing (100% green), adaptive daily spending limit recalculator, automated daily email digest.
+   - Links: https://github.com/TanishkaSahu191/PiggyPocket
 
-3. **AeroVision: Drone Fleet Mission Control**
-   - Domain: Autonomous Systems / Real-Time Telemetry
-   - Tech Stack: TypeScript, WebSockets, Mapbox GL, WebRTC
-   - Description: Sub-50ms latency telemetry command dashboard monitoring multi-UAV autonomous fleets. Includes 3D topographical trajectory tracking, live battery health diagnostics, geofencing alarms, and autonomous return-to-home protocols.
-   - Highlights: <45 ms telemetry latency, 250+ swarm node capacity, 1080p zero-lag FPV video.
+3. **HackFest: Full-Stack Hackathon Management Platform**
+   - Domain: Full-Stack Web Architecture & Event Management
+   - Tech Stack: React 19, Node.js, Express, MongoDB, Vite, Tailwind CSS
+   - Description: Modern full-stack hackathon event portal built with React 19 and Express. Enables students to explore multi-track hackathons, interactive schedules, prize pools, dynamic FAQ accordions, instant team registrations, and live participant roster tracking.
+   - Highlights: Full-stack MERN architecture, dynamic live participant roster feed, responsive multi-route dark UI.
+   - Links: https://github.com/TanishkaSahu191/hackathon-website
 
-4. **ApexFlow: High-Frequency DeFi Terminal**
-   - Domain: High Frequency Fintech / Performance
-   - Tech Stack: React, Rust WASM, Web Workers, Shared Array Buffers, Order Book
-   - Description: Institutional-grade decentralized trading terminal engineered with off-thread Web Workers and shared array buffers to process 120,000 tick updates per second with microsecond order routing and slippage mitigation.
-   - Highlights: 120k ticks/sec processed, 0% UI frame drop, 12 ms order fill time.
+4. **Swasthyam: Community Maternal & Child Health AI Companion**
+   - Domain: Healthcare Innovation & Context-Aware AI (Johns Hopkins Hackathon)
+   - Tech Stack: AI Health RAG (OpenAI), Python, React, Health Analytics, Bilingual (Hindi/English)
+   - Description: Comprehensive community-driven maternal & family health companion combining context-aware AI conversational guidance, child vaccination schedule tracking, real-time community discussion forums, health calculators, and bilingual Hindi/English localization.
+   - Highlights: Context-aware RAG healthbot, bilingual Hindi/English localization, pediatric vaccination & WHO milestone tracker.
+   - Links: https://github.com/TanishkaSahu191/Swasthyam-1
 
-5. **Chronos: Quantum Clock & Relativistic Engine**
-   - Domain: Quantum Simulation
-   - Tech Stack: WebGL, Relativistic Physics, Quantum Telemetry
-   - Description: Precision relativistic engine visualizing gravitational time dilation and quantum orbital mechanics.
-
-6. **Swasthyam (Healthcare Innovation)**
-   - Developed at the Johns Hopkins University Hackathon 2025.
-   - Focus: Digital healthcare platform for women and children.
-
-7. **Game Development Projects**
-   - Built Football, T-Rex runner, and Ping Pong arcade games with JavaScript, GitHub, and catapult physics as part of WhiteHat Jr. certification.
+5. **Lumora: Interactive 3D Celestial Solar System & Cosmic Portfolio**
+   - Domain: Spatial Computing & Three.js WebGL
+   - Tech Stack: Three.js, WebGL, Gemini AI, GLSL Shaders, Spatial Audio
+   - Description: High-performance interactive WebGL 3D interplanetary journey featuring real-time planetary orbits, axial rotation, procedural atmospheres, spatial audio, and an embedded Gemini-powered AI guide (Nova) synchronized dynamically with live portfolio archives.
+   - Highlights: 60 FPS zero-stutter WebGL, dynamic Gemini AI knowledge synchronizer, 9 interactive celestial bodies.
+   - Links: https://github.com/TanishkaSahu191
 
 ## 4. EDUCATION TIMELINE (from Mars Academic Archives)
 1. **Undergraduate Degree: B.Tech in Computer Science & Engineering**
