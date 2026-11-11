@@ -108,7 +108,8 @@
   }
 
   function tick(now) {
-    if (!reducedMotion && clipReady && Number.isFinite(duration)) {
+    const isSolarActive = document.body.classList.contains('solar-active') || document.body.classList.contains('in-launch');
+    if (!isSolarActive && !reducedMotion && clipReady && Number.isFinite(duration)) {
       const idleFor = now - lastMove;
       const idleAmount = idleFor > 3500 ? Math.sin((idleFor - 3500) / 1600) * duration * .32 : 0;
       const desired = idleFor > 3500 ? duration * .5 + idleAmount : targetTime;
@@ -119,7 +120,7 @@
       }
     }
 
-    if (finePointer && dot && ring) {
+    if (!isSolarActive && finePointer && dot && ring) {
       ringX += (lastPointerX - ringX) * .55;
       ringY += (pointerY - ringY) * .55;
       dot.style.transform = `translate3d(${lastPointerX}px, ${pointerY}px, 0)`;
@@ -175,6 +176,9 @@
       setTimeout(() => {
         document.body.classList.remove('in-launch');
         document.body.classList.add('solar-active');
+        if (clip) {
+          try { clip.pause(); } catch (e) { }
+        }
         if (transition) transition.classList.remove('is-active');
 
         // Trigger resize and reset view
@@ -233,6 +237,9 @@
 
     setTimeout(() => {
       document.body.classList.remove('solar-active');
+      if (clip) {
+        try { clip.play().catch(() => {}); } catch (e) { }
+      }
       setTimeout(() => {
         flash.classList.remove('is-flashing');
       }, 250);

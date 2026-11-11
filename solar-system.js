@@ -1706,7 +1706,7 @@
         powerPreference: 'high-performance'
       });
       this.renderer.setSize(width, height);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.25;
 
@@ -2461,7 +2461,7 @@
         powerPreference: 'high-performance'
       });
       this.renderer.setSize(width, height);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.15;
       if (this.renderer.outputEncoding !== undefined) {
@@ -3682,14 +3682,13 @@
           this.expandCard(card);
         });
 
-        // 2. Interactive pointer hover tilt
+        // 2. Interactive pointer hover tilt (zero layout reflows)
         card.addEventListener('pointermove', (e) => {
           if (this.expandedCard === card) return;
-          const rect = card.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = (e.clientX - cx) / (rect.width / 2);
-          const dy = (e.clientY - cy) / (rect.height / 2);
+          const w = card.offsetWidth || 250;
+          const h = card.offsetHeight || 400;
+          const dx = Math.max(-1, Math.min(1, (e.offsetX - w / 2) / (w / 2)));
+          const dy = Math.max(-1, Math.min(1, (e.offsetY - h / 2) / (h / 2)));
 
           const phys = this.cardPhysics[idx];
           if (phys) {
@@ -3746,10 +3745,60 @@
       });
     }
 
+    cacheLayout() {
+      if (!this.modal || !this.svg) return;
+      const modalRect = this.modal.getBoundingClientRect();
+      this.cachedLayout = this.cards.map((card, idx) => {
+        const eyeletL = card.querySelector('[data-eyelet="left"]');
+        const eyeletR = card.querySelector('[data-eyelet="right"]');
+        const bracket = this.brackets[idx];
+
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardTopY = cardRect.top;
+
+        let eyeletLX = -50;
+        let eyeletRX = 50;
+        let eyeletY = 12;
+        if (eyeletL && eyeletR) {
+          const lRect = eyeletL.getBoundingClientRect();
+          const rRect = eyeletR.getBoundingClientRect();
+          eyeletLX = (lRect.left + lRect.width / 2) - cardCenterX;
+          eyeletRX = (rRect.left + rRect.width / 2) - cardCenterX;
+          eyeletY = (lRect.top + lRect.height / 2) - cardTopY;
+        }
+
+        let anchorX1 = (cardCenterX + eyeletLX) - modalRect.left;
+        let anchorX2 = (cardCenterX + eyeletRX) - modalRect.left;
+        let anchorY = 70;
+
+        if (bracket) {
+          const bRect = bracket.getBoundingClientRect();
+          const bCenter = (bRect.left + bRect.width / 2) - modalRect.left;
+          anchorX1 = bCenter - 14;
+          anchorX2 = bCenter + 14;
+          anchorY = (bRect.top + bRect.height / 2) - modalRect.top;
+        }
+
+        return {
+          baseCenterX: cardCenterX - modalRect.left,
+          baseTopY: cardTopY - modalRect.top,
+          eyeletLX,
+          eyeletRX,
+          eyeletY,
+          anchorX1,
+          anchorX2,
+          anchorY
+        };
+      });
+    }
+
     start() {
       this.isRunning = true;
       this.startTime = performance.now();
       this.collapseCard(false);
+      this.cards.forEach(c => { c.style.transform = 'none'; });
+      this.cacheLayout();
       this.replayDropSequence();
       this.animId = requestAnimationFrame(this.tick.bind(this));
     }
@@ -3877,51 +3926,47 @@
     }
 
     updateStringLines() {
-      if (!this.modal || !this.svg) return;
-      const modalRect = this.modal.getBoundingClientRect();
+      if (!this.cachedLayout || !this.svg) return;
 
-      this.cards.forEach((card, idx) => {
+      this.cardPhysics.forEach((phys, idx) => {
         const lines = this.stringLines[idx];
-        if (!lines) return;
+        const layout = this.cachedLayout[idx];
+        if (!lines || !layout) return;
 
-        // Find top eyelet elements on the card
-        const eyeletL = card.querySelector('[data-eyelet="left"]');
-        const eyeletR = card.querySelector('[data-eyelet="right"]');
-        if (!eyeletL || !eyeletR) return;
-
-        const eyeRectL = eyeletL.getBoundingClientRect();
-        const eyeRectR = eyeletR.getBoundingClientRect();
-
-        // Eyelet target coordinates relative to SVG
-        const cardX1 = (eyeRectL.left + eyeRectL.width / 2) - modalRect.left;
-        const cardY1 = (eyeRectL.top + eyeRectL.height / 2) - modalRect.top;
-
-        const cardX2 = (eyeRectR.left + eyeRectR.width / 2) - modalRect.left;
-        const cardY2 = (eyeRectR.top + eyeRectR.height / 2) - modalRect.top;
-
-        // Top ceiling mount anchor coordinates
-        // Corresponding rail bracket or evenly spaced along the rail
-        const bracket = this.brackets[idx];
-        let anchorX1 = cardX1;
-        let anchorX2 = cardX2;
-        let anchorY = 70; // Rail height
-
-        if (bracket) {
-          const bRect = bracket.getBoundingClientRect();
-          const bCenter = (bRect.left + bRect.width / 2) - modalRect.left;
-          anchorX1 = bCenter - 14;
-          anchorX2 = bCenter + 14;
-          anchorY = (bRect.top + bRect.height / 2) - modalRect.top;
+        if (phys.el === this.expandedCard) {
+          lines.left.style.opacity = '0';
+          lines.right.style.opacity = '0';
+          return;
         }
+        lines.left.style.opacity = '1';
+        lines.right.style.opacity = '1';
 
-        // Set line coordinates
-        lines.left.setAttribute('x1', anchorX1.toFixed(1));
-        lines.left.setAttribute('y1', anchorY.toFixed(1));
+        const hoverLift = phys.isHovered ? -10 : 0;
+        const currentY = phys.currentY + hoverLift;
+        const currentX = phys.currentX;
+        const rad = (phys.currentAngle * Math.PI) / 180;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+
+        // Hinge center at top of card
+        const hingeX = layout.baseCenterX + currentX;
+        const hingeY = layout.baseTopY + currentY;
+
+        // Rotate left and right eyelets around top hinge
+        const cardX1 = hingeX + (layout.eyeletLX * cos - layout.eyeletY * sin);
+        const cardY1 = hingeY + (layout.eyeletLX * sin + layout.eyeletY * cos);
+
+        const cardX2 = hingeX + (layout.eyeletRX * cos - layout.eyeletY * sin);
+        const cardY2 = hingeY + (layout.eyeletRX * sin + layout.eyeletY * cos);
+
+        // Set string line coordinates with zero DOM reflows
+        lines.left.setAttribute('x1', layout.anchorX1.toFixed(1));
+        lines.left.setAttribute('y1', layout.anchorY.toFixed(1));
         lines.left.setAttribute('x2', cardX1.toFixed(1));
         lines.left.setAttribute('y2', cardY1.toFixed(1));
 
-        lines.right.setAttribute('x1', anchorX2.toFixed(1));
-        lines.right.setAttribute('y1', anchorY.toFixed(1));
+        lines.right.setAttribute('x1', layout.anchorX2.toFixed(1));
+        lines.right.setAttribute('y1', layout.anchorY.toFixed(1));
         lines.right.setAttribute('x2', cardX2.toFixed(1));
         lines.right.setAttribute('y2', cardY2.toFixed(1));
       });
@@ -4120,7 +4165,7 @@ Contact: ${email}`);
       // WebGL Renderer
       this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
       this.renderer.setSize(width, height);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.25;
       this.container.appendChild(this.renderer.domElement);
@@ -4769,19 +4814,17 @@ Contact: ${email}`);
           // Sun is partially off-screen on the far left. Anchor comfortably in the lower void
           anchorX = Math.max(centerX + 40, 80);
           anchorY = centerY + pixelRadius + 14;
-          tag.style.transform = 'translate(-50%, 0)';
+          tag.style.transform = `translate3d(${anchorX.toFixed(1)}px, ${anchorY.toFixed(1)}px, 0) translate(-50%, 0)`;
         } else if (isDown) {
           // Label is below planet: anchor dot sits cleanly below planet/ring rim, line and badge go down
           anchorY = centerY + pixelRadius + 10;
-          tag.style.transform = 'translate(-50%, 0)';
+          tag.style.transform = `translate3d(${anchorX.toFixed(1)}px, ${anchorY.toFixed(1)}px, 0) translate(-50%, 0)`;
         } else {
           // Label is above planet: anchor dot sits cleanly above planet rim, line and badge go up
           anchorY = centerY - pixelRadius - 10;
-          tag.style.transform = 'translate(-50%, -100%)';
+          tag.style.transform = `translate3d(${anchorX.toFixed(1)}px, ${anchorY.toFixed(1)}px, 0) translate(-50%, -100%)`;
         }
 
-        tag.style.left = `${anchorX}px`;
-        tag.style.top = `${anchorY}px`;
         tag.style.display = 'flex';
         tag.classList.toggle('is-selected', this.selectedBodyId === spec.id);
       });
@@ -5415,29 +5458,36 @@ Contact: ${email}`);
     }
 
     onPointerMove(event) {
-      const rect = this.renderer.domElement.getBoundingClientRect();
-      this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      if (this.pointerRafId) return;
+      const clientX = event.clientX;
+      const clientY = event.clientY;
+      this.pointerRafId = requestAnimationFrame(() => {
+        this.pointerRafId = null;
+        if (!this.renderer || !this.camera) return;
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const intersects = this.raycaster.intersectObjects(this.interactiveMeshes);
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.interactiveMeshes);
 
-      if (intersects.length > 0) {
-        const hit = intersects[0].object;
-        const id = hit.userData.id;
-        if (this.hoveredBody !== id) {
-          this.hoveredBody = id;
-          document.body.style.cursor = 'pointer';
-          this.audio.playSelectBlip();
-          this.highlightTag(id, true);
+        if (intersects.length > 0) {
+          const hit = intersects[0].object;
+          const id = hit.userData.id;
+          if (this.hoveredBody !== id) {
+            this.hoveredBody = id;
+            document.body.style.cursor = 'pointer';
+            this.audio.playSelectBlip();
+            this.highlightTag(id, true);
+          }
+        } else {
+          if (this.hoveredBody) {
+            this.highlightTag(this.hoveredBody, false);
+            this.hoveredBody = null;
+            document.body.style.cursor = 'default';
+          }
         }
-      } else {
-        if (this.hoveredBody) {
-          this.highlightTag(this.hoveredBody, false);
-          this.hoveredBody = null;
-          document.body.style.cursor = 'default';
-        }
-      }
+      });
     }
 
     highlightTag(id, isHovered) {
@@ -5459,7 +5509,27 @@ Contact: ${email}`);
       }
     }
 
+    pauseCosmicBgVideo() {
+      const vid = document.getElementById('solarCosmicBgVideo');
+      if (vid && !vid.paused) {
+        try { vid.pause(); } catch (e) {}
+      }
+    }
+
+    resumeCosmicBgVideo() {
+      const isAnyModalOpen = !!document.querySelector(
+        '.earth-book-modal.is-open, .saturn-certificates-modal.is-open, .uranus-resume-modal.is-open, .jupiter-roadmap-modal.is-open, .mars-modal.is-open, .neptune-links-modal.is-open, .mercury-id-modal.is-open, .venus-about-modal.is-open, #planetModal.is-open, #missionGuideModal.is-open, #novaAiModal.is-open'
+      );
+      if (!isAnyModalOpen && document.body.classList.contains('solar-active')) {
+        const vid = document.getElementById('solarCosmicBgVideo');
+        if (vid && vid.paused) {
+          vid.play().catch(() => {});
+        }
+      }
+    }
+
     openNovaModal() {
+      this.pauseCosmicBgVideo();
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
         pModal.classList.remove('is-open');
@@ -5502,9 +5572,11 @@ Contact: ${email}`);
           this.resetToDiagramView();
         }
       }
+      this.resumeCosmicBgVideo();
     }
 
     openMercuryIdCard() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5549,9 +5621,11 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     openVenusAboutModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5595,12 +5669,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // EARTH 3D FLIPPABLE PROJECT BOOK CONTROLLER
     // ==========================================
     openEarthBookModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5649,12 +5725,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // MARS ACADEMIC ARCHIVES & EDUCATION HUB
     // ==========================================
     openMarsModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5728,12 +5806,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // JUPITER 3D INTERACTIVE WINDING ROADMAP
     // ==========================================
     openJupiterRoadmapModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5784,12 +5864,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // URANUS 3D INTERACTIVE LAPTOP RESUME MODAL
     // ==========================================
     openUranusResumeModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5842,12 +5924,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // SATURN 3D HANGING CERTIFICATES VAULT MODAL
     // ==========================================
     openSaturnCertificatesModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5905,12 +5989,14 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     // ==========================================
     // NEPTUNE SUBSPACE NEXUS & COMMS DIRECTORY MODAL
     // ==========================================
     openNeptuneLinksModal() {
+      this.pauseCosmicBgVideo();
       // Close standard planet modal if open
       const pModal = document.getElementById('planetModal');
       if (pModal && pModal.open) {
@@ -5969,6 +6055,7 @@ Contact: ${email}`);
         document.querySelectorAll('.planet-dock-item').forEach(b => b.classList.remove('is-active'));
         this.resetToDiagramView();
       }
+      this.resumeCosmicBgVideo();
     }
 
     setMarsSceneBackground(active) {
@@ -6373,6 +6460,7 @@ Contact: ${email}`);
       this.cameraTargetPos.copy(this.diagramCameraPos);
       this.cameraTargetLook.copy(this.diagramCameraLook);
       this.isFocusingCamera = true;
+      this.resumeCosmicBgVideo();
     }
 
     openMissionGuideModal() {
@@ -6421,6 +6509,16 @@ Contact: ${email}`);
     }
 
     render(time) {
+      // If a full-screen modal or dialog is open, skip rendering the background solar scene to preserve 60 FPS performance
+      const isModalActive = !!document.querySelector(
+        '.earth-book-modal.is-open, .saturn-certificates-modal.is-open, .uranus-resume-modal.is-open, .jupiter-roadmap-modal.is-open, .mars-modal.is-open, .neptune-links-modal.is-open, .mercury-id-modal.is-open, .venus-about-modal.is-open, #planetModal.is-open, #missionGuideModal.is-open, #novaAiModal.is-open'
+      );
+      if (isModalActive) {
+        this.lastTime = time;
+        requestAnimationFrame(this.render.bind(this));
+        return;
+      }
+
       const delta = (time - this.lastTime) * 0.001;
       this.lastTime = time;
 

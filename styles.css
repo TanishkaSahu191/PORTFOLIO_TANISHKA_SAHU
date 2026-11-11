@@ -1320,6 +1320,7 @@ body.solar-active .solar-system-section {
   user-select: none;
   z-index: 15;
   transition: opacity 160ms ease, filter 160ms ease;
+  will-change: transform;
 }
 
 .planet-hud-tag .hud-name {
@@ -7059,8 +7060,7 @@ a.resume-contact-chip:hover {
   transform-style: preserve-3d;
   will-change: transform, opacity;
   cursor: pointer;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.4s ease,
+  transition: box-shadow 0.4s ease,
               border-color 0.4s ease,
               opacity 0.4s ease,
               filter 0.4s ease;
@@ -7305,6 +7305,7 @@ a.resume-contact-chip:hover {
   left: 50% !important;
   top: 10px !important;
   transform: translate(-50%, 0) translateZ(260px) !important;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease !important;
   width: min(620px, 92vw) !important;
   z-index: 100;
   cursor: default;
