@@ -2962,7 +2962,7 @@
 
       ctx.fillStyle = '#8be5e5';
       ctx.font = '600 14px "Space Grotesk", sans-serif';
-      ctx.fillText('VIT CSE 2022–2026', 126, 166);
+      ctx.fillText('VIT Bhopal • CGPA 9.52', 126, 166);
 
       ctx.fillStyle = '#86efac';
       ctx.font = '700 12px "Space Grotesk", sans-serif';
@@ -2970,12 +2970,12 @@
 
       // File Tree Items in Sidebar
       const treeItems = [
-        { icon: '•', label: 'Overview: Tanishka Sahu' },
-        { icon: 'TS', label: 'Resume_Engineering.ts', active: true },
-        { icon: 'GL', label: 'Lumora_SolarSystem.webgl' },
-        { icon: 'FX', label: 'Shaders & Kinematics' },
-        { icon: 'ED', label: 'VIT Academic Honors' },
-        { icon: '@', label: 'Get in Touch' }
+        { icon: '•', label: 'Tanishka_Sahu_Resume.pdf', active: true },
+        { icon: 'TS', label: 'ParkShark_3D_Twin.tsx' },
+        { icon: 'JS', label: 'PiggyPocket_Budget.js' },
+        { icon: 'GL', label: 'Lumora_Space_Engine.webgl' },
+        { icon: 'ED', label: 'VIT_Academic_9.52.ts' },
+        { icon: '@', label: 'Contact_7717603726.json' }
       ];
 
       treeItems.forEach((item, idx) => {
@@ -3000,34 +3000,36 @@
       // Tab Bar
       ctx.fillStyle = '#101626';
       ctx.beginPath();
-      ctx.roundRect(editorX, 82, 340, 44, 8);
+      ctx.roundRect(editorX, 82, 360, 44, 8);
       ctx.fill();
       ctx.fillStyle = '#8be5e5';
       ctx.font = '600 17px "Space Grotesk", sans-serif';
-      ctx.fillText('TanishkaSahu_Resume.ts  ✕', editorX + 24, 110);
+      ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 24, 110);
 
       editorY = 160;
 
-      // Syntax-highlighted resume code
+      // Syntax-highlighted resume code matching verified resume PDF
       const codeLines = [
-        { num: '01', tokens: [{ text: 'import ', col: '#ff7b72' }, { text: '{ ThreeEngine, WebGLShader, Systems } ', col: '#79c0ff' }, { text: 'from ', col: '#ff7b72' }, { text: "'@lumora/core';", col: '#a5d6ff' }] },
-        { num: '02', tokens: [{ text: '// Candidate Profile: Tanishka Sahu (VIT CSE)', col: '#8b949e' }] },
-        { num: '03', tokens: [{ text: 'export const ', col: '#ff7b72' }, { text: 'CandidateProfile ', col: '#d2a8ff' }, { text: '= {', col: '#c9d1d9' }] },
+        { num: '01', tokens: [{ text: 'import ', col: '#ff7b72' }, { text: '{ React, ThreeFiber, Firebase, NodeEngine } ', col: '#79c0ff' }, { text: 'from ', col: '#ff7b72' }, { text: "'@tanishka/portfolio';", col: '#a5d6ff' }] },
+        { num: '02', tokens: [{ text: '// Official Profile: Tanishka Sahu (VIT Bhopal University)', col: '#8b949e' }] },
+        { num: '03', tokens: [{ text: 'export const ', col: '#ff7b72' }, { text: 'TanishkaSahuResume ', col: '#d2a8ff' }, { text: '= {', col: '#c9d1d9' }] },
         { num: '04', tokens: [{ text: '  name: ', col: '#79c0ff' }, { text: '"Tanishka Sahu"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '05', tokens: [{ text: '  institution: ', col: '#79c0ff' }, { text: '"Vellore Institute of Technology (VIT)"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '06', tokens: [{ text: '  degree: ', col: '#79c0ff' }, { text: '"B.Tech in Computer Science & Engineering"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '07', tokens: [{ text: '  duration: ', col: '#79c0ff' }, { text: '"2022 – 2026"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '08', tokens: [{ text: '  coreExpertise: [', col: '#79c0ff' }] },
-        { num: '09', tokens: [{ text: '    "Three.js / WebGL", "Interactive 3D UI", "GLSL Shaders",', col: '#a5d6ff' }] },
-        { num: '10', tokens: [{ text: '    "React / Next.js", "Spatial Math", "Full-Stack Distributed Systems"', col: '#a5d6ff' }] },
-        { num: '11', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
-        { num: '12', tokens: [{ text: '  email: ', col: '#79c0ff' }, { text: '"tanishkasahuwork191@gmail.com"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
-        { num: '13', tokens: [{ text: '  featuredWork: [', col: '#79c0ff' }] },
-        { num: '14', tokens: [{ text: '    "Lumora 3D Interactive Solar System Engine",', col: '#7ee787' }] },
-        { num: '15', tokens: [{ text: '    "Kinematic 3D Hardware Simulation with Smooth Card Pop-out",', col: '#7ee787' }] },
-        { num: '16', tokens: [{ text: '    "Cadet Skyranger Head-Tracking Audio-Visual Experience"', col: '#7ee787' }] },
-        { num: '17', tokens: [{ text: '  ]', col: '#c9d1d9' }] },
-        { num: '18', tokens: [{ text: '};', col: '#c9d1d9' }] }
+        { num: '05', tokens: [{ text: '  headline: ', col: '#79c0ff' }, { text: '"Second Year Passionate Learner in Computer Science"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+        { num: '06', tokens: [{ text: '  institution: ', col: '#79c0ff' }, { text: '"Vellore Institute of Technology, Bhopal"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+        { num: '07', tokens: [{ text: '  degree: ', col: '#79c0ff' }, { text: '"B.Tech Computer Science & Engineering (2025–2029)"', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+        { num: '08', tokens: [{ text: '  cgpa: ', col: '#79c0ff' }, { text: '9.52', col: '#7ee787' }, { text: ', // Academic Standing', col: '#8b949e' }] },
+        { num: '09', tokens: [{ text: '  coreStack: [', col: '#79c0ff' }] },
+        { num: '10', tokens: [{ text: '    "React", "Three.js", "TypeScript", "Python", "C++", "Node.js",', col: '#a5d6ff' }] },
+        { num: '11', tokens: [{ text: '    "Firebase", "Tailwind CSS", "DSA", "SQL", "Cloud Functions"', col: '#a5d6ff' }] },
+        { num: '12', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
+        { num: '13', tokens: [{ text: '  contact: ', col: '#79c0ff' }, { text: '{ email: "tanishkasahuwork191@gmail.com", phone: "+91 7717603726" }', col: '#a5d6ff' }, { text: ',', col: '#c9d1d9' }] },
+        { num: '14', tokens: [{ text: '  verifiedProjects: [', col: '#79c0ff' }] },
+        { num: '15', tokens: [{ text: '    "ParkShark: Smart Bicycle Parking & 3D Campus Explorer",', col: '#7ee787' }] },
+        { num: '16', tokens: [{ text: '    "PiggyPocket: Student Budget Management with 59 Tests",', col: '#7ee787' }] },
+        { num: '17', tokens: [{ text: '    "Lumora: Cosmic 3D Space Portfolio & AI Assistant"', col: '#7ee787' }] },
+        { num: '18', tokens: [{ text: '  ],', col: '#c9d1d9' }] },
+        { num: '19', tokens: [{ text: '  resumePdf: ', col: '#79c0ff' }, { text: '"tanishka-sahu-resume.pdf"', col: '#79c0ff' }, { text: ' // Verified Official PDF', col: '#8b949e' }] },
+        { num: '20', tokens: [{ text: '};', col: '#c9d1d9' }] }
       ];
 
       codeLines.forEach(line => {
@@ -3125,13 +3127,13 @@
       ctx.fillText('Tanishka Sahu', 200, 115);
 
       ctx.fillStyle = '#8be5e5';
-      ctx.font = '600 24px "Space Grotesk", sans-serif';
-      ctx.fillText('Creative 3D Developer & Full-Stack Engineer', 200, 155);
+      ctx.font = '600 22px "Space Grotesk", sans-serif';
+      ctx.fillText('Second Year Passate Learner in Computer Science', 200, 155);
 
       // Section Dividers & Content
       ctx.fillStyle = '#94a3b8';
       ctx.font = '600 20px "Space Grotesk", sans-serif';
-      ctx.fillText('Vellore Institute of Technology (VIT) • B.Tech Computer Science (2022–2026)', 70, 225);
+      ctx.fillText('Vellore Institute of Technology, Bhopal • B.Tech CSE (2025–2029) • CGPA 9.52', 70, 225);
 
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 2;
@@ -3143,13 +3145,13 @@
       // Highlights
       ctx.fillStyle = '#38bdf8';
       ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('CORE COMPETENCIES & STACK', 70, 295);
+      ctx.fillText('TECHNICAL SKILLS & CORE STACK', 70, 295);
 
-      const skills = ['Three.js', 'WebGL', 'GLSL Shaders', 'React / Next.js', 'Distributed Systems', 'UI/UX Engineering'];
+      const skills = ['React', 'Three.js / R3F', 'TypeScript', 'Node.js', 'Firebase', 'Python', 'C++', 'DSA', 'SQL'];
       let skX = 70;
       skills.forEach(s => {
         ctx.fillStyle = 'rgba(139, 229, 229, 0.15)';
-        const w = ctx.measureText(s).width + 36;
+        const w = ctx.measureText(s).width + 30;
         ctx.beginPath();
         ctx.roundRect(skX, 315, w, 44, 12);
         ctx.fill();
@@ -3157,44 +3159,44 @@
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '600 18px "Space Grotesk", sans-serif';
-        ctx.fillText(s, skX + 18, 343);
-        skX += w + 16;
+        ctx.font = '600 17px "Space Grotesk", sans-serif';
+        ctx.fillText(s, skX + 15, 343);
+        skX += w + 14;
       });
 
       // Projects
       ctx.fillStyle = '#38bdf8';
       ctx.font = '700 24px "Space Grotesk", sans-serif';
-      ctx.fillText('FEATURED ENGINEERING HIGHLIGHTS', 70, 415);
+      ctx.fillText('VERIFIED PROJECTS (from official resume)', 70, 415);
 
       const projs = [
-        'Lumora 3D Interactive Solar System & Cinematic Hardware Showcase',
-        'Kinematic Hinge & Procedural Backlit Keycap Shaders (WebGL/Three.js)',
-        'Full-Stack Spatial Telemetry Visualization & Reactive Web Architecture'
+        'ParkShark: Smart Bicycle Parking & 3D Campus Explorer (Three.js, React, Firebase, 150 Slots, 84 Tests)',
+        'Personal Portfolio: Responsive space-themed portfolio with interactive 3D solar system',
+        'PiggyPocket: Student Budget Management with Adaptive Daily Limit (Google OAuth, 59 Passing Tests)'
       ];
       projs.forEach((p, idx) => {
         ctx.fillStyle = '#8be5e5';
         ctx.fillText('✦', 70, 460 + idx * 46);
         ctx.fillStyle = '#e2e8f0';
-        ctx.font = '500 21px "Space Grotesk", sans-serif';
+        ctx.font = '500 20px "Space Grotesk", sans-serif';
         ctx.fillText(p, 105, 460 + idx * 46);
       });
 
       // Contact Banner at bottom
       ctx.fillStyle = 'rgba(14, 25, 42, 0.9)';
       ctx.beginPath();
-      ctx.roundRect(70, 640, canvas.width - 140, 180, 24);
+      ctx.roundRect(70, 630, canvas.width - 140, 190, 24);
       ctx.fill();
       ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
       ctx.stroke();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '700 26px "Space Grotesk", sans-serif';
-      ctx.fillText('Contact: tanishkasahuwork191@gmail.com', 110, 710);
+      ctx.font = '700 24px "Space Grotesk", sans-serif';
+      ctx.fillText('Chandigarh, INDIA • Phone: +91 7717603726 • tanishkasahuwork191@gmail.com', 110, 690);
 
       ctx.fillStyle = '#86efac';
-      ctx.font = '600 21px "Space Grotesk", sans-serif';
-      ctx.fillText('● Ready for high-impact Creative Technologist & 3D WebGL roles', 110, 760);
+      ctx.font = '600 20px "Space Grotesk", sans-serif';
+      ctx.fillText('● Official Resume PDF: tanishka-sahu-resume.pdf • GitHub: @TanishkaSahu191', 110, 740);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.generateMipmaps = true;

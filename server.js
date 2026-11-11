@@ -62,6 +62,7 @@ const MIME_TYPES = {
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.pdf': 'application/pdf',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
   '.woff': 'font/woff',
@@ -238,12 +239,15 @@ function syncPortfolioKnowledge() {
 - **Technical & Graphics Lead (2023–2025) — Vellore Institute of Technology**:
   - Directed 3D WebGL workshops, orchestrated campus hackathons, and mentored 400+ students in creative engineering.
 
-## 6. PROFILES & CONTACT CHANNELS (from Neptune Subspace Nexus)
+## 6. PROFILES & CONTACT CHANNELS (from Neptune Subspace Nexus & Official Resume)
 - Email: tanishkasahuwork191@gmail.com
+- Phone: +91 7717603726
+- Location: Chandigarh, INDIA
 - GitHub: https://github.com/TanishkaSahu191 (@TanishkaSahu191)
 - LinkedIn: https://www.linkedin.com/in/tanishka-sahu-8a617a375/
 - LeetCode: https://leetcode.com/u/tanishka_189/ (500+ problems solved, strong algorithmic mastery)
-- takeUforward (TUF): Striver's SDE Sheet & DSA Roadmap
+- Resume Document: tanishka-sahu-resume.pdf (Available for download)
+- Volunteering: Core Member, Data Science Club (August 2026, Bhopal, India)
 - Available for: Software engineering roles, creative 3D web development, full-stack internships, and collaborative ventures.
 
 ## 7. RAW EXTRACTED ARCHIVES (FOR FULL FIDELITY)
