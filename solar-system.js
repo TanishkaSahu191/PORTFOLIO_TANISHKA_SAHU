@@ -6214,9 +6214,6 @@
       this.closeSaturnCertificatesModal(false);
       this.closeNeptuneLinksModal(false);
 
-      // Set Mars background video playing on scene layer
-      this.setMarsSceneBackground(true);
-
       const modal = document.getElementById('marsModal');
       const video = document.getElementById('marsBgVideo');
       const marsEduTimeline = document.getElementById('marsEducationTimeline');
@@ -6237,14 +6234,42 @@
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
       }
+
+      // Clear any prior timer
+      if (this.marsVideoTimer) {
+        clearTimeout(this.marsVideoTimer);
+        this.marsVideoTimer = null;
+      }
+
       if (video) {
         video.currentTime = 0;
-        video.play().catch(() => { });
+        video.muted = false;
+        video.volume = 1.0;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('Autoplay with audio blocked by browser policy, falling back to muted:', err);
+            video.muted = true;
+            video.play().catch(() => {});
+          });
+        }
+
+        // Keep active for 4 seconds, then pause on that frame
+        this.marsVideoTimer = setTimeout(() => {
+          if (video && !video.paused) {
+            video.pause();
+          }
+        }, 4000);
       }
       this.audio.playScanTelemetry();
     }
 
     closeMarsModal(shouldResetCamera = true) {
+      if (this.marsVideoTimer) {
+        clearTimeout(this.marsVideoTimer);
+        this.marsVideoTimer = null;
+      }
+
       const modal = document.getElementById('marsModal');
       const video = document.getElementById('marsBgVideo');
       const marsEduTimeline = document.getElementById('marsEducationTimeline');
@@ -6266,6 +6291,7 @@
       }
       if (video) {
         video.pause();
+        video.currentTime = 0;
       }
       if (shouldResetCamera) {
         this.selectedBodyId = null;
