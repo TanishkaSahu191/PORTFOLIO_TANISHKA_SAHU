@@ -6620,17 +6620,9 @@ a.resume-contact-chip:hover {
   color: #64748b;
 }
 
-/* Bottom Interactive Dock */
+/* Bottom Interactive Dock (Removed as requested) */
 .uranus-bottom-dock {
-  position: relative;
-  z-index: 50;
-  width: 100%;
-  padding: 12px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  pointer-events: auto;
+  display: none !important;
 }
 
 .uranus-dock-pills {
