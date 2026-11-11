@@ -3047,7 +3047,7 @@ body.solar-active .solar-system-section {
 .colophon-crest {
   font-size: 40px;
   color: #d97706;
-  margin-bottom: 8px;
+  margin-bottom: 22px;
 }
 
 .book-jump-btn {
@@ -3835,7 +3835,7 @@ body.solar-active .solar-system-section {
 }
 
 .back-title {
-  margin: 0 0 4px;
+  margin: 0 0 24px;
   font-family: 'Urbanist', sans-serif;
   font-size: 24px;
   font-weight: 900;

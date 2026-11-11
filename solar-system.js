@@ -6684,7 +6684,7 @@
         'Spread 1: ParkShark & PiggyPocket (P. 02–03)',
         'Spread 2: HackFest & Swasthyam (P. 04–05)',
         'Spread 3: Lumora & Back Cover (P. 06)',
-        'Epilogue: End of Project Volume'
+        'Back Cover & Archives'
       ];
       const pageLabelEl = document.getElementById('bookPageLabel');
       if (pageLabelEl) {
