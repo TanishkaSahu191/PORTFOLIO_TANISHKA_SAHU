@@ -1663,9 +1663,9 @@
       this.isRunning = false;
       this.animFrameId = null;
 
-      // Camera views
-      this.overviewCamPos = new THREE.Vector3(-10, 36, 54);
-      this.overviewCamLook = new THREE.Vector3(0, 3.5, -18);
+      // Camera views (angled panoramic overview showing winding highway from entrance to Jupiter)
+      this.overviewCamPos = new THREE.Vector3(-65.6, 48.8, 16.5);
+      this.overviewCamLook = new THREE.Vector3(-8.6, 5.0, -11.7);
       this.camTargetPos = this.overviewCamPos.clone();
       this.camTargetLook = this.overviewCamLook.clone();
       this.isCamTransitioning = false;
@@ -2445,6 +2445,8 @@
     start() {
       if (this.isRunning) return;
       this.isRunning = true;
+      this.camera.position.copy(this.overviewCamPos);
+      if (this.controls) this.controls.target.copy(this.overviewCamLook);
       this.onResize();
       this.resetToOverview();
       this.animate();
