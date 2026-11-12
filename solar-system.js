@@ -2321,39 +2321,69 @@
       const drawer = document.getElementById('milestoneDetailDrawer');
       if (!drawer) return;
 
-      document.getElementById('drawerPhaseBadge').textContent = m.code;
+      const phaseBadge = document.getElementById('drawerPhaseBadge');
+      if (phaseBadge) {
+        phaseBadge.innerHTML = `<span class="badge-icon">🏆</span><span class="badge-text">${m.code}</span>`;
+      }
       const statusBadge = document.getElementById('drawerStatusBadge');
-      statusBadge.textContent = m.status;
-      statusBadge.className = `drawer-status-badge ${m.statusClass}`;
+      if (statusBadge) {
+        statusBadge.innerHTML = `<span class="badge-icon">★</span><span class="badge-text">${m.status}</span>`;
+        statusBadge.className = `drawer-status-badge ${m.statusClass || ''}`;
+      }
 
-      document.getElementById('drawerTitle').textContent = m.title;
-      document.getElementById('drawerDesc').textContent = m.summary;
+      const titleEl = document.getElementById('drawerTitle');
+      if (titleEl) titleEl.textContent = m.title;
+      const descEl = document.getElementById('drawerDesc');
+      if (descEl) descEl.textContent = m.summary;
 
-      // Deliverables list
+      // Deliverables list with modern pill cards and emerald checkmarks
       const delList = document.getElementById('drawerDeliverablesList');
-      delList.innerHTML = '';
-      m.deliverables.forEach(d => {
-        const li = document.createElement('li');
-        li.className = d.done ? 'is-done' : '';
-        li.innerHTML = `
-          <span class="check-icon ${d.done ? 'done' : 'pending'}">${d.done ? '✓' : '○'}</span>
-          <span>${d.text}</span>
-        `;
-        delList.appendChild(li);
-      });
+      if (delList) {
+        delList.innerHTML = '';
+        m.deliverables.forEach(d => {
+          const li = document.createElement('li');
+          li.className = 'deliverable-pill-item';
+          li.innerHTML = `
+            <span class="pill-check-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="pill-deliverable-text">${d.text}</span>
+          `;
+          delList.appendChild(li);
+        });
+      }
 
-      // Metrics grid
+      // Metrics grid with 3 modern squircle icon cards
       const metGrid = document.getElementById('drawerMetricsGrid');
-      metGrid.innerHTML = '';
-      m.metrics.forEach(met => {
-        const div = document.createElement('div');
-        div.className = 'drawer-metric-card';
-        div.innerHTML = `
-          <span class="metric-label">${met.label}</span>
-          <span class="metric-val">${met.val}</span>
-        `;
-        metGrid.appendChild(div);
-      });
+      if (metGrid) {
+        metGrid.innerHTML = '';
+        const metricIcons = [
+          // Icon 1: Honor / Award / Trophy
+          `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>`,
+          // Icon 2: Map pin / Territory / Language / Platform
+          `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+          // Icon 3: Calendar / Event / Tools
+          `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>`
+        ];
+
+        m.metrics.forEach((met, idx) => {
+          const div = document.createElement('div');
+          div.className = 'drawer-metric-card-modern';
+          const iconSvg = metricIcons[idx % metricIcons.length];
+          div.innerHTML = `
+            <div class="metric-icon-squircle">
+              ${iconSvg}
+            </div>
+            <div class="metric-text-group">
+              <span class="metric-modern-label">${met.label}</span>
+              <span class="metric-modern-val">${met.val}</span>
+            </div>
+          `;
+          metGrid.appendChild(div);
+        });
+      }
 
       drawer.classList.add('is-open');
       drawer.setAttribute('aria-hidden', 'false');

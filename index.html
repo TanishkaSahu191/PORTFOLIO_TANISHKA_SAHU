@@ -1777,24 +1777,96 @@
       <div id="milestoneDetailDrawer" class="milestone-drawer" aria-hidden="true">
         <div class="drawer-inner-card">
           <button id="btnCloseMilestoneDrawer" class="drawer-close-btn" type="button" aria-label="Close detail panel">✕</button>
+          
           <div class="drawer-badge-row">
-            <span id="drawerPhaseBadge" class="drawer-phase-badge">ACHIEVEMENT 01</span>
-            <span id="drawerStatusBadge" class="drawer-status-badge">STATE WINNER</span>
+            <span id="drawerPhaseBadge" class="drawer-phase-badge">
+              <span class="badge-icon">🏆</span>
+              <span class="badge-text">ACHIEVEMENT 01 // 2018</span>
+            </span>
+            <span class="badge-separator" aria-hidden="true"></span>
+            <span id="drawerStatusBadge" class="drawer-status-badge">
+              <span class="badge-icon">★</span>
+              <span class="badge-text">STATE WINNER</span>
+            </span>
           </div>
-          <h2 id="drawerTitle" class="drawer-title">Haryana State Winner — National Spell Quest</h2>
-          <p id="drawerDesc" class="drawer-desc">Full narrative and scope description...</p>
+
+          <div class="drawer-hero-split">
+            <div class="drawer-hero-left">
+              <h2 id="drawerTitle" class="drawer-title">Haryana State Winner — National Spell Quest</h2>
+              <div class="drawer-title-accent"></div>
+              <p id="drawerDesc" class="drawer-desc">In 2018, I was recognized as the Haryana State Winner in the National Spell Quest, an achievement that reflects both strong language skills, vocabulary mastery, and dedicated effort across rigorous competitive rounds.</p>
+            </div>
+
+            <div class="drawer-trophy-pedestal" id="drawerTrophyPedestal" aria-hidden="true">
+              <svg class="trophy-pedestal-svg" viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="trophyChrome" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="35%" stop-color="#e2e8f0"/>
+                    <stop offset="70%" stop-color="#94a3b8"/>
+                    <stop offset="100%" stop-color="#cbd5e1"/>
+                  </linearGradient>
+                  <linearGradient id="pedestalDiscGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="60%" stop-color="#f8fafc"/>
+                    <stop offset="100%" stop-color="#e2e8f0"/>
+                  </linearGradient>
+                  <radialGradient id="trophyAuraGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#c7d2fe" stop-opacity="0.85"/>
+                    <stop offset="50%" stop-color="#e0e7ff" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                  </radialGradient>
+                  <filter id="trophyDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#4f46e5" flood-opacity="0.16"/>
+                  </filter>
+                </defs>
+                <!-- Glowing Aura -->
+                <circle cx="95" cy="85" r="65" fill="url(#trophyAuraGlow)"/>
+                <!-- Orbital Sparkle Ring -->
+                <ellipse cx="95" cy="100" rx="60" ry="20" stroke="#818cf8" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.6" transform="rotate(-15 95 100)"/>
+                <!-- Lower Pedestal Disc -->
+                <ellipse cx="95" cy="142" rx="46" ry="13" fill="#cbd5e1"/>
+                <path d="M49 142 C49 152 141 152 141 142 L141 147 C141 157 49 157 49 147 Z" fill="#94a3b8"/>
+                <!-- Upper Pedestal Disc -->
+                <ellipse cx="95" cy="134" rx="38" ry="10" fill="url(#pedestalDiscGrad)"/>
+                <path d="M57 134 C57 142 133 142 133 134 L133 138 C133 146 57 146 57 138 Z" fill="#cbd5e1"/>
+                <ellipse cx="95" cy="126" rx="30" ry="8" fill="#ffffff" filter="url(#trophyDropShadow)"/>
+                <!-- Trophy Base & Stem -->
+                <ellipse cx="95" cy="122" rx="16" ry="4.5" fill="#94a3b8"/>
+                <path d="M89 106 L87 121 C87 123 103 123 103 121 L101 106 Z" fill="url(#trophyChrome)"/>
+                <!-- Trophy Main Cup -->
+                <path d="M74 58 C74 90 87 106 95 106 C103 106 116 90 116 58 Z" fill="url(#trophyChrome)" filter="url(#trophyDropShadow)"/>
+                <ellipse cx="95" cy="58" rx="21" ry="6" fill="#64748b"/>
+                <ellipse cx="95" cy="59" rx="19.5" ry="4.8" fill="#f8fafc"/>
+                <!-- Trophy Handles -->
+                <path d="M76 64 C60 64 58 86 76 92 C74 88 73 68 79 66 Z" fill="url(#trophyChrome)"/>
+                <path d="M114 64 C130 64 132 86 114 92 C116 88 117 68 111 66 Z" fill="url(#trophyChrome)"/>
+                <!-- Sparkle Stars -->
+                <path d="M138 38 Q138 46 142 46 Q138 46 138 54 Q138 46 134 46 Q138 46 138 38 Z" fill="#818cf8"/>
+                <path d="M64 32 Q64 36 67 36 Q64 36 64 40 Q64 36 61 36 Q64 36 64 32 Z" fill="#a5b4fc"/>
+                <circle cx="146" cy="68" r="2" fill="#818cf8"/>
+                <circle cx="50" cy="85" r="1.5" fill="#c7d2fe"/>
+              </svg>
+            </div>
+          </div>
           
           <div class="drawer-deliverables">
-            <h4>Key Highlights &amp; Core Competencies:</h4>
+            <div class="drawer-deliverables-header">
+              <span class="deliverables-accent-bar"></span>
+              <h4>KEY HIGHLIGHTS &amp; CORE COMPETENCIES:</h4>
+            </div>
             <ul id="drawerDeliverablesList" class="deliverables-list"></ul>
           </div>
 
           <div class="drawer-metrics-grid" id="drawerMetricsGrid"></div>
 
           <div class="drawer-actions-row">
-            <button id="btnPrevMilestone" class="drawer-action-btn" type="button">← Prev Phase</button>
-            <button id="btnResetOverviewFromDrawer" class="drawer-action-btn primary" type="button">Reset Overview View</button>
-            <button id="btnNextMilestone" class="drawer-action-btn" type="button">Next Phase →</button>
+            <button id="btnPrevMilestone" class="drawer-action-btn pill-btn" type="button">← Prev Phase</button>
+            <button id="btnResetOverviewFromDrawer" class="drawer-action-btn primary pill-btn" type="button">
+              <span class="btn-reset-icon">↺</span>
+              <span>Reset Overview View</span>
+            </button>
+            <button id="btnNextMilestone" class="drawer-action-btn pill-btn" type="button">Next Phase →</button>
           </div>
         </div>
       </div>
