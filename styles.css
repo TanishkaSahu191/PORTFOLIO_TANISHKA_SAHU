@@ -4469,7 +4469,7 @@ body.solar-active .solar-system-section {
   top: 50%;
   transform: translateY(-50%) translateX(-60px);
   z-index: 35;
-  width: min(450px, calc(100vw - 48px));
+  width: min(540px, calc(100vw - 48px));
   max-height: calc(100vh - 80px);
   opacity: 0;
   pointer-events: none;
