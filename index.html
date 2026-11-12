@@ -143,6 +143,24 @@
         </div>
         <div class="solar-nav-right">
           <button
+            id="btnInteractiveReadme"
+            class="interactive-readme-btn"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="interactiveReadmeModal"
+            title="Open Interactive System README &amp; Terminal"
+          >
+            <span class="readme-pulse-dot" aria-hidden="true"></span>
+            <svg class="readme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="8" y1="10" x2="14" y2="10"></line>
+            </svg>
+            <span class="readme-btn-label">Interactive README</span>
+          </button>
+          <button
             id="btnMissionGuide"
             class="mission-guide-btn"
             type="button"
@@ -2932,6 +2950,412 @@
       </div>
     </dialog>
 
+    <!-- Interactive In-App README & System Terminal Modal -->
+    <dialog id="interactiveReadmeModal" class="interactive-readme-modal" aria-labelledby="readmeModalTitle" aria-modal="true">
+      <div class="readme-modal-backdrop" id="readmeModalBackdrop"></div>
+      <div class="readme-terminal-card">
+        <!-- Terminal Title Bar -->
+        <header class="readme-term-header">
+          <div class="readme-term-controls">
+            <span class="term-dot close" id="btnTermDotClose" title="Close README"></span>
+            <span class="term-dot min" title="Minimize"></span>
+            <span class="term-dot max" title="Maximize"></span>
+          </div>
+          <div class="readme-term-titlebar">
+            <span class="term-prompt-icon">⚡</span>
+            <span id="readmeModalTitle" class="term-title-text">lumora-v2.0 // INTERACTIVE_README.md</span>
+            <span class="term-badge">60 FPS WebGL Engine</span>
+          </div>
+          <button id="btnCloseInteractiveReadme" class="readme-close-btn" type="button" aria-label="Close Interactive README" title="Close README [Esc]">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </header>
+
+        <!-- Interactive Navigation Tabs -->
+        <nav class="readme-tab-nav" aria-label="README Navigation Tabs">
+          <button class="readme-tab-btn is-active" data-readme-tab="overview" type="button">
+            <span class="tab-icon">🌌</span>
+            <span>Mission</span>
+          </button>
+          <button class="readme-tab-btn" data-readme-tab="planets" type="button">
+            <span class="tab-icon">🪐</span>
+            <span>Planetary Deck</span>
+          </button>
+          <button class="readme-tab-btn" data-readme-tab="architecture" type="button">
+            <span class="tab-icon">🏗️</span>
+            <span>Architecture</span>
+          </button>
+          <button class="readme-tab-btn" data-readme-tab="projects" type="button">
+            <span class="tab-icon">🚀</span>
+            <span>Projects</span>
+          </button>
+          <button class="readme-tab-btn" data-readme-tab="controls" type="button">
+            <span class="tab-icon">🕹️</span>
+            <span>Controls</span>
+          </button>
+          <button class="readme-tab-btn" data-readme-tab="quickstart" type="button">
+            <span class="tab-icon">💻</span>
+            <span>Quick Start</span>
+          </button>
+        </nav>
+
+        <!-- Interactive Tab Panels Area -->
+        <div class="readme-tab-content-area">
+          <!-- 1. Mission Overview Tab -->
+          <div class="readme-pane is-active" id="paneOverview">
+            <div class="readme-hero-banner">
+              <div class="hero-chip">VERSION 2.0.4 // PRODUCTION</div>
+              <h2 class="hero-headline">Lumora: Interactive 3D Celestial Portfolio</h2>
+              <p class="hero-sub">High-performance Three.js spatial computing vessel with custom GLSL atmospheric shaders, spatial Web Audio, and an in-universe conversational Gemini AI copilot (Nova AI).</p>
+            </div>
+
+            <div class="readme-stats-grid">
+              <div class="stat-pill-card">
+                <span class="stat-num">9</span>
+                <span class="stat-tag">Celestial Bodies</span>
+                <span class="stat-sub">Real-Time Simulation</span>
+              </div>
+              <div class="stat-pill-card">
+                <span class="stat-num">60</span>
+                <span class="stat-tag">FPS Locked</span>
+                <span class="stat-sub">WebGL Zero Stutter</span>
+              </div>
+              <div class="stat-pill-card">
+                <span class="stat-num">5</span>
+                <span class="stat-tag">Flagship Projects</span>
+                <span class="stat-sub">3D Book Chronicles</span>
+              </div>
+              <div class="stat-pill-card">
+                <span class="stat-num">9.52</span>
+                <span class="stat-tag">Current CGPA</span>
+                <span class="stat-sub">VIT Bhopal B.Tech CSE</span>
+              </div>
+            </div>
+
+            <div class="readme-section-block">
+              <h3 class="section-title">Core Engineering Foundations</h3>
+              <ul class="feature-checklist">
+                <li><span class="check-glyph">✓</span> <strong>Keplerian Dynamics:</strong> Mathematically grounded orbital velocities, elliptical eccentricities &amp; axial tilts.</li>
+                <li><span class="check-glyph">✓</span> <strong>Procedural Shaders:</strong> Multi-pass corona Fresnel glows, volumetric atmospheres, and dynamic Saturn ring shadows.</li>
+                <li><span class="check-glyph">✓</span> <strong>Context-Grounded Gemini AI:</strong> In-universe voice &amp; chat copilot answering background, skills, and project telemetry.</li>
+                <li><span class="check-glyph">✓</span> <strong>Directional Web Audio:</strong> Proximity-calibrated cosmic soundscapes with dynamic Doppler frequency shift.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 2. Planetary Deck Tab (Interactive Flight Jumps) -->
+          <div class="readme-pane" id="panePlanets">
+            <div class="pane-header-strip">
+              <h3 class="pane-title">Celestial Waypoint Navigation</h3>
+              <p class="pane-desc">Click any planetary waypoint to close this manual and engage immediate 3D camera warp to that destination.</p>
+            </div>
+
+            <div class="deck-cards-grid">
+              <!-- Sun -->
+              <div class="deck-card sun-deck">
+                <div class="deck-top">
+                  <span class="deck-orb sun-dot"></span>
+                  <span class="deck-name">Sol // Sun</span>
+                  <span class="deck-badge yellow">Primary Core</span>
+                </div>
+                <p class="deck-summary">Nova AI in-universe conversational copilot grounded in portfolio knowledge.</p>
+                <button class="deck-warp-btn" data-fly-planet="sun" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Mercury -->
+              <div class="deck-card mercury-deck">
+                <div class="deck-top">
+                  <span class="deck-orb mercury-dot"></span>
+                  <span class="deck-name">Mercury</span>
+                  <span class="deck-badge gray">Telemetry</span>
+                </div>
+                <p class="deck-summary">Verified developer identity card, core technical stack, and credentials.</p>
+                <button class="deck-warp-btn" data-fly-planet="mercury" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Venus -->
+              <div class="deck-card venus-deck">
+                <div class="deck-top">
+                  <span class="deck-orb venus-dot"></span>
+                  <span class="deck-name">Venus</span>
+                  <span class="deck-badge orange">Philosophy</span>
+                </div>
+                <p class="deck-summary">Developer biography, engineering vision, and creative problem solving.</p>
+                <button class="deck-warp-btn" data-fly-planet="venus" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Earth -->
+              <div class="deck-card earth-deck">
+                <div class="deck-top">
+                  <span class="deck-orb earth-dot"></span>
+                  <span class="deck-name">Earth</span>
+                  <span class="deck-badge blue">Software Book</span>
+                </div>
+                <p class="deck-summary">Interactive 3D flippable parchment chronicles featuring 5 flagship software projects.</p>
+                <button class="deck-warp-btn" data-fly-planet="earth" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Mars -->
+              <div class="deck-card mars-deck">
+                <div class="deck-top">
+                  <span class="deck-orb mars-dot"></span>
+                  <span class="deck-name">Mars</span>
+                  <span class="deck-badge red">Education</span>
+                </div>
+                <p class="deck-summary">Academic trajectory across 10th (97%), 12th (90%), and VIT Bhopal B.Tech (9.52 CGPA).</p>
+                <button class="deck-warp-btn" data-fly-planet="mars" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Jupiter -->
+              <div class="deck-card jupiter-deck">
+                <div class="deck-top">
+                  <span class="deck-orb jupiter-dot"></span>
+                  <span class="deck-name">Jupiter</span>
+                  <span class="deck-badge amber">Achievements</span>
+                </div>
+                <p class="deck-summary">Johns Hopkins Healthcare Hackathon, Collegiate DSA League, and SpellQuest State Gold.</p>
+                <button class="deck-warp-btn" data-fly-planet="jupiter" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Saturn -->
+              <div class="deck-card saturn-deck">
+                <div class="deck-top">
+                  <span class="deck-orb saturn-dot"></span>
+                  <span class="deck-name">Saturn</span>
+                  <span class="deck-badge gold">Certifications</span>
+                </div>
+                <p class="deck-summary">Suspended glass vault of verified credentials with kinetic pendulum hover physics.</p>
+                <button class="deck-warp-btn" data-fly-planet="saturn" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Uranus -->
+              <div class="deck-card uranus-deck">
+                <div class="deck-top">
+                  <span class="deck-orb uranus-dot"></span>
+                  <span class="deck-name">Uranus</span>
+                  <span class="deck-badge cyan">3D Resume</span>
+                </div>
+                <p class="deck-summary">Interactive modular resume card inside a 3D laptop workspace with PDF export.</p>
+                <button class="deck-warp-btn" data-fly-planet="uranus" type="button">Fly To Orbit ➔</button>
+              </div>
+
+              <!-- Neptune -->
+              <div class="deck-card neptune-deck">
+                <div class="deck-top">
+                  <span class="deck-orb neptune-dot"></span>
+                  <span class="deck-name">Neptune</span>
+                  <span class="deck-badge indigo">Communications</span>
+                </div>
+                <p class="deck-summary">GitHub, LinkedIn, direct email contact channels, and social coordinates.</p>
+                <button class="deck-warp-btn" data-fly-planet="neptune" type="button">Fly To Orbit ➔</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Architecture & Flow Tab -->
+          <div class="readme-pane" id="paneArchitecture">
+            <div class="pane-header-strip">
+              <h3 class="pane-title">System Architecture &amp; Data Pipeline</h3>
+              <p class="pane-desc">Modular client-server pipeline separating high-frequency 60 FPS WebGL rendering from asynchronous LLM streaming.</p>
+            </div>
+
+            <div class="arch-flow-diagram">
+              <div class="arch-box client-box">
+                <span class="arch-tag">CLIENT BROWSER (60 FPS)</span>
+                <h4 class="arch-title">Three.js WebGL Engine</h4>
+                <p class="arch-sub">Scene Graph • Keplerian Math • GLSL Shaders • Spatial Web Audio • 3D Modals</p>
+              </div>
+              <div class="arch-arrow">➔ RequestAnimationFrame ➔</div>
+              <div class="arch-box server-box">
+                <span class="arch-tag">NODE.JS / EXPRESS HOST</span>
+                <h4 class="arch-title">API &amp; Streaming Server</h4>
+                <p class="arch-sub">Static Asset Distribution • Port 3000 • Gemini API Streaming Proxy</p>
+              </div>
+              <div class="arch-arrow">➔ Secure TLS ➔</div>
+              <div class="arch-box cloud-box">
+                <span class="arch-tag">CLOUD SERVICES</span>
+                <h4 class="arch-title">Google Gemini API</h4>
+                <p class="arch-sub">Real-time Conversational Inference • Context-Grounded Prompt Archive</p>
+              </div>
+            </div>
+
+            <div class="arch-specs-row">
+              <div class="arch-spec-card">
+                <span class="spec-label">RENDERING LOOP</span>
+                <span class="spec-value">60 FPS Locked</span>
+                <p class="spec-note">Zero-garbage collection loop with matrix reuse and frustum culling.</p>
+              </div>
+              <div class="arch-spec-card">
+                <span class="spec-label">CAMERA ORCHESTRATION</span>
+                <span class="spec-value">Spherical Slerp</span>
+                <p class="spec-note">Kinematic camera lerp transitions with velocity damping and collision bounds.</p>
+              </div>
+              <div class="arch-spec-card">
+                <span class="spec-label">AUDIO SYNTHESIS</span>
+                <span class="spec-value">Web Audio API</span>
+                <p class="spec-note">Real-time directional oscillators with proximity-driven volume falloff.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Flagship Projects Tab -->
+          <div class="readme-pane" id="paneProjects">
+            <div class="pane-header-strip">
+              <h3 class="pane-title">Flagship Software Projects</h3>
+              <p class="pane-desc">Featured systems documented in the Earth 3D Project Chronicles with live code and demos.</p>
+            </div>
+
+            <div class="projects-matrix-list">
+              <!-- ParkShark -->
+              <div class="project-matrix-item">
+                <div class="matrix-head">
+                  <h4 class="matrix-title">ParkShark: Smart Bicycle Management &amp; 3D Campus Explorer</h4>
+                  <span class="matrix-badge">Three.js • React 19 • Firebase</span>
+                </div>
+                <p class="matrix-desc">Intelligent IoT parking platform with 150 automated stands, WASD avatar physics, real-time 2D minimap HUD, and SHA-256 anti-tamper security.</p>
+                <div class="matrix-actions">
+                  <a href="https://github.com/TanishkaSahu191/ParkShark" target="_blank" rel="noopener noreferrer" class="matrix-link">GitHub Repository ↗</a>
+                  <a href="https://github.com/TanishkaSahu191/ParkShark#readme" target="_blank" rel="noopener noreferrer" class="matrix-link secondary">Documentation ↗</a>
+                </div>
+              </div>
+
+              <!-- PiggyPocket -->
+              <div class="project-matrix-item">
+                <div class="matrix-head">
+                  <h4 class="matrix-title">PiggyPocket: Student Budget &amp; Adaptive Daily Allowance</h4>
+                  <span class="matrix-badge">React 18 • Node.js • 59 Tests</span>
+                </div>
+                <p class="matrix-desc">Adaptive financial engine auto-recalibrating daily spending velocity from recurring monthly allowances, backed by Google OAuth 2.0 and 59 Vitest test suites.</p>
+                <div class="matrix-actions">
+                  <a href="https://github.com/TanishkaSahu191/PiggyPocket" target="_blank" rel="noopener noreferrer" class="matrix-link">GitHub Repository ↗</a>
+                  <a href="https://github.com/TanishkaSahu191/PiggyPocket#readme" target="_blank" rel="noopener noreferrer" class="matrix-link secondary">Documentation ↗</a>
+                </div>
+              </div>
+
+              <!-- HackFest -->
+              <div class="project-matrix-item">
+                <div class="matrix-head">
+                  <h4 class="matrix-title">HackFest: Full-Stack Hackathon Management Platform</h4>
+                  <span class="matrix-badge">React 19 • Express • MongoDB</span>
+                </div>
+                <p class="matrix-desc">Multi-track collegiate hackathon operations platform with dynamic team formation, live rubric scoring, and sub-45ms compound index queries.</p>
+                <div class="matrix-actions">
+                  <a href="https://github.com/TanishkaSahu191/hackathon-website" target="_blank" rel="noopener noreferrer" class="matrix-link">GitHub Repository ↗</a>
+                  <a href="https://github.com/TanishkaSahu191/hackathon-website#readme" target="_blank" rel="noopener noreferrer" class="matrix-link secondary">Documentation ↗</a>
+                </div>
+              </div>
+
+              <!-- Swasthyam -->
+              <div class="project-matrix-item">
+                <div class="matrix-head">
+                  <h4 class="matrix-title">Swasthyam: Maternal &amp; Child Health AI Companion</h4>
+                  <span class="matrix-badge">Johns Hopkins Winner • AI RAG</span>
+                </div>
+                <p class="matrix-desc">Domain-grounded health copilot with automated WHO/MoHFW immunization countdowns and bilingual Hindi/English peer support forums.</p>
+                <div class="matrix-actions">
+                  <a href="https://github.com/TanishkaSahu191/Swasthyam-1" target="_blank" rel="noopener noreferrer" class="matrix-link">GitHub Repository ↗</a>
+                  <a href="https://github.com/TanishkaSahu191/Swasthyam-1#readme" target="_blank" rel="noopener noreferrer" class="matrix-link secondary">Documentation ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Flight Controls Tab -->
+          <div class="readme-pane" id="paneControls">
+            <div class="pane-header-strip">
+              <h3 class="pane-title">Interactive Flight Controls Simulator</h3>
+              <p class="pane-desc">Click any interactive keycap below to simulate control inputs or test spatial navigation commands.</p>
+            </div>
+
+            <div class="interactive-keycaps-grid">
+              <div class="keycap-card" data-key-name="Orbit">
+                <div class="keycap-face">MOUSE DRAG</div>
+                <span class="keycap-label">Orbit Camera</span>
+                <span class="keycap-sub">Free 360° celestial rotation</span>
+              </div>
+              <div class="keycap-card" data-key-name="Zoom">
+                <div class="keycap-face">SCROLL</div>
+                <span class="keycap-label">Zoom Telemetry</span>
+                <span class="keycap-sub">Adjust planetary focal distance</span>
+              </div>
+              <div class="keycap-card" data-key-name="Pan">
+                <div class="keycap-face">RIGHT CLICK</div>
+                <span class="keycap-label">Pan Ecliptic</span>
+                <span class="keycap-sub">Lateral translation in space</span>
+              </div>
+              <div class="keycap-card" data-key-name="Click">
+                <div class="keycap-face">CLICK</div>
+                <span class="keycap-label">Engage Target</span>
+                <span class="keycap-sub">Slerp fly to body &amp; open HUD</span>
+              </div>
+              <div class="keycap-card" data-key-name="Esc">
+                <div class="keycap-face">ESC</div>
+                <span class="keycap-label">Disengage Focus</span>
+                <span class="keycap-sub">Return to wide solar system</span>
+              </div>
+              <div class="keycap-card" data-key-name="Guide">
+                <div class="keycap-face">GUIDE</div>
+                <span class="keycap-label">Mission Guide</span>
+                <span class="keycap-sub">Skeuomorphic tactile manual</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Quick Start & CLI Tab -->
+          <div class="readme-pane" id="paneQuickstart">
+            <div class="pane-header-strip">
+              <h3 class="pane-title">Local Deployment &amp; CLI Quick Start</h3>
+              <p class="pane-desc">Run this project locally with Node.js and any WebGL-compatible browser.</p>
+            </div>
+
+            <div class="code-terminal-block">
+              <div class="code-block-head">
+                <span class="code-block-title">Step 1 // Clone the Repository</span>
+                <button class="term-copy-btn" data-copy-cmd="git clone https://github.com/TanishkaSahu191/lumora.git" type="button">Copy</button>
+              </div>
+              <pre class="code-snippet"><code>git clone https://github.com/TanishkaSahu191/lumora.git
+cd lumora</code></pre>
+            </div>
+
+            <div class="code-terminal-block">
+              <div class="code-block-head">
+                <span class="code-block-title">Step 2 // Install Dependencies</span>
+                <button class="term-copy-btn" data-copy-cmd="npm install" type="button">Copy</button>
+              </div>
+              <pre class="code-snippet"><code>npm install</code></pre>
+            </div>
+
+            <div class="code-terminal-block">
+              <div class="code-block-head">
+                <span class="code-block-title">Step 3 // Launch Cosmic Vessel</span>
+                <button class="term-copy-btn" data-copy-cmd="npm start" type="button">Copy</button>
+              </div>
+              <pre class="code-snippet"><code>npm start
+# Server online at http://localhost:3000</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Footer -->
+        <footer class="readme-term-footer">
+          <div class="term-footer-meta">
+            <span class="footer-dot-live"></span>
+            <span>DEVELOPER: TANISHKA SAHU</span>
+            <span class="footer-sep">•</span>
+            <span>VIT BHOPAL (CGPA 9.52)</span>
+          </div>
+          <div class="term-footer-links">
+            <a href="https://github.com/TanishkaSahu191" target="_blank" rel="noopener noreferrer" class="term-foot-link">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/tanishka-sahu-7b1b3628b/" target="_blank" rel="noopener noreferrer" class="term-foot-link">LinkedIn ↗</a>
+            <a href="mailto:tanishkasahuwork191@gmail.com" class="term-foot-link">Contact ↗</a>
+          </div>
+        </footer>
+      </div>
+    </dialog>
+
     <!-- Glassmorphic Interactive Planet Dossier Dialog Modal -->
     <dialog id="planetModal" class="planet-modal" aria-labelledby="modalPlanetName" aria-modal="true">
       <div class="planet-modal-card">
@@ -3045,7 +3469,6 @@
         </div>
       </div>
     </dialog>
-
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

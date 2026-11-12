@@ -5852,6 +5852,10 @@
           if (missionGuideModal && missionGuideModal.classList.contains('is-open')) {
             this.closeMissionGuideModal();
           }
+          const readmeModal = document.getElementById('interactiveReadmeModal');
+          if (readmeModal && readmeModal.classList.contains('is-open')) {
+            this.closeInteractiveReadmeModal();
+          }
         }
       });
 
@@ -5863,6 +5867,99 @@
           if (planetId) {
             this.selectPlanet(planetId);
           }
+        });
+      });
+
+      // Interactive System README Modal Events
+      const btnInteractiveReadme = document.getElementById('btnInteractiveReadme');
+      const interactiveReadmeModal = document.getElementById('interactiveReadmeModal');
+      const btnCloseInteractiveReadme = document.getElementById('btnCloseInteractiveReadme');
+      const btnTermDotClose = document.getElementById('btnTermDotClose');
+      const readmeModalBackdrop = document.getElementById('readmeModalBackdrop');
+
+      if (btnInteractiveReadme) {
+        btnInteractiveReadme.addEventListener('click', () => {
+          this.toggleInteractiveReadmeModal();
+        });
+      }
+
+      if (btnCloseInteractiveReadme) {
+        btnCloseInteractiveReadme.addEventListener('click', () => {
+          this.closeInteractiveReadmeModal();
+        });
+      }
+
+      if (btnTermDotClose) {
+        btnTermDotClose.addEventListener('click', () => {
+          this.closeInteractiveReadmeModal();
+        });
+      }
+
+      if (readmeModalBackdrop) {
+        readmeModalBackdrop.addEventListener('click', () => {
+          this.closeInteractiveReadmeModal();
+        });
+      }
+
+      // README Tab Switching
+      document.querySelectorAll('.readme-tab-btn[data-readme-tab]').forEach(tabBtn => {
+        tabBtn.addEventListener('click', () => {
+          const tabId = tabBtn.getAttribute('data-readme-tab');
+          document.querySelectorAll('.readme-tab-btn').forEach(b => b.classList.remove('is-active'));
+          tabBtn.classList.add('is-active');
+
+          document.querySelectorAll('.readme-pane').forEach(p => p.classList.remove('is-active'));
+          const targetPane = document.getElementById(`pane${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+          if (targetPane) {
+            targetPane.classList.add('is-active');
+          }
+          if (this.audio) {
+            try { this.audio.playSelectBlip(); } catch (err) {}
+          }
+        });
+      });
+
+      // README Planetary Deck Quick Jumps
+      document.querySelectorAll('.deck-warp-btn[data-fly-planet]').forEach(warpBtn => {
+        warpBtn.addEventListener('click', () => {
+          const planetId = warpBtn.getAttribute('data-fly-planet');
+          this.closeInteractiveReadmeModal();
+          if (planetId) {
+            this.selectPlanet(planetId);
+          }
+        });
+      });
+
+      // README CLI Copy Buttons
+      document.querySelectorAll('.term-copy-btn[data-copy-cmd]').forEach(copyBtn => {
+        copyBtn.addEventListener('click', async () => {
+          const cmd = copyBtn.getAttribute('data-copy-cmd');
+          if (cmd) {
+            try {
+              await navigator.clipboard.writeText(cmd);
+              const originalText = copyBtn.textContent;
+              copyBtn.textContent = 'Copied!';
+              copyBtn.classList.add('is-copied');
+              setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.classList.remove('is-copied');
+              }, 2000);
+            } catch (err) {
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
+            }
+          }
+        });
+      });
+
+      // README Keycap Simulator Clicks
+      document.querySelectorAll('.keycap-card').forEach(keyCard => {
+        keyCard.addEventListener('click', () => {
+          keyCard.classList.add('is-pressed');
+          if (this.audio) {
+            try { this.audio.playSelectBlip(); } catch (err) {}
+          }
+          setTimeout(() => keyCard.classList.remove('is-pressed'), 300);
         });
       });
 
@@ -7462,10 +7559,55 @@
       }
     }
 
+    openInteractiveReadmeModal() {
+      const modal = document.getElementById('interactiveReadmeModal');
+      const btn = document.getElementById('btnInteractiveReadme');
+      if (modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        if (typeof modal.showModal === 'function' && !modal.open) {
+          try { modal.showModal(); } catch (err) {}
+        }
+      }
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    closeInteractiveReadmeModal() {
+      const modal = document.getElementById('interactiveReadmeModal');
+      const btn = document.getElementById('btnInteractiveReadme');
+      if (modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        if (typeof modal.close === 'function' && modal.open) {
+          try { modal.close(); } catch (err) {}
+        }
+      }
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      if (this.audio) {
+        try { this.audio.playSelectBlip(); } catch (err) {}
+      }
+    }
+
+    toggleInteractiveReadmeModal() {
+      const modal = document.getElementById('interactiveReadmeModal');
+      if (modal && modal.classList.contains('is-open')) {
+        this.closeInteractiveReadmeModal();
+      } else {
+        this.openInteractiveReadmeModal();
+      }
+    }
+
     render(time) {
       // If a full-screen modal or dialog is open, skip rendering the background solar scene to preserve 60 FPS performance
       const isModalActive = !!document.querySelector(
-        '.earth-book-modal.is-open, .saturn-certificates-modal.is-open, .uranus-resume-modal.is-open, .jupiter-roadmap-modal.is-open, .mars-modal.is-open, .neptune-links-modal.is-open, .mercury-id-modal.is-open, .venus-about-modal.is-open, #planetModal.is-open, #missionGuideModal.is-open, #novaAiModal.is-open'
+        '.earth-book-modal.is-open, .saturn-certificates-modal.is-open, .uranus-resume-modal.is-open, .jupiter-roadmap-modal.is-open, .mars-modal.is-open, .neptune-links-modal.is-open, .mercury-id-modal.is-open, .venus-about-modal.is-open, #planetModal.is-open, #missionGuideModal.is-open, #interactiveReadmeModal.is-open, #novaAiModal.is-open'
       );
       if (isModalActive) {
         this.lastTime = time;
