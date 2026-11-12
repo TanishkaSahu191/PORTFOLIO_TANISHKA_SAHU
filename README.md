@@ -1,4 +1,4 @@
-# 🪐 LUMORA — Interactive 3D Cosmic Portfolio
+#   Portfolio Page
 
 <div align="center">
 
@@ -18,9 +18,10 @@
 
 ---
 
-## 🌌 Interactive Overview
+##  Interactive Overview
 
-Lumora reimagines the traditional developer portfolio as an **interactive planetary exploration vessel**. Visitors navigate across the solar system where each celestial body represents a foundational pillar of engineering, scholarship, and creative development.
+ Reimagines the my portfolio as an **interactive planetary exploration vessel**.
+ Visitors navigate across the solar system where each celestial body represents a foundational pillar of engineering, scholarship, and creative development.
 
 ```
                    ☀️ SOL [Nova AI Assistant]
@@ -38,12 +39,12 @@ Cosmic ID   Philosophy  3D Project Book Education  Achievements
 
 ---
 
-## 🪐 Celestial Destinations (Interactive Directory)
+##  Celestial Destinations (Interactive Directory)
 
 Click on any celestial body below to expand its mission specs, engineering telemetry, and in-universe features:
 
 <details open>
-<summary><b>☀️ SOL // Ask Nova AI (In-Universe Gemini Intelligence)</b></summary>
+<summary><b> SOL // Ask Nova AI (In-Universe Gemini Intelligence)</b></summary>
 <br/>
 
 * **Role**: Primary Solar Core & Conversational AI Copilot.
@@ -114,9 +115,9 @@ Click on any celestial body below to expand its mission specs, engineering telem
 
 * **Role**: Massive planetary gravity well archiving competitive hackathons and honors.
 * **Highlights**:
-  * 🏆 **Johns Hopkins University × VIT Bhopal Hackathon**: Healthcare Innovation Distinction for Swasthyam.
-  * 🌟 **Collegiate DSA League**: 6th Position Solo Contender (Graphs, Trees, Dynamic Programming).
-  * 🥇 **SpellQuest India State Championship**: 1st Position State Winner (Club V).
+  * **Johns Hopkins University × VIT Bhopal Hackathon**: Healthcare Innovation Distinction for Swasthyam.
+  *  **Collegiate DSA League**: 6th Position Solo Contender (Graphs, Trees, Dynamic Programming).
+  *  **SpellQuest India State Championship**: 1st Position State Winner (Club V).
 
 </details>
 
@@ -160,7 +161,7 @@ Click on any celestial body below to expand its mission specs, engineering telem
 
 ---
 
-## 🛠️ System Architecture
+##  System Architecture
 
 ```mermaid
 flowchart TD
@@ -195,7 +196,7 @@ flowchart TD
 
 ---
 
-## 💻 Tech Stack Matrix
+##  Tech Stack Matrix
 
 | Layer | Technologies |
 |---|---|
@@ -208,7 +209,7 @@ flowchart TD
 
 ---
 
-## 🚀 Flagship Software Projects
+##  Flagship Software Projects
 
 | Project | Tech Stack | Key Architectural Achievement | Links |
 |---|---|---|---|
@@ -220,7 +221,7 @@ flowchart TD
 
 ---
 
-## 🕹️ Interactive Flight Controls
+##  Interactive Flight Controls
 
 | Control | Action | Scope |
 |---|---|---|
@@ -234,7 +235,7 @@ flowchart TD
 
 ---
 
-## 📦 Quick Start & Local Deployment
+##  Quick Start & Local Deployment
 
 ### Prerequisites
 * [Node.js](https://nodejs.org/) (v16.0 or higher recommended)
@@ -270,7 +271,7 @@ Open [http://localhost:3000](http://localhost:3000) in any modern WebGL-supporte
 
 ---
 
-## 📜 Academic & Verification Credentials
+##  Academic & Verification Credentials
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -286,7 +287,7 @@ Open [http://localhost:3000](http://localhost:3000) in any modern WebGL-supporte
 
 <div align="center">
 
-**Developed with 💙 and celestial physics by [Tanishka Sahu](https://github.com/TanishkaSahu191)**  
-*Continuous Learning • Creative Engineering • Spatial Computing*
+**Developed by [Tanishka Sahu](https://github.com/TanishkaSahu191)**  
+*Continuous Learning • Creative Engineering
 
 </div>
