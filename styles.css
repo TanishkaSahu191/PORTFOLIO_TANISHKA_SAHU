@@ -929,85 +929,118 @@ body.solar-active .solar-system-section {
 .mission-guide-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(2, 6, 18, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(15, 12, 10, 0.84);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   z-index: 1;
   cursor: pointer;
 }
 
+/* Outer Tactile Device Bezel / Frame */
 .mission-guide-card {
   position: relative;
   z-index: 2;
-  width: 92%;
-  max-width: 780px;
-  max-height: 88vh;
+  width: min(820px, 94vw);
+  max-height: 92vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(155deg, rgba(12, 22, 50, 0.94) 0%, rgba(5, 12, 32, 0.97) 100%);
-  border: 1px solid rgba(110, 180, 255, 0.28);
-  border-radius: 18px;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(40, 110, 240, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.16);
+  background: #1c1a17;
+  border: 2px solid #2d2924;
+  border-radius: 36px;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.85),
+              0 10px 30px rgba(0, 0, 0, 0.6),
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.15),
+              inset 0 -2px 6px rgba(0, 0, 0, 0.9);
+  padding: 12px;
   overflow: hidden;
   transform: translateY(16px) scale(0.97);
   transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
 .mission-guide-modal.is-open .mission-guide-card {
   transform: translateY(0) scale(1);
 }
 
-/* Guide Header */
-.guide-header {
-  padding: 22px 28px 16px;
+/* Inner Device Screen: Warm Oatmeal/Matte Leather Textured Surface */
+.mission-guide-inner-surface {
+  background: #e3dbc9;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.4) 0%, transparent 65%),
+    radial-gradient(rgba(140, 120, 100, 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 8px 8px;
+  border-radius: 26px;
+  border: 1.5px solid #b8ae9b;
+  box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.22),
+              inset 0 -2px 6px rgba(255, 255, 255, 0.4);
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  max-height: calc(92vh - 24px);
+  overflow: hidden;
+  padding: 20px 22px 18px;
+  gap: 13px;
+  box-sizing: border-box;
+}
+
+/* Guide Header with Stitched Cognac Leather Badge */
+.guide-header {
+  padding: 0;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  gap: 14px;
   flex-shrink: 0;
 }
 
-.guide-badge {
-  display: inline-flex;
+.guide-leather-badge {
+  flex: 1;
+  background: linear-gradient(180deg, #d89b58 0%, #c4833e 45%, #b1722e 100%);
+  border-radius: 18px;
+  border: 2px solid #8e541e;
+  padding: 11px 22px;
+  box-shadow: 0 5px 16px rgba(80, 45, 12, 0.35),
+              0 1px 3px rgba(80, 45, 12, 0.2),
+              inset 0 2px 2px rgba(255, 245, 220, 0.75),
+              inset 0 -2.5px 3px rgba(60, 28, 5, 0.5);
+  position: relative;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  font-family: 'Space Grotesk', monospace;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #64b5ff;
-  text-transform: uppercase;
-  margin-bottom: 6px;
+  justify-content: center;
 }
 
-.badge-pulsar {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #50e3c2;
-  box-shadow: 0 0 8px #50e3c2;
+/* Realistic Stitched Border Seam around Leather (matching Auto-Brightness) */
+.guide-leather-badge::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed rgba(75, 36, 6, 0.75);
+  border-radius: 13px;
+  pointer-events: none;
+  box-shadow: 0 1px 0 rgba(255, 245, 220, 0.4);
 }
 
 .guide-title {
   margin: 0;
-  font-family: 'Archivo', sans-serif;
-  font-size: 24px;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 23px;
   font-weight: 800;
   font-style: italic;
   letter-spacing: 0.01em;
-  color: #ffffff;
-  text-shadow: 0 0 20px rgba(100, 180, 255, 0.4);
+  color: #2b1805;
+  text-shadow: 0 1px 0 rgba(255, 245, 225, 0.65), 0 -1px 0 rgba(0, 0, 0, 0.45);
 }
 
+/* Stainless Steel Circular Knob Close Button */
 .guide-close-btn {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #b5c7e0;
+  background: radial-gradient(circle at 38% 35%, #ffffff 0%, #d8dde3 45%, #8893a0 100%);
+  border: 2px solid #586472;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.32),
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+              inset 0 -1.5px 2px rgba(40, 50, 65, 0.6);
+  color: #222933;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1017,107 +1050,135 @@ body.solar-active .solar-system-section {
 }
 
 .guide-close-btn:hover {
-  background: rgba(255, 59, 48, 0.22);
-  border-color: rgba(255, 80, 70, 0.6);
-  color: #ffffff;
-  transform: rotate(90deg);
+  transform: scale(1.08) rotate(90deg);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
+              inset 0 1.5px 2px #ffffff;
+  color: #0f141a;
 }
 
-/* Core Instruction Banner */
-.guide-instruction-banner {
-  margin: 18px 26px 12px;
-  padding: 16px 20px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(20, 48, 105, 0.5) 0%, rgba(10, 25, 60, 0.35) 100%);
-  border: 1px solid rgba(100, 185, 255, 0.35);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* Tactile Recessed Slider Bar (matching inspiration) */
+.guide-tactile-slider-bar {
+  background: linear-gradient(180deg, #ede7d8 0%, #dfd6c3 100%);
+  border: 1.5px solid #c9c0ad;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(65, 55, 45, 0.16),
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+              inset 0 -2px 3px rgba(110, 100, 85, 0.25);
+  padding: 10px 18px;
   display: flex;
   align-items: center;
   gap: 16px;
   flex-shrink: 0;
 }
 
-.instruction-orb-glow {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(100, 180, 255, 0.35) 0%, rgba(10, 30, 80, 0.2) 70%);
-  border: 1px solid rgba(120, 200, 255, 0.4);
+.tactile-slider-groove {
+  flex: 1;
+  height: 14px;
+  background: #8e877c;
+  border-radius: 999px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.55),
+              0 1px 1px rgba(255, 255, 255, 0.7);
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 16px rgba(80, 160, 255, 0.35);
-  flex-shrink: 0;
 }
 
-.instruction-main {
-  margin: 0 0 3px 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: 15.5px;
-  font-weight: 800;
-  color: #e6f3ff;
-  letter-spacing: 0.01em;
+.tactile-slider-knob {
+  position: absolute;
+  left: 45%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #ffffff 0%, #d8dde3 45%, #76818e 100%);
+  border: 2px solid #55606d;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4),
+              inset 0 1px 2px rgba(255, 255, 255, 0.9),
+              inset 0 -1px 2px rgba(30, 40, 50, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.instruction-sub {
-  margin: 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: #a8bfde;
+.tactile-slider-caption {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-style: italic;
+  color: #4a4135;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-/* Celestial Destinations Grid */
+/* Celestial Destinations Grid (Tactile Pillow Buttons) */
 .guide-destinations-grid {
-  padding: 20px 26px 22px;
+  padding: 4px 6px;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(100, 180, 255, 0.4) rgba(0, 0, 0, 0.2);
+  scrollbar-color: #b5ac99 rgba(0, 0, 0, 0.05);
 }
 
 .guide-destinations-grid::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
 }
 .guide-destinations-grid::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
 }
 .guide-destinations-grid::-webkit-scrollbar-thumb {
-  background: rgba(100, 180, 255, 0.4);
-  border-radius: 4px;
+  background: #b5ac99;
+  border-radius: 999px;
 }
 
-/* Item Card */
+/* The Volumetric "Pillow Button" */
 .guide-item-card {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 15px;
+  padding: 12px 18px;
+  border-radius: 19px;
+  background: linear-gradient(180deg, #f0ebd0 0%, #e6ddc7 45%, #dcd1bb 100%);
+  border: 1.5px solid #c7beab;
+  box-shadow: 0 6px 16px -2px rgba(65, 55, 45, 0.22),
+              0 2px 5px rgba(65, 55, 45, 0.12),
+              inset 0 2.5px 3px rgba(255, 255, 255, 0.95),
+              inset 0 -3px 4px rgba(105, 95, 80, 0.35);
   text-align: left;
   cursor: pointer;
-  transition: all 180ms ease;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 180ms ease,
+              background 180ms ease;
   position: relative;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .guide-item-card:hover {
-  background: rgba(25, 55, 120, 0.45);
-  border-color: rgba(100, 180, 255, 0.55);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(70, 150, 255, 0.25);
+  background: linear-gradient(180deg, #f6f1e8 0%, #ede5d2 45%, #e2d8c3 100%);
+  transform: translateY(-2.5px);
+  box-shadow: 0 10px 24px -3px rgba(65, 55, 45, 0.28),
+              0 4px 8px rgba(65, 55, 45, 0.16),
+              inset 0 2.5px 3px rgba(255, 255, 255, 1),
+              inset 0 -3px 4px rgba(105, 95, 80, 0.35);
 }
 
+.guide-item-card:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 2px 6px rgba(65, 55, 45, 0.2),
+              inset 0 2px 4px rgba(65, 55, 45, 0.3),
+              inset 0 -1px 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Sunken circular socket for celestial orb */
 .guide-item-icon {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #cfc6b3;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4),
+              0 1px 1px rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1125,45 +1186,46 @@ body.solar-active .solar-system-section {
 }
 
 .item-orb {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: block;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.6);
 }
 
 .sun-orb {
-  background: radial-gradient(circle at 35% 35%, #fff1a8 0%, #ff9e1f 50%, #c43800 100%);
-  box-shadow: 0 0 10px #ff9e1f, 0 0 16px rgba(255, 120, 0, 0.5);
+  background: radial-gradient(circle at 35% 30%, #fff7b8 0%, #ff9500 50%, #c43800 100%);
+  box-shadow: 0 0 10px rgba(255, 149, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.7);
 }
 .mercury-orb {
-  background: radial-gradient(circle at 35% 35%, #d1d5db 0%, #9ca3af 60%, #4b5563 100%);
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #9ca3af 60%, #4b5563 100%);
 }
 .venus-orb {
-  background: radial-gradient(circle at 35% 35%, #fff3cc 0%, #fcd34d 55%, #b45309 100%);
-  box-shadow: 0 0 8px rgba(252, 211, 77, 0.4);
+  background: radial-gradient(circle at 35% 30%, #fffbeb 0%, #fbbf24 55%, #b45309 100%);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 .earth-orb {
-  background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #3b82f6 50%, #1e3a8a 100%);
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  background: radial-gradient(circle at 35% 30%, #bfdbfe 0%, #3b82f6 50%, #1e3a8a 100%);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
 }
 .mars-orb {
-  background: radial-gradient(circle at 35% 35%, #fca5a5 0%, #ef4444 55%, #7f1d1d 100%);
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+  background: radial-gradient(circle at 35% 30%, #fecaca 0%, #ef4444 55%, #991b1b 100%);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 .jupiter-orb {
-  background: radial-gradient(circle at 35% 35%, #fde68a 0%, #d97706 60%, #78350f 100%);
+  background: radial-gradient(circle at 35% 30%, #fef3c7 0%, #f59e0b 60%, #78350f 100%);
 }
 .saturn-orb {
-  background: radial-gradient(circle at 35% 35%, #fef3c7 0%, #eab308 55%, #713f12 100%);
-  box-shadow: 0 0 6px rgba(234, 179, 8, 0.35);
+  background: radial-gradient(circle at 35% 30%, #fef9c3 0%, #eab308 55%, #854d0e 100%);
+  box-shadow: 0 0 6px rgba(234, 179, 8, 0.45);
 }
 .uranus-orb {
-  background: radial-gradient(circle at 35% 35%, #a5f3fc 0%, #06b6d4 55%, #164e63 100%);
-  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+  background: radial-gradient(circle at 35% 30%, #cffafe 0%, #06b6d4 55%, #155e75 100%);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
 }
 .neptune-orb {
-  background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #2563eb 55%, #1e1b4b 100%);
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+  background: radial-gradient(circle at 35% 30%, #bfdbfe 0%, #2563eb 55%, #1e1b4b 100%);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
 }
 
 .guide-item-content {
@@ -1174,78 +1236,152 @@ body.solar-active .solar-system-section {
 .guide-item-header {
   display: flex;
   align-items: baseline;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
   margin-bottom: 2px;
 }
 
 .guide-item-body {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #ffffff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #272118;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .guide-item-dash {
-  color: #64b5ff;
-  font-weight: 600;
+  color: #925f28;
+  font-weight: 700;
   font-size: 13px;
 }
 
 .guide-item-name {
-  font-family: 'Urbanist', sans-serif;
-  font-size: 13.5px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14.5px;
   font-weight: 700;
-  color: #72b9ff;
+  color: #8c531d;
+  letter-spacing: 0.01em;
 }
 
 .guide-item-desc {
   margin: 0;
-  font-family: 'Urbanist', sans-serif;
-  font-size: 11.5px;
-  line-height: 1.4;
-  color: #9cb5d6;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #584f40;
 }
 
 .guide-item-arrow {
-  color: rgba(120, 180, 255, 0.4);
-  font-size: 16px;
-  font-weight: 700;
+  color: #8c531d;
+  font-size: 18px;
+  font-weight: 800;
   transition: transform 180ms ease, color 180ms ease;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
   flex-shrink: 0;
 }
 
 .guide-item-card:hover .guide-item-arrow {
-  color: #72b9ff;
-  transform: translateX(3px);
+  transform: translateX(4px);
+  color: #b16a24;
 }
 
-/* Guide Footer */
-.guide-footer {
-  padding: 14px 26px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(2, 6, 18, 0.5);
+/* Tactile Torn Yellow Notepad "Notes" (matching inspiration) */
+.guide-notes-paper {
+  position: relative;
+  background: #fdf6cc;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 23px,
+    rgba(140, 185, 230, 0.45) 23px,
+    rgba(140, 185, 230, 0.45) 24px
+  );
+  border-radius: 4px 4px 14px 14px;
+  border-left: 3px double rgba(239, 68, 68, 0.55);
+  box-shadow: 0 5px 16px rgba(60, 50, 35, 0.22),
+              0 1px 4px rgba(0, 0, 0, 0.12);
+  transform: rotate(-0.5deg);
+  margin-top: 2px;
+  padding: 13px 20px 13px 24px;
   flex-shrink: 0;
 }
 
-.guide-shortcut-hint {
-  font-family: 'Space Grotesk', monospace;
-  font-size: 11.5px;
-  color: #7d96b8;
+/* Sawtooth Jagged Torn Edge at top of paper */
+.notes-paper-torn-edge {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #fdf6cc 0px,
+    #fdf6cc 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.08));
 }
 
-.guide-shortcut-hint kbd {
+.notes-title {
+  margin: 0 0 3px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 800;
+  font-style: italic;
+  color: #2b251a;
+}
+
+.notes-text {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #4b4131;
+}
+
+.notes-text kbd {
   display: inline-block;
-  padding: 2px 6px;
+  padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.18);
   font-family: monospace;
-  font-size: 10.5px;
-  color: #cddcf2;
+  font-size: 11px;
+  color: #1e1911;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .mission-guide-card {
+    width: 96vw;
+    border-radius: 28px;
+    padding: 8px;
+  }
+  .mission-guide-inner-surface {
+    padding: 16px 14px 14px;
+    border-radius: 20px;
+    gap: 10px;
+  }
+  .guide-title {
+    font-size: 19px;
+  }
+  .guide-leather-badge {
+    padding: 9px 16px;
+  }
+  .guide-item-card {
+    padding: 10px 13px;
+    border-radius: 16px;
+    gap: 11px;
+  }
+  .guide-tactile-slider-bar {
+    padding: 8px 12px;
+  }
+  .tactile-slider-caption {
+    font-size: 11.5px;
+  }
+  .guide-notes-paper {
+    padding: 11px 14px;
+  }
 }
 
 .guide-explore-btn {

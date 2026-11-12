@@ -2594,164 +2594,185 @@
     <dialog id="missionGuideModal" class="mission-guide-modal" aria-labelledby="guideModalTitle" aria-modal="true">
       <div class="mission-guide-backdrop" id="missionGuideBackdrop"></div>
       <div class="mission-guide-card">
-        <!-- Guide Header -->
-        <header class="guide-header">
-          <div class="guide-header-meta">
-            <h2 id="guideModalTitle" class="guide-title">Mission Navigation Guide</h2>
+        <div class="mission-guide-inner-surface">
+          <!-- Guide Header with Stitched Leather Badge & Stainless Steel Knob -->
+          <header class="guide-header">
+            <div class="guide-leather-badge">
+              <h2 id="guideModalTitle" class="guide-title">Mission Navigation Guide</h2>
+            </div>
+            <button id="btnCloseMissionGuide" class="guide-close-btn" type="button" aria-label="Close Mission Guide" title="Close Guide [Esc]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </header>
+
+          <!-- Tactile Slider Control Track (matching inspiration) -->
+          <div class="guide-tactile-slider-bar">
+            <div class="tactile-slider-groove">
+              <div class="tactile-slider-knob"></div>
+            </div>
+            <span class="tactile-slider-caption">Orbital Directory // Telemetry Active</span>
           </div>
-          <button id="btnCloseMissionGuide" class="guide-close-btn" type="button" aria-label="Close Mission Guide" title="Close Guide [Esc]">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </header>
 
-        <!-- 9 Celestial Destinations Directory -->
-        <div class="guide-destinations-grid">
-          <!-- 1. Sun -->
-          <button class="guide-item-card" data-guide-planet="sun" type="button">
-            <div class="guide-item-icon sun-icon">
-              <span class="item-orb sun-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Sun</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Ask Nova AI</span>
+          <!-- 9 Celestial Destinations Directory (Tactile Pillow Buttons) -->
+          <div class="guide-destinations-grid">
+            <!-- 1. Sun -->
+            <button class="guide-item-card" data-guide-planet="sun" type="button">
+              <div class="guide-item-icon sun-icon">
+                <span class="item-orb sun-orb"></span>
               </div>
-              <p class="guide-item-desc">Interactive AI assistant answering questions on background, skills, and projects.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Sun</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Ask Nova AI</span>
+                </div>
+                <p class="guide-item-desc">Interactive AI assistant answering questions on background, skills, and projects.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 2. Mercury -->
-          <button class="guide-item-card" data-guide-planet="mercury" type="button">
-            <div class="guide-item-icon mercury-icon">
-              <span class="item-orb mercury-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Mercury</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Cosmic ID</span>
+            <!-- 2. Mercury -->
+            <button class="guide-item-card" data-guide-planet="mercury" type="button">
+              <div class="guide-item-icon mercury-icon">
+                <span class="item-orb mercury-orb"></span>
               </div>
-              <p class="guide-item-desc">Developer ID card, tech stack, and verified credentials.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Mercury</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Cosmic ID</span>
+                </div>
+                <p class="guide-item-desc">Developer ID card, tech stack, and verified credentials.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 3. Venus -->
-          <button class="guide-item-card" data-guide-planet="venus" type="button">
-            <div class="guide-item-icon venus-icon">
-              <span class="item-orb venus-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Venus</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Meet Tanishka Sahu</span>
+            <!-- 3. Venus -->
+            <button class="guide-item-card" data-guide-planet="venus" type="button">
+              <div class="guide-item-icon venus-icon">
+                <span class="item-orb venus-orb"></span>
               </div>
-              <p class="guide-item-desc">Background, engineering philosophy, and creative problem solving.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Venus</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Meet Tanishka Sahu</span>
+                </div>
+                <p class="guide-item-desc">Background, engineering philosophy, and creative problem solving.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 4. Earth -->
-          <button class="guide-item-card" data-guide-planet="earth" type="button">
-            <div class="guide-item-icon earth-icon">
-              <span class="item-orb earth-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Earth</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Planet of Projects</span>
+            <!-- 4. Earth -->
+            <button class="guide-item-card" data-guide-planet="earth" type="button">
+              <div class="guide-item-icon earth-icon">
+                <span class="item-orb earth-orb"></span>
               </div>
-              <p class="guide-item-desc">Interactive 3D project book with live prototypes and case studies.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Earth</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Planet of Projects</span>
+                </div>
+                <p class="guide-item-desc">Interactive 3D project book with live prototypes and case studies.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 5. Mars -->
-          <button class="guide-item-card" data-guide-planet="mars" type="button">
-            <div class="guide-item-icon mars-icon">
-              <span class="item-orb mars-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Mars</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Education</span>
+            <!-- 5. Mars -->
+            <button class="guide-item-card" data-guide-planet="mars" type="button">
+              <div class="guide-item-icon mars-icon">
+                <span class="item-orb mars-orb"></span>
               </div>
-              <p class="guide-item-desc">Academic background, university coursework, and technical training.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Mars</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Education</span>
+                </div>
+                <p class="guide-item-desc">Academic background, university coursework, and technical training.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 6. Jupiter -->
-          <button class="guide-item-card" data-guide-planet="jupiter" type="button">
-            <div class="guide-item-icon jupiter-icon">
-              <span class="item-orb jupiter-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Jupiter</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Achievements</span>
+            <!-- 6. Jupiter -->
+            <button class="guide-item-card" data-guide-planet="jupiter" type="button">
+              <div class="guide-item-icon jupiter-icon">
+                <span class="item-orb jupiter-orb"></span>
               </div>
-              <p class="guide-item-desc">Hackathon victories, academic honors, and competitive achievements.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Jupiter</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Achievements</span>
+                </div>
+                <p class="guide-item-desc">Hackathon victories, academic honors, and competitive achievements.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 7. Saturn -->
-          <button class="guide-item-card" data-guide-planet="saturn" type="button">
-            <div class="guide-item-icon saturn-icon">
-              <span class="item-orb saturn-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Saturn</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Certifications &amp; Activities</span>
+            <!-- 7. Saturn -->
+            <button class="guide-item-card" data-guide-planet="saturn" type="button">
+              <div class="guide-item-icon saturn-icon">
+                <span class="item-orb saturn-orb"></span>
               </div>
-              <p class="guide-item-desc">Hanging vault of verified certifications, hackathons, and credentials.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Saturn</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Certifications &amp; Activities</span>
+                </div>
+                <p class="guide-item-desc">Hanging vault of verified certifications, hackathons, and credentials.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 8. Uranus -->
-          <button class="guide-item-card" data-guide-planet="uranus" type="button">
-            <div class="guide-item-icon uranus-icon">
-              <span class="item-orb uranus-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Uranus</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Resume</span>
+            <!-- 8. Uranus -->
+            <button class="guide-item-card" data-guide-planet="uranus" type="button">
+              <div class="guide-item-icon uranus-icon">
+                <span class="item-orb uranus-orb"></span>
               </div>
-              <p class="guide-item-desc">Interactive 3D laptop workspace with resume preview and PDF download.</p>
-            </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Uranus</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Resume</span>
+                </div>
+                <p class="guide-item-desc">Interactive 3D laptop workspace with resume preview and PDF download.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
 
-          <!-- 9. Neptune -->
-          <button class="guide-item-card" data-guide-planet="neptune" type="button">
-            <div class="guide-item-icon neptune-icon">
-              <span class="item-orb neptune-orb"></span>
-            </div>
-            <div class="guide-item-content">
-              <div class="guide-item-header">
-                <span class="guide-item-body">Neptune</span>
-                <span class="guide-item-dash">—</span>
-                <span class="guide-item-name">Important Links</span>
+            <!-- 9. Neptune -->
+            <button class="guide-item-card" data-guide-planet="neptune" type="button">
+              <div class="guide-item-icon neptune-icon">
+                <span class="item-orb neptune-orb"></span>
               </div>
-              <p class="guide-item-desc">GitHub, LinkedIn, social links, and direct contact form.</p>
+              <div class="guide-item-content">
+                <div class="guide-item-header">
+                  <span class="guide-item-body">Neptune</span>
+                  <span class="guide-item-dash">—</span>
+                  <span class="guide-item-name">Important Links</span>
+                </div>
+                <p class="guide-item-desc">GitHub, LinkedIn, social links, and direct contact form.</p>
+              </div>
+              <span class="guide-item-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <!-- Tactile Torn Yellow Notepad "Notes" (matching inspiration) -->
+          <div class="guide-notes-paper">
+            <div class="notes-paper-torn-edge"></div>
+            <div class="notes-paper-body">
+              <div class="notes-paper-content">
+                <h3 class="notes-title">Notes</h3>
+                <p class="notes-text">Select any celestial pillow button above to warp directly to its 3D planetary orbit. Press <kbd>Esc</kbd> anytime to return to cosmic spaceflight.</p>
+              </div>
             </div>
-            <span class="guide-item-arrow" aria-hidden="true">→</span>
-          </button>
+          </div>
         </div>
       </div>
     </dialog>
