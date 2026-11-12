@@ -763,8 +763,15 @@ body.solar-active .solar-system-section {
 }
 
 .solar-title-group {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
 }
 
 .solar-system-badge {
@@ -785,6 +792,8 @@ body.solar-active .solar-system-section {
   color: #fff;
   letter-spacing: 0.02em;
   text-shadow: 0 0 16px rgba(100, 180, 255, 0.6);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .solar-nav-controls {
