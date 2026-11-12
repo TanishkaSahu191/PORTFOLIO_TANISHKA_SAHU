@@ -226,12 +226,14 @@ button { border: 0; }
 .copy-block h1 {
   color: var(--white);
   font-family: 'Archivo', Impact, sans-serif;
-  font-size: calc(82 * var(--u));
+  font-size: calc(68 * var(--u));
   font-style: italic;
   font-weight: 900;
-  line-height: .92;
+  line-height: .95;
   letter-spacing: -.02em;
   white-space: nowrap;
+  text-align: center;
+  margin: 0 auto;
   opacity: 0;
   filter: blur(14px);
   transform: translateY(calc(20 * var(--u)));
@@ -1067,7 +1069,7 @@ body.solar-active .solar-system-section {
 
 /* Celestial Destinations Grid */
 .guide-destinations-grid {
-  padding: 8px 26px 18px;
+  padding: 20px 26px 22px;
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));

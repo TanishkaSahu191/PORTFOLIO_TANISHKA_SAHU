@@ -31,7 +31,7 @@
         </div>
 
         <section class="copy-block" aria-labelledby="hero-title">
-          <h1 id="hero-title">COSMIC PORTFOLIO</h1>
+          <h1 id="hero-title">Welcome to Cosmic Portfolio</h1>
           <p class="subtitle">~ Tanishka Sahu</p>
         </section>
 
@@ -244,12 +244,7 @@
       
       <!-- Top Action Bar -->
       <div class="nova-modal-topbar">
-        <div class="nova-tag-group">
-          <span class="nova-badge-dot"></span>
-          <span class="nova-badge-text">SOL // EPICENTER • COSMIC INTELLIGENCE</span>
-        </div>
-        
-        <div class="nova-topbar-actions">
+        <div class="nova-topbar-actions" style="margin-left: auto;">
           <div id="novaStatusBadge" class="nova-status-pill online">
             <span class="status-indicator-dot"></span>
             <span class="status-indicator-label">Nova Active</span>
@@ -355,8 +350,7 @@
               </svg>
             </button>
           </div>
-          <div class="input-meta-bar">
-            <span class="meta-left">Grounded in verified portfolio archives</span>
+          <div class="input-meta-bar" style="justify-content: flex-end;">
             <span class="meta-right">Google Gemini API</span>
           </div>
         </form>
@@ -782,10 +776,6 @@
         </div>
         
         <div class="earth-topbar-controls">
-          <button id="btnEarthAutoFlip" class="book-ctrl-pill" type="button" title="Auto-play Page Turning">
-            <span class="ctrl-icon">▶</span>
-            <span class="btn-text">Auto-Flip</span>
-          </button>
           <button id="btnCloseEarthBook" class="earth-close-btn" type="button" aria-label="Close Project Book" title="Close Project Book">
             <span>✕</span>
           </button>
@@ -1236,29 +1226,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Bottom Page Navigation Toolbar -->
-      <footer class="book-nav-toolbar">
-        <button id="btnPrevPage" class="book-nav-btn prev" type="button" aria-label="Previous Page">
-          <span class="nav-arrow">‹</span>
-          <span>Previous</span>
-        </button>
-        
-        <div class="book-pagination-indicator" id="bookPagination">
-          <span class="page-label" id="bookPageLabel">Cover: PROJECTS BOOKLET</span>
-          <div class="page-pills" id="pagePills">
-            <span class="page-pill active" data-leaf-idx="0"></span>
-            <span class="page-pill" data-leaf-idx="1"></span>
-            <span class="page-pill" data-leaf-idx="2"></span>
-            <span class="page-pill" data-leaf-idx="3"></span>
-          </div>
-        </div>
-
-        <button id="btnNextPage" class="book-nav-btn next" type="button" aria-label="Next Page">
-          <span>Next</span>
-          <span class="nav-arrow">›</span>
-        </button>
-      </footer>
     </div>
 
     <!-- Mars Section: 3D Video Background + Center 3D Button + Vertical Education Timeline -->
@@ -1305,11 +1272,7 @@
       <!-- Vertical Education Timeline To The Left Of The Screen -->
       <aside id="marsEducationTimeline" class="mars-education-timeline" aria-label="Education Timeline">
         <div class="mars-timeline-card">
-          <header class="mars-timeline-header">
-            <div class="mars-timeline-tag">
-              <span class="pulse-marker"></span>
-              <span>ACADEMIC TRAJECTORY</span>
-            </div>
+          <header class="mars-timeline-header" style="justify-content: flex-end;">
             <button id="btnCloseMarsTimeline" class="mars-timeline-close-btn" type="button" aria-label="Collapse Timeline" title="Collapse Timeline">
               ✕
             </button>
@@ -1652,10 +1615,6 @@
           <span class="uranus-badge-text">URANUS // 7TH ORBIT • ICE GIANT EMBEDDED WORKSPACE</span>
         </div>
         <div class="uranus-topbar-controls">
-          <button id="btnUranusToggleThemeTop" class="uranus-ctrl-pill" type="button" title="Toggle Laptop Screen Light / Dark Mode">
-            <span class="btn-icon" aria-hidden="true">☀️</span>
-            <span class="theme-top-text">Light Mode</span>
-          </button>
           <a id="btnDownloadResumePdf" href="./tanishka-sahu-resume.pdf" download="Tanishka_Sahu_Resume.pdf" target="_blank" rel="noopener noreferrer" class="uranus-ctrl-pill resume-download-btn" title="Download Official Resume PDF">
             <span class="btn-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
             <span>Download Resume PDF</span>
@@ -1946,10 +1905,6 @@
           <span class="saturn-badge-text">SATURN // 6TH ORBIT • CERTIFICATES &amp; ACHIEVEMENTS VAULT</span>
         </div>
         <div class="saturn-topbar-controls">
-          <button id="btnSaturnReplayDrop" class="saturn-ctrl-pill" type="button" title="Replay drop entrance animation">
-            <span class="btn-icon">↺</span>
-            <span>Replay Drop</span>
-          </button>
           <button id="btnCloseSaturnModal" class="saturn-close-btn" type="button" aria-label="Close Saturn View" title="Return to Solar System" onclick="if(window.solarAppInstance){window.solarAppInstance.closeSaturnCertificatesModal(true);}">
             <span aria-hidden="true">✕</span>
           </button>
@@ -2313,9 +2268,6 @@
             <span>Competitions</span>
           </button>
         </div>
-        <div class="saturn-hints">
-          <span>Click any hanging card to inspect in full-screen landscape • Strings stay attached during motion • Move pointer for dynamic 3D glare</span>
-        </div>
       </nav>
 
       <!-- Full Screen Scrollable Landscape Page for Certificate Inspection -->
@@ -2569,10 +2521,6 @@
         <!-- Guide Header -->
         <header class="guide-header">
           <div class="guide-header-meta">
-            <span class="guide-badge">
-              <span class="badge-pulsar"></span>
-              ORBITAL FLIGHT MANUAL // SYSTEM DIRECTORY
-            </span>
             <h2 id="guideModalTitle" class="guide-title">Mission Navigation Guide</h2>
           </div>
           <button id="btnCloseMissionGuide" class="guide-close-btn" type="button" aria-label="Close Mission Guide" title="Close Guide [Esc]">
@@ -2582,23 +2530,6 @@
             </svg>
           </button>
         </header>
-
-        <!-- Primary Core Instruction Banner -->
-        <div class="guide-instruction-banner">
-          <div class="instruction-icon-col">
-            <div class="instruction-orb-glow">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#68b9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                <path d="M2 12h20"></path>
-              </svg>
-            </div>
-          </div>
-          <div class="instruction-text-col">
-            <p class="instruction-main">Click any planet to explore its universe.</p>
-            <p class="instruction-sub">Select a celestial body in 3D space or choose an entry below to warp directly to it.</p>
-          </div>
-        </div>
 
         <!-- 9 Celestial Destinations Directory -->
         <div class="guide-destinations-grid">
@@ -2746,16 +2677,6 @@
             <span class="guide-item-arrow" aria-hidden="true">→</span>
           </button>
         </div>
-
-        <!-- Guide Footer -->
-        <footer class="guide-footer">
-          <span class="guide-shortcut-hint">
-            <kbd>Esc</kbd> or click outside to dismiss
-          </span>
-          <button id="btnDismissGuide" class="guide-explore-btn" type="button">
-            <span>Explore Solar System</span>
-          </button>
-        </footer>
       </div>
     </dialog>
 
