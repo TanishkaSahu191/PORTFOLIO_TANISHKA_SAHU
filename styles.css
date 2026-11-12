@@ -3852,7 +3852,7 @@ body.solar-active .solar-system-section {
 .project-img-frame {
   position: relative;
   width: 100%;
-  height: 155px;
+  height: 180px;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #cbd5e1;
@@ -3989,7 +3989,7 @@ body.solar-active .solar-system-section {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 6px 10px;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
 
 .highlight-item {
@@ -4011,6 +4011,60 @@ body.solar-active .solar-system-section {
   color: #64748b;
   text-transform: uppercase;
   margin-top: 1px;
+}
+
+/* Core Architectural Modules & Engineering Specs Grid */
+.project-deep-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.spec-chip {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 160ms ease;
+}
+
+.spec-chip:hover {
+  background: #ffffff;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.14);
+}
+
+.spec-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.spec-glyph {
+  font-size: 10px;
+  color: #0284c7;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.spec-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.spec-detail {
+  font-size: 10px;
+  line-height: 1.34;
+  color: #475569;
+  margin: 0;
 }
 
 .project-links-row {
