@@ -5963,6 +5963,9 @@
         });
       });
 
+      // Initialize Magnetic Button Attraction
+      this.initMagneticButtons();
+
       // Planet Selector Bottom Dock
       const dockButtons = document.querySelectorAll('.planet-dock-item');
       dockButtons.forEach(btn => {
@@ -7602,6 +7605,138 @@
       } else {
         this.openInteractiveReadmeModal();
       }
+    }
+
+    initMagneticButtons() {
+      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isTouch = window.matchMedia('(hover: none)').matches;
+      if (isReducedMotion || isTouch) return;
+
+      const magneticBtns = document.querySelectorAll('.magnetic-btn');
+      if (!magneticBtns.length) return;
+
+      magneticBtns.forEach(btn => {
+        const inner = btn.querySelector('.magnetic-inner');
+        const glow = btn.querySelector('.magnetic-glow');
+        const strength = parseFloat(btn.getAttribute('data-magnetic-strength')) || 0.38;
+        const textStrength = parseFloat(btn.getAttribute('data-magnetic-text-strength')) || 0.22;
+
+        let isHovered = false;
+        let animFrame = null;
+        let currentX = 0, currentY = 0;
+        let targetX = 0, targetY = 0;
+        let innerCurrentX = 0, innerCurrentY = 0;
+        let innerTargetX = 0, innerTargetY = 0;
+
+        const updatePhysics = () => {
+          const lerp = 0.22;
+          currentX += (targetX - currentX) * lerp;
+          currentY += (targetY - currentY) * lerp;
+          innerCurrentX += (innerTargetX - innerCurrentX) * lerp;
+          innerCurrentY += (innerTargetY - innerCurrentY) * lerp;
+
+          btn.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`;
+          if (inner) {
+            inner.style.transform = `translate3d(${innerCurrentX.toFixed(2)}px, ${innerCurrentY.toFixed(2)}px, 0)`;
+          }
+
+          const dist = Math.hypot(targetX - currentX, targetY - currentY);
+          if (isHovered || dist > 0.05) {
+            animFrame = requestAnimationFrame(updatePhysics);
+          } else {
+            btn.style.transform = '';
+            if (inner) inner.style.transform = '';
+            btn.classList.remove('is-magnetic-active', 'is-magnetic-returning');
+            animFrame = null;
+          }
+        };
+
+        const startLoop = () => {
+          if (!animFrame) animFrame = requestAnimationFrame(updatePhysics);
+        };
+
+        btn.addEventListener('pointerenter', () => {
+          isHovered = true;
+          btn.classList.add('is-magnetic-active');
+          btn.classList.remove('is-magnetic-returning');
+          startLoop();
+        });
+
+        btn.addEventListener('pointermove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const relX = e.clientX - rect.left;
+          const relY = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const deltaX = relX - centerX;
+          const deltaY = relY - centerY;
+
+          targetX = deltaX * strength;
+          targetY = deltaY * strength;
+          innerTargetX = deltaX * textStrength;
+          innerTargetY = deltaY * textStrength;
+
+          if (glow) {
+            glow.style.left = `${relX}px`;
+            glow.style.top = `${relY}px`;
+          }
+
+          startLoop();
+        });
+
+        btn.addEventListener('pointerleave', () => {
+          isHovered = false;
+          targetX = 0;
+          targetY = 0;
+          innerTargetX = 0;
+          innerTargetY = 0;
+          btn.classList.remove('is-magnetic-active');
+          btn.classList.add('is-magnetic-returning');
+        });
+
+        btn._magneticState = {
+          setTarget: (tx, ty, itx, ity) => {
+            targetX = tx;
+            targetY = ty;
+            innerTargetX = itx;
+            innerTargetY = ity;
+            startLoop();
+          },
+          isHovered: () => isHovered
+        };
+      });
+
+      // Window proximity attraction field around magnetic buttons
+      const proximityThreshold = 75;
+      window.addEventListener('pointermove', (e) => {
+        if (isReducedMotion || isTouch) return;
+        magneticBtns.forEach(btn => {
+          if (btn.matches(':hover') || !btn._magneticState || btn._magneticState.isHovered()) return;
+          const rect = btn.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const deltaX = e.clientX - centerX;
+          const deltaY = e.clientY - centerY;
+          const dist = Math.hypot(deltaX, deltaY);
+
+          if (dist < proximityThreshold) {
+            const pullFactor = (1 - dist / proximityThreshold) * 0.28;
+            btn.classList.add('is-magnetic-active');
+            btn.classList.remove('is-magnetic-returning');
+            btn._magneticState.setTarget(
+              deltaX * pullFactor,
+              deltaY * pullFactor,
+              deltaX * (pullFactor * 0.5),
+              deltaY * (pullFactor * 0.5)
+            );
+          } else if (btn.classList.contains('is-magnetic-active')) {
+            btn.classList.remove('is-magnetic-active');
+            btn.classList.add('is-magnetic-returning');
+            btn._magneticState.setTarget(0, 0, 0, 0);
+          }
+        });
+      }, { passive: true });
     }
 
     render(time) {
