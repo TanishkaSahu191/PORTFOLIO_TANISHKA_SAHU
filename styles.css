@@ -4480,7 +4480,7 @@ body.solar-active .solar-system-section {
   top: 50%;
   transform: translateY(-50%) translateX(-60px);
   z-index: 35;
-  width: min(540px, calc(100vw - 48px));
+  width: min(580px, calc(100vw - 48px));
   max-height: calc(100vh - 80px);
   opacity: 0;
   pointer-events: none;
@@ -4598,7 +4598,7 @@ body.solar-active .solar-system-section {
 .mars-timeline-title {
   margin: 0 0 6px;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 24px;
+  font-size: 26px;
   font-style: normal;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -4608,7 +4608,7 @@ body.solar-active .solar-system-section {
 
 .mars-timeline-caption {
   margin: 0 0 22px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   color: #94a3b8;
 }
@@ -4661,11 +4661,11 @@ body.solar-active .solar-system-section {
   transition-delay: 280ms;
 }
 
-/* Indicator Node - Tactile Clay Pebble */
+/* Indicator Node - Tactile Clay Pebble with Stage Theme Glow */
 .timeline-indicator {
   position: absolute;
   left: -28px;
-  top: 10px;
+  top: 12px;
   width: 22px;
   height: 22px;
   display: flex;
@@ -4678,32 +4678,88 @@ body.solar-active .solar-system-section {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #333a4a 0%, #161821 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.75),
-              inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.35),
-              inset -1.5px -1.5px 2px rgba(0, 0, 0, 0.85);
   position: relative;
   z-index: 2;
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-/* Timeline Content Card - Tactile Dark Clay */
+.mars-timeline-node[data-stage="10th"] .timeline-dot {
+  background: linear-gradient(145deg, #10b981 0%, #064e3b 100%);
+  border: 1.5px solid #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.7), 3px 4px 8px rgba(0, 0, 0, 0.75), inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.5);
+}
+
+.mars-timeline-node[data-stage="12th"] .timeline-dot {
+  background: linear-gradient(145deg, #0284c7 0%, #0c4a6e 100%);
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7), 3px 4px 8px rgba(0, 0, 0, 0.75), inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.5);
+}
+
+.mars-timeline-node[data-stage="college"] .timeline-dot {
+  background: linear-gradient(145deg, #d97706 0%, #78350f 100%);
+  border: 1.5px solid #fbbf24;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.7), 3px 4px 8px rgba(0, 0, 0, 0.75), inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Timeline Content Card - Tactile Dark Clay with Stage Accents */
 .timeline-content-card {
   background: linear-gradient(145deg, #1b1e28 0%, #11131a 100%);
   border: 1.5px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  padding: 18px 20px;
+  padding: 20px 22px;
   box-shadow: 8px 10px 22px rgba(0, 0, 0, 0.75),
               inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.09),
               inset -2px -2px 4px rgba(0, 0, 0, 0.7);
   transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
 }
 
-.timeline-content-card:hover {
+.mars-timeline-node[data-stage="10th"] .timeline-content-card {
+  border-color: rgba(52, 211, 153, 0.22);
+  box-shadow: 8px 10px 22px rgba(0, 0, 0, 0.75),
+              0 0 20px rgba(16, 185, 129, 0.07),
+              inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.09),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.7);
+}
+.mars-timeline-node[data-stage="10th"] .timeline-content-card:hover {
   transform: translateY(-2px);
-  background: linear-gradient(145deg, #212634 0%, #141721 100%);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(145deg, #1d2526 0%, #121817 100%);
+  border-color: rgba(52, 211, 153, 0.45);
   box-shadow: 10px 14px 28px rgba(0, 0, 0, 0.85),
+              0 0 26px rgba(52, 211, 153, 0.18),
+              inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.14),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.mars-timeline-node[data-stage="12th"] .timeline-content-card {
+  border-color: rgba(56, 189, 248, 0.22);
+  box-shadow: 8px 10px 22px rgba(0, 0, 0, 0.75),
+              0 0 20px rgba(14, 165, 233, 0.07),
+              inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.09),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.7);
+}
+.mars-timeline-node[data-stage="12th"] .timeline-content-card:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #1b232e 0%, #111721 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 10px 14px 28px rgba(0, 0, 0, 0.85),
+              0 0 26px rgba(56, 189, 248, 0.18),
+              inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.14),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.mars-timeline-node[data-stage="college"] .timeline-content-card {
+  border-color: rgba(245, 158, 11, 0.26);
+  box-shadow: 8px 10px 22px rgba(0, 0, 0, 0.75),
+              0 0 24px rgba(245, 158, 11, 0.09),
+              inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.09),
+              inset -2px -2px 4px rgba(0, 0, 0, 0.7);
+}
+.mars-timeline-node[data-stage="college"] .timeline-content-card:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #272216 0%, #17140b 100%);
+  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow: 10px 14px 28px rgba(0, 0, 0, 0.85),
+              0 0 30px rgba(251, 191, 36, 0.22),
               inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.14),
               inset -2px -2px 4px rgba(0, 0, 0, 0.7);
 }
@@ -4726,112 +4782,208 @@ body.solar-active .solar-system-section {
 
 .timeline-stage-pill {
   font-family: 'Space Grotesk', monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.14em;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   text-transform: uppercase;
-  background: linear-gradient(145deg, #252b38 0%, #151821 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
   box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.14),
               inset -1px -1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.timeline-stage-pill.stage-10,
-.timeline-stage-pill.stage-12,
-.timeline-stage-pill.stage-college {
-  color: #f1f5f9;
+.timeline-stage-pill.stage-10 {
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 78, 59, 0.4) 100%);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #34d399;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
 }
 
-/* Tactile Score Badge - 97%, 90%, CGPA: 9.52 */
+.timeline-stage-pill.stage-12 {
+  background: linear-gradient(145deg, rgba(14, 165, 233, 0.25) 0%, rgba(12, 74, 110, 0.4) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.25);
+}
+
+.timeline-stage-pill.stage-college {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.25) 0%, rgba(120, 53, 15, 0.4) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+/* Tactile Score Badges - 97%, 90%, CGPA: 9.52 */
 .timeline-score-badge {
   font-family: 'Space Grotesk', monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: linear-gradient(145deg, #252c3b 0%, #141721 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.65),
-              inset 1px 1px 2px rgba(255, 255, 255, 0.22),
+}
+
+.mars-timeline-node[data-stage="10th"] .timeline-score-badge {
+  background: linear-gradient(145deg, #132e24 0%, #091712 100%);
+  border: 1.5px solid rgba(52, 211, 153, 0.5);
+  color: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.3),
+              inset 1px 1px 2px rgba(255, 255, 255, 0.25),
               inset -1px -1px 2px rgba(0, 0, 0, 0.75);
 }
 
-.timeline-score-badge.highlight {
+.mars-timeline-node[data-stage="12th"] .timeline-score-badge {
+  background: linear-gradient(145deg, #11283d 0%, #081622 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3),
+              inset 1px 1px 2px rgba(255, 255, 255, 0.25),
+              inset -1px -1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.mars-timeline-node[data-stage="college"] .timeline-score-badge {
   background: linear-gradient(145deg, #322b1a 0%, #1c180e 100%);
-  border-color: rgba(245, 158, 11, 0.45);
+  border: 1.5px solid rgba(245, 158, 11, 0.6);
   color: #fbbf24;
-  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.65),
-              inset 1px 1px 2px rgba(251, 191, 36, 0.3),
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35),
+              inset 1px 1px 2px rgba(251, 191, 36, 0.35),
               inset -1px -1px 2px rgba(0, 0, 0, 0.75);
 }
 
 .timeline-year {
   font-family: 'Space Grotesk', monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #cbd5e1;
   letter-spacing: 0.04em;
 }
 
 .timeline-school-name {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 800;
   color: #ffffff;
   line-height: 1.35;
 }
 
 .timeline-degree {
-  margin: 0 0 10px;
-  font-size: 12.5px;
-  color: #cbd5e1;
+  margin: 0 0 12px;
+  font-size: 14.5px;
   font-weight: 600;
+  line-height: 1.4;
+}
+
+.mars-timeline-node[data-stage="10th"] .timeline-degree {
+  color: #86efac;
+}
+
+.mars-timeline-node[data-stage="12th"] .timeline-degree {
+  color: #93c5fd;
+}
+
+.mars-timeline-node[data-stage="college"] .timeline-degree {
+  color: #fde047;
 }
 
 .timeline-meta-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 7px;
+  margin-bottom: 12px;
 }
 
 .meta-tag {
   font-family: 'Space Grotesk', monospace;
-  font-size: 9.5px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 3px 8px;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
   background: linear-gradient(145deg, #202430 0%, #12141a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: #94a3b8;
   box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.08),
               inset -1px -1px 2px rgba(0, 0, 0, 0.6);
 }
 
-.meta-tag.score-tag {
-  background: linear-gradient(145deg, #2b3242 0%, #171b24 100%);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  font-weight: 800;
+.mars-timeline-node[data-stage="10th"] .meta-tag.score-tag {
+  background: linear-gradient(145deg, #143527 0%, #091a13 100%);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #a7f3d0;
 }
 
-.meta-tag.score-tag.highlight {
-  background: linear-gradient(145deg, #372e1c 0%, #1e190f 100%);
-  border-color: rgba(245, 158, 11, 0.38);
+.mars-timeline-node[data-stage="12th"] .meta-tag.score-tag {
+  background: linear-gradient(145deg, #132e48 0%, #091a2a 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #bae6fd;
+}
+
+.mars-timeline-node[data-stage="college"] .meta-tag.score-tag {
+  background: linear-gradient(145deg, #3a2e16 0%, #1c160a 100%);
+  border-color: rgba(245, 158, 11, 0.5);
   color: #fde68a;
-  font-weight: 800;
+}
+
+/* Readable Bullet List */
+.timeline-bullet-list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.timeline-bullet-list li {
+  position: relative;
+  padding-left: 20px;
+  font-family: 'Urbanist', -apple-system, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.timeline-bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.mars-timeline-node[data-stage="10th"] .timeline-bullet-list li::before {
+  background: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+}
+.mars-timeline-node[data-stage="10th"] .timeline-bullet-list strong {
+  color: #a7f3d0;
+  font-weight: 700;
+}
+
+.mars-timeline-node[data-stage="12th"] .timeline-bullet-list li::before {
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+}
+.mars-timeline-node[data-stage="12th"] .timeline-bullet-list strong {
+  color: #bae6fd;
+  font-weight: 700;
+}
+
+.mars-timeline-node[data-stage="college"] .timeline-bullet-list li::before {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+}
+.mars-timeline-node[data-stage="college"] .timeline-bullet-list strong {
+  color: #fde68a;
+  font-weight: 700;
 }
 
 .timeline-summary {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 12.5px;
   line-height: 1.55;
   color: #94a3b8;
 }
