@@ -2614,8 +2614,8 @@
       this.camTargetLook = new THREE.Vector3(0, 1.8, 0);
       this.isLerpingCamera = false;
 
-      // Theme state: defaults to Light Mode as requested
-      this.isLightMode = true;
+      // Theme state: defaults to Black Display (Dark Mode) as requested
+      this.isLightMode = false;
       this.screenTexture = null;
       this.floatingCardTexture = null;
 
@@ -2677,8 +2677,8 @@
       bottomRimLight.position.set(0, -12, 10);
       this.scene.add(bottomRimLight);
 
-      // Soft point light right above keyboard for warm backlight bounce
-      const kbPointLight = new THREE.PointLight(0xd8f8ff, 0.9, 14);
+      // Soft point light right above keyboard for warm bounce
+      const kbPointLight = new THREE.PointLight(0xd8f8ff, 0.22, 14);
       kbPointLight.position.set(0, 2.5, 0);
       this.scene.add(kbPointLight);
 
@@ -2700,11 +2700,11 @@
       this.laptopRoot.rotation.y = this.currentRotY;
       this.scene.add(this.laptopRoot);
 
-      // Sleek Anodized Aluminum / Titanium Material (Space Black / Deep Matte Obsidian)
+      // Sleek Anodized Aluminum / Ceramic White Material (Pristine White)
       const chassisMaterial = new THREE.MeshStandardMaterial({
-        color: 0x090b10,
-        metalness: 0.90,
-        roughness: 0.20
+        color: 0xf5f7fb,
+        metalness: 0.15,
+        roughness: 0.28
       });
 
       // =====================================================================
@@ -2718,7 +2718,7 @@
 
       // Bottom rubber feet
       const footGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.08, 16);
-      const footMat = new THREE.MeshBasicMaterial({ color: 0x020305 });
+      const footMat = new THREE.MeshBasicMaterial({ color: 0x94a3b8 });
       [
         [-5.8, -4.0], [5.8, -4.0],
         [-5.8, 4.0], [5.8, 4.0]
@@ -2730,7 +2730,7 @@
 
       // Front thumb opening notch
       const notchGeo = new THREE.BoxGeometry(2.4, 0.16, 0.2);
-      const notchMat = new THREE.MeshStandardMaterial({ color: 0x040508, roughness: 0.5 });
+      const notchMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 });
       const notch = new THREE.Mesh(notchGeo, notchMat);
       notch.position.set(0, 0.38, 4.65);
       this.laptopRoot.add(notch);
@@ -2741,9 +2741,9 @@
       const trackpadGeo = new THREE.PlaneGeometry(4.8, 3.2);
       trackpadGeo.rotateX(-Math.PI / 2);
       const trackpadMat = new THREE.MeshStandardMaterial({
-        color: 0x0d1017,
-        metalness: 0.65,
-        roughness: 0.25
+        color: 0xedf2f7,
+        metalness: 0.08,
+        roughness: 0.35
       });
       this.trackpadMesh = new THREE.Mesh(trackpadGeo, trackpadMat);
       this.trackpadMesh.position.set(0, 0.445, 2.3);
@@ -2758,39 +2758,36 @@
         new THREE.Vector3(-2.4, 0.446, 0.7)
       ]);
       const trackpadBorderMat = new THREE.LineBasicMaterial({
-        color: 0x1e2636,
+        color: 0xcfd8e3,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.6
       });
       const trackpadBorder = new THREE.Line(trackpadBorderGeo, trackpadBorderMat);
       this.laptopRoot.add(trackpadBorder);
 
       // =====================================================================
-      // 3. ILLUMINATED BACKLIT KEYBOARD (Matching Reference Photo!)
+      // 3. BLACK CHICLET KEYBOARD ON RECESSED WELL
       // =====================================================================
       // Recessed dark well
       const wellGeo = new THREE.BoxGeometry(11.6, 0.04, 4.8);
       const wellMat = new THREE.MeshStandardMaterial({
-        color: 0x040508,
-        roughness: 0.7,
-        metalness: 0.3
+        color: 0x090d16,
+        roughness: 0.85,
+        metalness: 0.1
       });
       const wellMesh = new THREE.Mesh(wellGeo, wellMat);
       wellMesh.position.set(0, 0.435, -1.8);
       this.laptopRoot.add(wellMesh);
 
-      // Backlit Keyboard Canvas Texture
+      // Black Keyboard Canvas Texture
       const keyboardTexture = this.createKeyboardTexture();
       const keyboardGeo = new THREE.PlaneGeometry(11.4, 4.6);
       keyboardGeo.rotateX(-Math.PI / 2);
 
       const keyboardMat = new THREE.MeshStandardMaterial({
         map: keyboardTexture,
-        emissiveMap: keyboardTexture,
-        emissive: 0xffffff,
-        emissiveIntensity: 0.95,
-        roughness: 0.25,
-        metalness: 0.2
+        roughness: 0.45,
+        metalness: 0.12
       });
 
       this.keyMesh = new THREE.Mesh(keyboardGeo, keyboardMat);
@@ -2810,9 +2807,9 @@
       const hingeGeo = new THREE.CylinderGeometry(0.24, 0.24, 11.4, 32);
       hingeGeo.rotateZ(Math.PI / 2);
       const hingeMat = new THREE.MeshStandardMaterial({
-        color: 0x06080c,
-        metalness: 0.95,
-        roughness: 0.16
+        color: 0xe2e8f0,
+        metalness: 0.75,
+        roughness: 0.25
       });
       const hingeMesh = new THREE.Mesh(hingeGeo, hingeMat);
       hingeMesh.position.set(0, 0, 0);
@@ -2829,7 +2826,7 @@
       const logoGeo = new THREE.RingGeometry(0.25, 0.65, 32);
       logoGeo.rotateX(Math.PI / 2);
       const logoMat = new THREE.MeshBasicMaterial({
-        color: 0x8be5e5,
+        color: 0x0284c7,
         side: THREE.DoubleSide
       });
       const logoMesh = new THREE.Mesh(logoGeo, logoMat);
@@ -2839,7 +2836,7 @@
       // Inner screen bezel (Onyx black border framing screen)
       const bezelGeo = new THREE.PlaneGeometry(12.8, 8.8);
       bezelGeo.rotateX(Math.PI / 2); // Faces downwards (-Y) inside lid
-      const bezelMat = new THREE.MeshBasicMaterial({ color: 0x020305 });
+      const bezelMat = new THREE.MeshBasicMaterial({ color: 0x05070a });
       const bezelMesh = new THREE.Mesh(bezelGeo, bezelMat);
       bezelMesh.position.set(0, -0.005, 4.7);
       this.lidGroup.add(bezelMesh);
@@ -2861,10 +2858,10 @@
 
       const screenMat = new THREE.MeshStandardMaterial({
         map: this.screenTexture,
-        roughness: 0.24,
+        roughness: 0.22,
         metalness: 0.0,
         emissive: 0xffffff,
-        emissiveIntensity: 0.10
+        emissiveIntensity: 0.35
       });
 
       this.screenMesh = new THREE.Mesh(screenGeo, screenMat);
@@ -2901,12 +2898,12 @@
       canvas.height = 920;
       const ctx = canvas.getContext('2d');
 
-      // 1. Dark matte chassis background (Deep Space Black)
-      ctx.fillStyle = '#080b10';
+      // 1. Pristine White Laptop Top-Case Chassis Background
+      ctx.fillStyle = '#f5f7fb';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. Speaker grilles on left and right flanks
-      ctx.fillStyle = '#040508';
+      // 2. Speaker grilles on left and right flanks (subtle perforated dots on white top-case)
+      ctx.fillStyle = '#cbd5e1';
       const drawSpeakerGrille = (startX, endX) => {
         for (let x = startX; x < endX; x += 10) {
           for (let y = 80; y < 840; y += 10) {
@@ -2919,19 +2916,24 @@
       drawSpeakerGrille(25, 125);
       drawSpeakerGrille(canvas.width - 125, canvas.width - 25);
 
-      // 3. Recessed keyboard well
+      // 3. Recessed keyboard well (Deep Black Well)
       const wellX = 140;
       const wellY = 30;
       const wellW = canvas.width - 280;
       const wellH = canvas.height - 60;
       const r = 24;
 
-      ctx.fillStyle = '#040508';
+      ctx.fillStyle = '#090d16';
       ctx.beginPath();
       ctx.roundRect(wellX, wellY, wellW, wellH, r);
       ctx.fill();
 
-      // 4. Chiclet Keys Layout (6 Rows)
+      // Well border rim
+      ctx.strokeStyle = '#d1d5db';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // 4. Matte Black Chiclet Keys Layout (6 Rows)
       const rows = [
         // Row 0: Function Keys
         [
@@ -2983,9 +2985,6 @@
       const numRows = rows.length;
       const rowH = (wellH - 40 - (numRows - 1) * gap) / numRows;
 
-      let spacebarCenterX = 0;
-      let spacebarBottomY = 0;
-
       rows.forEach((row, rIdx) => {
         const totalUnits = row.reduce((acc, k) => acc + k.w, 0);
         const gapsTotal = (row.length - 1) * gap;
@@ -2997,33 +2996,20 @@
           const keyW = key.w * unitW;
           const kRadius = 8;
 
-          // 1. BACKLIGHT GLOW (Underneath Keycap)
-          // Radiant white/cyan glow bleed matching reference image
-          const glowRadius = Math.max(keyW, rowH) * 0.75;
-          const glowGrad = ctx.createRadialGradient(
-            curX + keyW / 2, keyY + rowH / 2, 2,
-            curX + keyW / 2, keyY + rowH / 2, glowRadius
-          );
-          glowGrad.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
-          glowGrad.addColorStop(0.5, 'rgba(215, 248, 255, 0.4)');
-          glowGrad.addColorStop(1, 'rgba(139, 229, 229, 0)');
-          ctx.fillStyle = glowGrad;
-          ctx.fillRect(curX - 8, keyY - 8, keyW + 16, rowH + 16);
-
-          // 2. KEYCAP BODY (Deep Obsidian Matte)
-          ctx.fillStyle = '#10131b';
+          // 1. KEYCAP BODY (Crisp Matte Black)
+          ctx.fillStyle = '#111624';
           ctx.beginPath();
           ctx.roundRect(curX, keyY, keyW, rowH, kRadius);
           ctx.fill();
 
-          // Subtle top bevel highlight
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-          ctx.lineWidth = 1.2;
+          // Subtle keycap border highlight
+          ctx.strokeStyle = '#222b3e';
+          ctx.lineWidth = 1.3;
           ctx.stroke();
 
-          // 3. KEYCAP LEGEND (Crisp White Text)
+          // 2. KEYCAP LEGEND (Crisp White / Light Gray Text)
           if (key.label) {
-            ctx.fillStyle = '#f8fafc';
+            ctx.fillStyle = '#f1f5f9';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
@@ -3042,28 +3028,9 @@
             }
           }
 
-          if (key.isSpace) {
-            spacebarCenterX = curX + keyW / 2;
-            spacebarBottomY = keyY + rowH;
-          }
-
           curX += keyW + gap;
         });
       });
-
-      // 5. Ambient Backlight Glow Pool under Spacebar (Exact match to reference photo!)
-      if (spacebarCenterX > 0) {
-        const poolGrad = ctx.createRadialGradient(
-          spacebarCenterX, spacebarBottomY + 6, 2,
-          spacebarCenterX, spacebarBottomY + 24, 180
-        );
-        poolGrad.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
-        poolGrad.addColorStop(0.35, 'rgba(215, 248, 255, 0.55)');
-        poolGrad.addColorStop(0.7, 'rgba(139, 229, 229, 0.22)');
-        poolGrad.addColorStop(1, 'rgba(8, 11, 16, 0)');
-        ctx.fillStyle = poolGrad;
-        ctx.fillRect(spacebarCenterX - 260, spacebarBottomY, 520, 110);
-      }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.generateMipmaps = true;
@@ -3915,7 +3882,7 @@
         if (this.screenTexture) this.screenTexture.dispose();
         this.screenTexture = this.createScreenTexture(this.isLightMode);
         this.screenMesh.material.map = this.screenTexture;
-        this.screenMesh.material.emissiveIntensity = this.isLightMode ? 0.10 : 0.45;
+        this.screenMesh.material.emissiveIntensity = this.isLightMode ? 0.10 : 0.35;
         this.screenMesh.material.needsUpdate = true;
       }
       if (this.floatingCardMesh && this.floatingCardMesh.material) {
