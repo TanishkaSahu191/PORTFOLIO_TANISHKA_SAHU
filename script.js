@@ -255,6 +255,26 @@
     if (objectUrl) URL.revokeObjectURL(objectUrl);
   });
 
+  // Global mailto interceptor: Redirect to Gmail web composer directly
+  document.addEventListener('click', (e) => {
+    const mailLink = e.target.closest('a[href^="mailto:"]');
+    if (mailLink) {
+      e.preventDefault();
+      const href = mailLink.getAttribute('href') || '';
+      const mailtoContent = href.replace(/^mailto:/, '');
+      const [recipient, queryString] = mailtoContent.split('?');
+      const params = new URLSearchParams(queryString || '');
+      const subject = params.get('subject') || '';
+      const body = params.get('body') || '';
+      
+      let gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient || 'tanishkasahuwork191@gmail.com')}`;
+      if (subject) gmailUrl += `&su=${encodeURIComponent(subject)}`;
+      if (body) gmailUrl += `&body=${encodeURIComponent(body)}`;
+      
+      window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+    }
+  });
+
   setLoaded();
   preloadClip();
   requestAnimationFrame(tick);

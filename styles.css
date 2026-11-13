@@ -10139,8 +10139,18 @@ a.mod-chip:hover {
   border: 1.5px solid rgba(45, 212, 191, 0.32);
   border-radius: 14px;
   padding: 10px 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 180ms ease;
   box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.9),
     inset -2px -2px 5px rgba(45, 212, 191, 0.12);
+}
+
+.email-address-row:hover {
+  border-color: rgba(45, 212, 191, 0.75);
+  background: #04252a;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(45, 212, 191, 0.3);
 }
 
 .email-icon {

@@ -5000,7 +5000,7 @@
           // Graceful fallback option
           if (this.transmitStatus) {
             this.transmitStatus.className = 'transmit-status-msg is-error';
-            this.transmitStatus.innerHTML = `⚠️ ${err.message || 'Transmission failed.'} <a href="mailto:tanishkasahuwork191@gmail.com?subject=Regarding%20Portfolio&body=${encodeURIComponent(msg)}" style="color:#38bdf8;text-decoration:underline;margin-left:4px;">Send via Email App ↗</a>`;
+            this.transmitStatus.innerHTML = `⚠️ ${err.message || 'Transmission failed.'} <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tanishkasahuwork191@gmail.com&su=Regarding%20Portfolio&body=${encodeURIComponent(msg)}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:underline;margin-left:4px;">Send via Gmail ↗</a>`;
           }
         } finally {
           if (btnSubmit) {
