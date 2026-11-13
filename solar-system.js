@@ -2323,7 +2323,7 @@
 
       const phaseBadge = document.getElementById('drawerPhaseBadge');
       if (phaseBadge) {
-        phaseBadge.innerHTML = `<span class="badge-icon">🏆</span><span class="badge-text">${m.code}</span>`;
+        phaseBadge.innerHTML = `<span class="badge-icon">✦</span><span class="badge-text">${m.code}</span>`;
       }
       const statusBadge = document.getElementById('drawerStatusBadge');
       if (statusBadge) {
@@ -3087,7 +3087,7 @@
         ctx.textAlign = 'center';
         ctx.fillText('lumora // workspace // TanishkaSahu_Resume.ts — Orbit Studio (Light Mode)', canvas.width / 2, 42);
 
-        // Right side badge on title bar: "☀️ LIGHT MODE ACTIVE"
+        // Right side badge on title bar: "LIGHT MODE ACTIVE"
         ctx.fillStyle = '#e2e8f0';
         ctx.beginPath();
         ctx.roundRect(canvas.width - 240, 16, 210, 36, 18);
@@ -3095,7 +3095,7 @@
         ctx.fillStyle = '#0284c7';
         ctx.font = '700 13px "Space Grotesk", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('☀️ LIGHT MODE ACTIVE', canvas.width - 135, 39);
+        ctx.fillText('LIGHT MODE ACTIVE', canvas.width - 135, 39);
 
         // 3. Left Sidebar (Explorer & Candidate Profile)
         const sidebarW = 420;
@@ -3154,12 +3154,12 @@
 
         // File Tree Items in Sidebar
         const treeItems = [
-          { icon: '📄', label: 'Tanishka_Sahu_Resume.pdf', active: true },
-          { icon: '⚡', label: 'ParkShark_3D_Twin.tsx' },
-          { icon: '💰', label: 'PiggyPocket_Budget.js' },
-          { icon: '🌌', label: 'Lumora_Space_Engine.webgl' },
-          { icon: '🎓', label: 'VIT_Academic_9.52.ts' },
-          { icon: '📬', label: 'Contact_7717603726.json' }
+          { icon: '•', label: 'Tanishka_Sahu_Resume.pdf', active: true },
+          { icon: 'TS', label: 'ParkShark_3D_Twin.tsx' },
+          { icon: 'JS', label: 'PiggyPocket_Budget.js' },
+          { icon: 'GL', label: 'Lumora_Space_Engine.webgl' },
+          { icon: 'ED', label: 'VIT_Academic_9.52.ts' },
+          { icon: '@', label: 'Contact_7717603726.json' }
         ];
 
         treeItems.forEach((item, idx) => {
@@ -3208,7 +3208,7 @@
 
         ctx.fillStyle = '#0f172a';
         ctx.font = '700 16.5px "Space Grotesk", sans-serif';
-        ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 16, 107);
+        ctx.fillText('TanishkaSahu_Resume.pdf', editorX + 16, 107);
 
         let editorY = 160;
 
@@ -3314,7 +3314,7 @@
         ctx.textAlign = 'center';
         ctx.fillText('lumora // workspace // TanishkaSahu_Resume.ts — Orbit Studio (Dark Mode)', canvas.width / 2, 42);
 
-        // Right side badge on title bar: "🌙 DARK MODE ACTIVE"
+        // Right side badge on title bar: "DARK MODE ACTIVE"
         ctx.fillStyle = '#1e293b';
         ctx.beginPath();
         ctx.roundRect(canvas.width - 240, 16, 210, 36, 18);
@@ -3322,7 +3322,7 @@
         ctx.fillStyle = '#8be5e5';
         ctx.font = '700 13px "Space Grotesk", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('🌙 DARK MODE ACTIVE', canvas.width - 135, 39);
+        ctx.fillText('DARK MODE ACTIVE', canvas.width - 135, 39);
 
         // 3. Left Sidebar (Project Files & Dossier)
         const sidebarW = 420;
@@ -3406,7 +3406,7 @@
         ctx.fill();
         ctx.fillStyle = '#8be5e5';
         ctx.font = '600 17px "Space Grotesk", sans-serif';
-        ctx.fillText('TanishkaSahu_Resume.pdf  📄', editorX + 24, 110);
+        ctx.fillText('TanishkaSahu_Resume.pdf', editorX + 24, 110);
 
         editorY = 160;
 
@@ -3601,11 +3601,11 @@
         // Footer
         ctx.fillStyle = '#0f172a';
         ctx.font = '700 18px "Space Grotesk", sans-serif';
-        ctx.fillText('📄 Tanishka_Sahu_Resume.pdf • Verified Official Academic Credential', 70, 740);
+        ctx.fillText('Tanishka_Sahu_Resume.pdf • Verified Official Academic Credential', 70, 740);
 
         ctx.fillStyle = '#0284c7';
         ctx.font = '600 17px "Space Grotesk", sans-serif';
-        ctx.fillText('✉️ tanishkasahuwork191@gmail.com  •  📞 +91 7717603726  •  🐙 github.com/TanishkaSahu191', 70, 775);
+        ctx.fillText('tanishkasahuwork191@gmail.com  •  +91 7717603726  •  github.com/TanishkaSahu191', 70, 775);
 
         // Return prompt
         ctx.fillStyle = '#f0fdf4';
@@ -3894,7 +3894,7 @@
       const btnDock = document.getElementById('btnUranusToggleTheme');
       if (btnDock) {
         const textSpan = btnDock.querySelector('#uranusThemeBtnText');
-        if (textSpan) textSpan.textContent = this.isLightMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+        if (textSpan) textSpan.textContent = this.isLightMode ? 'Light Mode' : 'Dark Mode';
         btnDock.classList.toggle('is-active', this.isLightMode);
       }
       const btnTop = document.getElementById('btnUranusToggleThemeTop');
@@ -3902,7 +3902,7 @@
         const textSpan = btnTop.querySelector('.theme-top-text');
         const iconSpan = btnTop.querySelector('.btn-icon');
         if (textSpan) textSpan.textContent = this.isLightMode ? 'Light Mode' : 'Dark Mode';
-        if (iconSpan) iconSpan.textContent = this.isLightMode ? '☀️' : '🌙';
+        if (iconSpan) iconSpan.textContent = this.isLightMode ? '○' : '●';
         btnTop.classList.toggle('is-light-active', this.isLightMode);
       }
       if (this.audio && typeof this.audio.playSelectBlip === 'function') {
@@ -4967,7 +4967,7 @@
           // Graceful fallback option
           if (this.transmitStatus) {
             this.transmitStatus.className = 'transmit-status-msg is-error';
-            this.transmitStatus.innerHTML = `⚠️ ${err.message || 'Transmission failed.'} <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tanishkasahuwork191@gmail.com&su=Regarding%20Portfolio&body=${encodeURIComponent(msg)}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:underline;margin-left:4px;">Send via Gmail ↗</a>`;
+            this.transmitStatus.innerHTML = `${err.message || 'Transmission failed.'} <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tanishkasahuwork191@gmail.com&su=Regarding%20Portfolio&body=${encodeURIComponent(msg)}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;text-decoration:underline;margin-left:4px;">Send via Gmail ↗</a>`;
           }
         } finally {
           if (btnSubmit) {
@@ -6728,6 +6728,12 @@
         video.play().catch(() => { });
       }
 
+      this.currentBookLeaf = 0;
+      const book3d = document.getElementById('book3D');
+      if (book3d) {
+        book3d.classList.add('is-book-closed');
+        book3d.classList.remove('is-book-back-closed');
+      }
       this.updateBookState();
       this.audio.playPageFlip();
     }
@@ -6736,6 +6742,13 @@
       if (this.isAutoFlipping) {
         this.toggleAutoFlip();
       }
+      this.currentBookLeaf = 0;
+      const book3d = document.getElementById('book3D');
+      if (book3d) {
+        book3d.classList.add('is-book-closed');
+        book3d.classList.remove('is-book-back-closed');
+      }
+      this.updateBookState();
       const modal = document.getElementById('earthBookModal');
       const video = document.getElementById('earthBgVideo');
       if (modal) {
@@ -7131,8 +7144,12 @@
         this.isPageTurning = true;
         this.audio.playPageFlip();
 
+        const book3d = document.getElementById('book3D');
+        if (this.currentBookLeaf === 0 && book3d) {
+          book3d.classList.remove('is-book-closed');
+        }
+
         if (leafToFlip) {
-          const book3d = document.getElementById('book3D');
           if (book3d) {
             book3d.classList.remove('has-page-turning-prev');
             book3d.classList.add('has-page-turning-next');
@@ -7167,8 +7184,12 @@
         this.isPageTurning = true;
         this.audio.playPageFlip();
 
+        const book3d = document.getElementById('book3D');
+        if (prevIdx === 0 && book3d) {
+          book3d.classList.add('is-book-closed');
+        }
+
         if (leafToFlip) {
-          const book3d = document.getElementById('book3D');
           if (book3d) {
             book3d.classList.remove('has-page-turning-next');
             book3d.classList.add('has-page-turning-prev');
@@ -7238,6 +7259,12 @@
     }
 
     updateBookState() {
+      const book3d = document.getElementById('book3D');
+      if (book3d) {
+        book3d.classList.toggle('is-book-closed', this.currentBookLeaf === 0);
+        book3d.classList.toggle('is-book-back-closed', this.currentBookLeaf === this.totalBookLeaves);
+      }
+
       const leaves = document.querySelectorAll('.book-leaf');
       const N = leaves.length;
       leaves.forEach((leaf) => {
