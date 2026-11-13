@@ -4298,7 +4298,7 @@
           summary: 'Ranked 6th solo contender across Graphs, Trees, and Dynamic Programming.',
           scopeHeading: 'Algorithmic & Problem-Solving Scope',
           scopeDesc: 'Competed solo solving complex data structures and algorithmic challenges under tight execution time limits, leveraging 500+ LeetCode problems experience in BFS/DFS, shortest path, and dynamic programming.',
-          certImg: './cert-dsa-league.svg',
+          certImg: './cert-dsa-league.jpg',
           certAlt: 'Collegiate DSA League 2025 Certificate',
           skills: ['Graph Theory', 'Dynamic Programming', 'Trees & Heaps', 'Time Complexity', 'C++ / Java DSA'],
           credentialId: 'VERIFY: DSA-LEAGUE-2025-RANK6',
