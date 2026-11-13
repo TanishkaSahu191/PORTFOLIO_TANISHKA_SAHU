@@ -4210,19 +4210,23 @@ body.solar-active .solar-system-section {
   border: 1px solid #cbd5e1;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   margin-bottom: 10px;
-  background: #0f172a;
+  background: #0b1120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .project-preview-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
   transition: transform 400ms ease;
 }
 
 .book-leaf:hover .project-preview-img {
-  transform: scale(1.03);
+  transform: none;
 }
 
 .project-status-badge {
@@ -8775,9 +8779,9 @@ a.mod-chip:hover {
 .saturn-landscape-backdrop {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center 30%, rgba(32, 20, 10, 0.95) 0%, rgba(16, 10, 6, 0.98) 60%, #060403 100%);
-  backdrop-filter: blur(28px) saturate(140%);
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  background: rgba(248, 250, 252, 0.96);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
   z-index: 1;
 }
 
@@ -8791,7 +8795,7 @@ a.mod-chip:hover {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(251, 191, 36, 0.4) rgba(0, 0, 0, 0.4);
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .saturn-landscape-scroller::-webkit-scrollbar {
@@ -8799,13 +8803,17 @@ a.mod-chip:hover {
 }
 
 .saturn-landscape-scroller::-webkit-scrollbar-track {
-  background: rgba(10, 6, 3, 0.6);
+  background: #f1f5f9;
 }
 
 .saturn-landscape-scroller::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+  background: #cbd5e1;
   border-radius: 999px;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  border: 2px solid #f1f5f9;
+}
+
+.saturn-landscape-scroller::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Sticky Top Navigation Bar */
@@ -8817,11 +8825,11 @@ a.mod-chip:hover {
   align-items: center;
   justify-content: space-between;
   padding: 16px clamp(16px, 4vw, 48px);
-  background: rgba(14, 9, 5, 0.88);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1.5px solid rgba(251, 191, 36, 0.22);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+  border-bottom: 1.5px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .saturn-landscape-header-left {
@@ -8830,14 +8838,27 @@ a.mod-chip:hover {
   gap: 12px;
 }
 
+.saturn-landscape-topbar .saturn-badge-text {
+  color: #0f172a;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.saturn-landscape-topbar .saturn-badge-dot {
+  background: #0f172a;
+  box-shadow: 0 0 6px rgba(15, 23, 42, 0.3);
+}
+
 .saturn-landscape-counter {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  color: #fde047;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  color: #0f172a;
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
   font-weight: 700;
@@ -8850,29 +8871,43 @@ a.mod-chip:hover {
   gap: 12px;
 }
 
+.saturn-landscape-topbar .saturn-close-btn {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.saturn-landscape-topbar .saturn-close-btn:hover {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  transform: translateY(-1px);
+}
+
 .saturn-nav-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 9px 18px;
   border-radius: 999px;
-  background: linear-gradient(145deg, #241a10 0%, #140d07 100%);
-  border: 1.5px solid rgba(251, 191, 36, 0.35);
-  color: #fef08a;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: all 180ms ease;
 }
 
 .saturn-nav-btn:hover {
-  background: linear-gradient(145deg, #322316 0%, #1c130a 100%);
+  background: #0f172a;
   color: #ffffff;
-  border-color: rgba(251, 191, 36, 0.7);
+  border-color: #0f172a;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
 }
 
 .saturn-return-btn {
@@ -8881,21 +8916,22 @@ a.mod-chip:hover {
   gap: 8px;
   padding: 9px 20px;
   border-radius: 999px;
-  background: linear-gradient(145deg, #f59e0b 0%, #d97706 60%, #b45309 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  color: #ffffff;
+  background: #ffffff;
+  border: 2px solid #0f172a;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(217, 119, 6, 0.5), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: all 180ms ease;
 }
 
 .saturn-return-btn:hover {
-  background: linear-gradient(145deg, #fbbf24 0%, #ea580c 100%);
+  background: #0f172a;
+  color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(217, 119, 6, 0.7);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
 }
 
 .saturn-return-btn .return-icon {
@@ -8908,13 +8944,11 @@ a.mod-chip:hover {
   max-width: 1400px;
   width: min(1400px, 94vw);
   margin: 28px auto 60px;
-  background: linear-gradient(150deg, #241a12 0%, #17110b 50%, #0d0905 100%);
-  border: 2px solid rgba(251, 191, 36, 0.45);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 32px;
   padding: clamp(24px, 3.5vw, 44px);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.95),
-    inset 2px 2px 5px rgba(255, 235, 195, 0.15),
-    inset -3px -3px 8px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.08), 0 4px 16px rgba(15, 23, 42, 0.04);
   animation: saturnLandscapeEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -8946,11 +8980,11 @@ a.mod-chip:hover {
 }
 
 .landscape-cert-frame {
-  background: rgba(10, 7, 4, 0.85);
-  border: 1.5px solid rgba(251, 191, 36, 0.35);
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: 22px;
   padding: 18px;
-  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.85), 0 12px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -8968,16 +9002,16 @@ a.mod-chip:hover {
   gap: 7px;
   padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(52, 211, 153, 0.4);
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
 }
 
 .cert-status-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 8px #34d399;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
 }
 
 .cert-status-text {
@@ -8985,18 +9019,18 @@ a.mod-chip:hover {
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #a7f3d0;
+  color: #065f46;
 }
 
 .cert-year-tag {
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
   font-weight: 700;
-  color: #fbbf24;
+  color: #0f172a;
   padding: 4px 10px;
   border-radius: 8px;
-  background: rgba(251, 191, 36, 0.12);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
 }
 
 .cert-image-container {
@@ -9004,8 +9038,9 @@ a.mod-chip:hover {
   width: 100%;
   border-radius: 14px;
   overflow: hidden;
-  background: #000000;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .landscape-cert-img {
@@ -9031,24 +9066,24 @@ a.mod-chip:hover {
   gap: 6px;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(14, 9, 5, 0.88);
-  border: 1.5px solid rgba(251, 191, 36, 0.6);
-  color: #fef08a;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #0f172a;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 11.5px;
   font-weight: 700;
   text-decoration: none;
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 180ms ease;
 }
 
 .landscape-zoom-btn:hover {
-  background: rgba(245, 158, 11, 0.95);
-  color: #0b0704;
-  border-color: #fde047;
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
 }
 
 .cert-frame-footer {
@@ -9058,7 +9093,7 @@ a.mod-chip:hover {
   flex-wrap: wrap;
   gap: 10px;
   padding-top: 10px;
-  border-top: 1px solid rgba(251, 191, 36, 0.18);
+  border-top: 1px solid #e2e8f0;
 }
 
 .cert-seal-pill {
@@ -9067,9 +9102,9 @@ a.mod-chip:hover {
   gap: 6px;
   padding: 5px 12px;
   border-radius: 8px;
-  background: rgba(251, 191, 36, 0.15);
-  border: 1px solid rgba(251, 191, 36, 0.35);
-  color: #fde047;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 11px;
   font-weight: 700;
@@ -9079,7 +9114,7 @@ a.mod-chip:hover {
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #475569;
   letter-spacing: 0.06em;
 }
 
@@ -9091,26 +9126,27 @@ a.mod-chip:hover {
 }
 
 .landscape-metric-item {
-  background: linear-gradient(145deg, #1f160e 0%, #110c07 100%);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: 14px;
   padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.08), 0 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .landscape-metric-val {
   font-family: 'Space Grotesk', sans-serif;
-  color: #fde047;
-  font-weight: 700;
-  font-size: 14px;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 15px;
 }
 
 .landscape-metric-lbl {
-  color: #94a3b8;
+  color: #64748b;
   font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -9141,65 +9177,68 @@ a.mod-chip:hover {
 }
 
 .landscape-cat-badge.amber {
-  background: rgba(245, 158, 11, 0.18);
-  border: 1px solid rgba(251, 191, 36, 0.45);
-  color: #fbbf24;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
 }
 
 .landscape-cat-badge.cyan {
-  background: rgba(6, 182, 212, 0.18);
-  border: 1px solid rgba(34, 211, 238, 0.45);
-  color: #38bdf8;
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
 }
 
 .landscape-cat-badge.purple {
-  background: rgba(168, 85, 247, 0.18);
-  border: 1px solid rgba(192, 132, 252, 0.45);
-  color: #c084fc;
+  background: #f3e8ff;
+  border: 1px solid #e9d5ff;
+  color: #6b21a8;
 }
 
 .landscape-cat-badge.emerald {
-  background: rgba(16, 185, 129, 0.18);
-  border: 1px solid rgba(52, 211, 153, 0.45);
-  color: #34d399;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
 }
 
 .landscape-cat-badge.gold {
-  background: rgba(234, 179, 8, 0.18);
-  border: 1px solid rgba(250, 204, 21, 0.45);
-  color: #facc15;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  color: #854d0e;
 }
 
 .landscape-date-badge {
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
   font-weight: 700;
-  color: #cbd5e1;
+  color: #0f172a;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
 }
 
 .landscape-cert-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(24px, 2.4vw, 34px);
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   line-height: 1.22;
   margin: 6px 0 8px;
 }
 
 .landscape-cert-org {
   font-size: 15px;
-  color: #fbbf24;
+  color: #334155;
   font-weight: 600;
   margin: 0 0 18px;
 }
 
 .landscape-summary-callout {
-  background: rgba(245, 158, 11, 0.08);
-  border-left: 3.5px solid #fbbf24;
+  background: #f8fafc;
+  border-left: 4px solid #0f172a;
+  border-top: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   border-radius: 0 14px 14px 0;
   padding: 14px 18px;
   margin-bottom: 22px;
@@ -9207,8 +9246,9 @@ a.mod-chip:hover {
 
 .landscape-summary-callout .summary-text {
   margin: 0;
-  color: #e2e8f0;
+  color: #0f172a;
   font-size: 14px;
+  font-weight: 500;
   line-height: 1.6;
 }
 
@@ -9222,7 +9262,7 @@ a.mod-chip:hover {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fbbf24;
+  color: #0f172a;
   margin: 0 0 10px;
 }
 
@@ -9230,7 +9270,8 @@ a.mod-chip:hover {
   margin: 0;
   font-size: 14px;
   line-height: 1.65;
-  color: #cbd5e1;
+  color: #1e293b;
+  font-weight: 450;
 }
 
 .landscape-skills-section {
@@ -9245,14 +9286,22 @@ a.mod-chip:hover {
 
 .landscape-skill-tag {
   padding: 8px 16px;
-  background: linear-gradient(145deg, #241a10 0%, #130d07 100%);
-  border: 1.5px solid rgba(251, 191, 36, 0.35);
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
   border-radius: 999px;
-  color: #fef08a;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 180ms ease;
+}
+
+.landscape-skill-tag:hover {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  transform: translateY(-1px);
 }
 
 .landscape-bottom-actions {
@@ -9261,7 +9310,7 @@ a.mod-chip:hover {
   gap: 14px;
   flex-wrap: wrap;
   padding-top: 18px;
-  border-top: 1.5px solid rgba(251, 191, 36, 0.18);
+  border-top: 1.5px solid #e2e8f0;
 }
 
 .landscape-btn-return {
@@ -9270,21 +9319,22 @@ a.mod-chip:hover {
   gap: 8px;
   padding: 12px 26px;
   border-radius: 999px;
-  background: linear-gradient(145deg, #f59e0b 0%, #d97706 60%, #b45309 100%);
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  color: #ffffff;
+  background: #ffffff;
+  border: 2px solid #0f172a;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5), inset 2px 2px 4px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   transition: all 180ms ease;
 }
 
 .landscape-btn-return:hover {
-  background: linear-gradient(145deg, #fbbf24 0%, #ea580c 100%);
+  background: #0f172a;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(217, 119, 6, 0.65);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.2);
 }
 
 .landscape-btn-credential {
@@ -9293,9 +9343,9 @@ a.mod-chip:hover {
   gap: 8px;
   padding: 12px 24px;
   border-radius: 999px;
-  background: rgba(251, 191, 36, 0.14);
-  border: 1.5px solid rgba(251, 191, 36, 0.45);
-  color: #fef08a;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -9304,8 +9354,8 @@ a.mod-chip:hover {
 }
 
 .landscape-btn-credential:hover {
-  background: rgba(251, 191, 36, 0.28);
-  border-color: rgba(251, 191, 36, 0.85);
+  background: #0f172a;
+  border-color: #0f172a;
   color: #ffffff;
   transform: translateY(-2px);
 }
