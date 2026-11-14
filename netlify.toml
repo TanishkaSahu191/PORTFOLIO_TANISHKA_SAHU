@@ -40,3 +40,4 @@
   from = "/api/portfolio-data"
   to = "/.netlify/functions/status"
   status = 200
+

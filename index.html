@@ -844,7 +844,8 @@
               <span class="hint-pulse"></span>
               <span class="hint-text">Click Cover to Open</span>
               <span class="hint-arrow">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
@@ -1682,11 +1683,6 @@
       </div>
 
       <div class="jupiter-header-controls">
-        <button id="btnJupiterAutoTour" class="jupiter-ctrl-btn tour-btn" type="button"
-          title="Cinematic 3D Camera Flythrough along the Road">
-          <span class="tour-icon">▶</span>
-          <span class="tour-text">Flythrough Tour</span>
-        </button>
         <button id="btnCloseJupiterModal" class="jupiter-close-btn" type="button" aria-label="Close Jupiter Roadmap"
           title="Return to Solar System"
           onclick="if(window.solarAppInstance){window.solarAppInstance.closeJupiterRoadmapModal(true);}">
@@ -1864,6 +1860,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Floating Bottom-Left Flythrough Tour Controller -->
+    <div class="jupiter-bottom-left-dock">
+      <button id="btnJupiterAutoTour" class="jupiter-ctrl-btn tour-btn" type="button"
+        title="Cinematic 3D Camera Flythrough along the Road">
+        <span class="tour-icon">▶</span>
+        <span class="tour-text">Flythrough Tour</span>
+      </button>
     </div>
 
     <!-- Bottom Interactive Road Dock / View Selector -->
@@ -2373,7 +2378,7 @@
               <span>+91 7717603726</span>
             </a>
           </div>
-          <div class="resume-concept-preview-tag">Conceptual layout preview</div>
+
         </footer>
       </article>
     </div>
@@ -2472,9 +2477,6 @@
             <div class="hanging-cert-window" title="Click card to expand certificate">
               <img src="./cert-nptel-iitk.jpg" alt="IIT Kanpur Marketing Management Certificate"
                 class="hanging-cert-thumbnail" loading="lazy" />
-              <div class="hanging-cert-glass-overlay">
-                <span class="hanging-inspect-tag">Click to Inspect</span>
-              </div>
             </div>
 
             <h3 class="card-title">Marketing Management - I</h3>
@@ -2542,9 +2544,6 @@
             <div class="hanging-cert-window" title="Click card to expand certificate">
               <img src="./cert-johnshopkins-health.jpg" alt="Health Hackathon 2026 Certificate"
                 class="hanging-cert-thumbnail" loading="lazy" />
-              <div class="hanging-cert-glass-overlay">
-                <span class="hanging-inspect-tag">Click to Inspect</span>
-              </div>
             </div>
 
             <h3 class="card-title">Health Hackathon '26</h3>
@@ -2612,9 +2611,6 @@
             <div class="hanging-cert-window" title="Click card to expand certificate">
               <img src="./cert-whitehatjr.jpg" alt="Certified Game Developer Certificate" class="hanging-cert-thumbnail"
                 loading="lazy" />
-              <div class="hanging-cert-glass-overlay">
-                <span class="hanging-inspect-tag">Click to Inspect</span>
-              </div>
             </div>
 
             <h3 class="card-title">Certified Game Developer</h3>
@@ -2682,9 +2678,6 @@
             <div class="hanging-cert-window" title="Click card to expand certificate">
               <img src="./cert-spellquest.jpg" alt="SpellQuest India State Winner Certificate"
                 class="hanging-cert-thumbnail" loading="lazy" />
-              <div class="hanging-cert-glass-overlay">
-                <span class="hanging-inspect-tag">Click to Inspect</span>
-              </div>
             </div>
 
             <h3 class="card-title">State Winner — 1st Position</h3>
@@ -2752,9 +2745,6 @@
             <div class="hanging-cert-window" title="Click card to expand certificate">
               <img src="./cert-dsa-league.jpg" alt="Collegiate DSA League 2025 Certificate"
                 class="hanging-cert-thumbnail" loading="lazy" />
-              <div class="hanging-cert-glass-overlay">
-                <span class="hanging-inspect-tag">Click to Inspect</span>
-              </div>
             </div>
 
             <h3 class="card-title">DSA League — 6th Position</h3>
@@ -3072,21 +3062,27 @@
 
             <!-- Quick Message Composer -->
             <form class="quick-transmit-form" id="neptuneTransmitForm"
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
               onsubmit="event.preventDefault(); window.handleNeptuneMessageSend();">
+              <input type="hidden" name="form-name" value="contact" />
+              <p style="display:none" class="hidden"><label>Don't fill this out if you're human: <input name="bot-field" /></label></p>
               <h4 class="form-title">Send a Message</h4>
               <div class="form-inputs-grid">
                 <div class="form-field">
                   <label for="neptuneSenderName">Name</label>
-                  <input type="text" id="neptuneSenderName" placeholder="Your Name" required />
+                  <input type="text" id="neptuneSenderName" name="name" placeholder="Your Name" required />
                 </div>
                 <div class="form-field">
                   <label for="neptuneSenderContact">Email</label>
-                  <input type="email" id="neptuneSenderContact" placeholder="Your Email" required />
+                  <input type="email" id="neptuneSenderContact" name="email" placeholder="Your Email" required />
                 </div>
               </div>
               <div class="form-field" style="margin-top: 10px;">
                 <label for="neptuneSenderMessage">Message</label>
-                <textarea id="neptuneSenderMessage" rows="2" placeholder="Your message here..." required></textarea>
+                <textarea id="neptuneSenderMessage" name="message" rows="2" placeholder="Your message here..." required></textarea>
               </div>
               <div class="form-submit-row">
                 <button class="btn-transmit-submit" id="btnTransmitMessage" type="submit">

@@ -4934,6 +4934,20 @@
         }
 
         try {
+          // Opportunistically mirror to Netlify Forms engine for dashboard collection
+          try {
+            const netlifyPayload = new URLSearchParams();
+            netlifyPayload.append('form-name', 'contact');
+            netlifyPayload.append('name', name);
+            netlifyPayload.append('email', email);
+            netlifyPayload.append('message', msg);
+            fetch('/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: netlifyPayload.toString()
+            }).catch(() => {});
+          } catch (e) {}
+
           const response = await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -4948,7 +4962,7 @@
             }
             if (this.transmitStatus) {
               this.transmitStatus.className = 'transmit-status-msg';
-              this.transmitStatus.innerHTML = '✓ Transmission Delivered to Tanishka!';
+              this.transmitStatus.innerHTML = '✓ Transmission Delivered to Tanishka\'s Inbox!';
             }
             if (this.transmitForm) {
               this.transmitForm.reset();

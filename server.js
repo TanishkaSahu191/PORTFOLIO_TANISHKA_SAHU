@@ -247,7 +247,33 @@ async function dispatchContactNotification(entry) {
     }
   }
 
-  // 3. Webhook (Discord / Slack)
+  // 3. FormSubmit Gateway (Zero-config direct inbox forwarding)
+  if (!dispatched) {
+    try {
+      const fsRes = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(receiverEmail)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: entry.name,
+          email: entry.email,
+          message: entry.message,
+          _subject: `🚀 [Lumora Portfolio] New Transmission from ${entry.name}`,
+          _template: 'box'
+        })
+      });
+      if (fsRes.ok) {
+        dispatched = true;
+        deliveryMethod = 'formsubmit_gateway';
+      }
+    } catch (err) {
+      console.warn('[Dispatch] FormSubmit fallback failed:', err.message);
+    }
+  }
+
+  // 4. Webhook (Discord / Slack)
   if (process.env.CONTACT_WEBHOOK_URL) {
     try {
       await fetch(process.env.CONTACT_WEBHOOK_URL, {
